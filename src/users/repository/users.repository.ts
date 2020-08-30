@@ -1,7 +1,5 @@
-import { EntityRepository, ObjectLiteral, Repository } from 'typeorm'
+import { EntityRepository, Repository } from 'typeorm'
 import { User } from '../../entities/entity.user'
-import { AuthDto } from '../../dto/user.dto'
-import { ObjectUtils } from '../../utils/object'
 
 @EntityRepository(User)
 export class UsersRepository extends Repository<User> {

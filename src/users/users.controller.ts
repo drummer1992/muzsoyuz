@@ -3,30 +3,29 @@ import {
 	Controller,
 	Get,
 	Inject,
-	Param,
-	Patch, UseGuards,
+	Patch, Req, UseGuards,
 	UseInterceptors,
 } from '@nestjs/common'
 import { UserDto } from '../dto/user.dto'
-import { User } from '../entities/entity.user'
 import { UsersService } from './users.service'
 import { LoggingInterceptor } from '../logging/logging.interceptor'
-import { AuthService } from '../auth/auth.service'
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard'
 
-@Controller('user')
 @UseInterceptors(LoggingInterceptor)
+@Controller('user')
 export class UserController {
 	@Inject()
 	private readonly userService: UsersService
 
-	@Get('profile/:id')
-	getProfile(@Param() { id }): Promise<User> {
-		return this.userService.getProfile(id)
+	@UseGuards(JwtAuthGuard)
+	@Get('profile')
+	getProfile(@Req() { user }) {
+		return this.userService.getProfile(user.id)
 	}
 
-	@Patch('profile/:id')
-	updateProfile(@Param() { id }, @Body() data: UserDto) {
-		return this.userService.updateProfile(id, data)
+	@UseGuards(JwtAuthGuard)
+	@Patch('profile')
+	updateProfile(@Req() { user }, @Body() data: UserDto) {
+		return this.userService.updateProfile(user.id, data)
 	}
 }

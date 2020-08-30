@@ -1,8 +1,7 @@
 import { Column, Entity } from 'typeorm'
 import { BasicEntity, IStats } from './entity.basic'
-import { UserType, Gender, Instrument } from '../app.interfaces'
+import { UserType, Gender } from '../app.interfaces'
 import * as bCrypt from 'bcrypt'
-import { UserDto } from '../dto/user.dto'
 
 export interface IUser {
 	dob?: Date
@@ -18,7 +17,7 @@ export interface IUser {
 @Entity({ name: 'User' })
 export class User extends BasicEntity implements IUser, IStats {
 	constructor(user) {
-		super();
+		super()
 
 		Object.assign(this, user)
 	}

@@ -4,8 +4,8 @@ import { UserDto } from '../dto/user.dto'
 import { InjectRepository } from '@nestjs/typeorm'
 import { businessAssert } from '../lib/errors'
 import { ValidationUtils } from '../utils/validation'
-import { isUUID } from 'class-validator'
 import { User } from '../entities/entity.user'
+import { ObjectUtils } from '../utils/object'
 
 @Injectable()
 export class UsersService {
@@ -14,10 +14,8 @@ export class UsersService {
 		private usersRepository: UsersRepository,
 	) {}
 
-	getProfile(id: string) {
-		businessAssert(isUUID(id), `Not valid id: [${id}]`)
-
-		return this.usersRepository.findOne(id)
+	async getProfile(id: string) {
+		return ObjectUtils.omit(await this.usersRepository.findOne(id), ['salt', 'hash'])
 	}
 
 	async findByEmail(email: string): Promise<User> {
@@ -28,7 +26,7 @@ export class UsersService {
 		return user
 	}
 
-	async ensureUniqueEmail(email: string) {
+	ensureUniqueEmail(email: string) {
 		return this.usersRepository.ensureUniqueEmail(email)
 	}
 
@@ -36,11 +34,13 @@ export class UsersService {
 		return this.usersRepository.createProfile(user)
 	}
 
-	updateProfile(id: string, data: UserDto) {
-		businessAssert(isUUID(id), `Not valid id: [${id}]`)
-
+	async updateProfile(id: string, data: UserDto) {
 		ValidationUtils.validateDTO(data, this.usersRepository.publicAttributes)
 
-		return this.usersRepository.update({ id }, data)
+		const { affected } =  await this.usersRepository.update({ id }, data)
+
+		if (affected) {
+			return data
+		}
 	}
 }

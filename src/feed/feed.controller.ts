@@ -6,7 +6,7 @@ import {
 	Inject,
 	Param,
 	Patch,
-	Post,
+	Post, Req, UseGuards,
 	UseInterceptors,
 	UsePipes,
 	ValidationPipe,
@@ -17,6 +17,7 @@ import { FeedService } from './feed.service'
 import { Feed } from '../entities/entity.feed'
 import { FeedType } from '../app.interfaces'
 import { LoggingInterceptor } from '../logging/logging.interceptor'
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard'
 
 @Controller('feed')
 @UseInterceptors(LoggingInterceptor)
@@ -34,40 +35,23 @@ export class FeedController {
 		return  this.feedService.getFeeds(FeedType.JOB)
 	}
 
+	@UseGuards(JwtAuthGuard)
 	@Post('job')
 	@UsePipes(ValidationPipe)
-	createJobFeed(@Body() data: JobFeedDto): Promise<ObjectLiteral> {
-		return this.feedService.createFeed(data)
+	createJobFeed(@Req() { user }, @Body() data: JobFeedDto): Promise<ObjectLiteral> {
+		return this.feedService.createFeed(Object.assign(data, { ownerId: user.id }))
 	}
 
+	@UseGuards(JwtAuthGuard)
 	@Patch('job/:id')
 	@UsePipes(ValidationPipe)
 	updateJobFeed(@Param() { id }, @Body() data): Promise<void> {
 		return this.feedService.updatedFeed(id, data)
 	}
 
+	@UseGuards(JwtAuthGuard)
 	@Delete('job/:id')
 	deleteJobFeed(@Param() { id }): Promise<void> {
 		return this.feedService.deleteFeed(id)
-	}
-
-	@Get('user')
-	getUserFeed() {
-
-	}
-
-	@Get('user')
-	getUserFeeds() {
-
-	}
-
-	@Post('user')
-	createUserFeed() {
-
-	}
-
-	@Patch('user')
-	updateUserFeed() {
-
 	}
 }

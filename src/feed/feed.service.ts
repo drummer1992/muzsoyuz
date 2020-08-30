@@ -27,7 +27,7 @@ export class FeedService {
 
 	getFeeds(type: FeedType) {
 		return this.jobFeedRepository.find({
-			where: { type }
+			where: { type },
 		})
 	}
 

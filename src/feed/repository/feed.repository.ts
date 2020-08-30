@@ -22,6 +22,7 @@ export class FeedRepository extends Repository<Feed> {
 		'extraInfo',
 		'isActive',
 		'type',
+		'ownerId',
 	]
 
 	createFeed(data: JobFeedDto | UserFeedDto): Promise<ObjectLiteral> {

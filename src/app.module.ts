@@ -15,7 +15,7 @@ import { AppController } from './app.controller'
 		FeedModule,
 		AuthModule,
 	],
-	controllers: [AppController]
+	controllers: [AppController],
 })
 
 export class AppModule {}

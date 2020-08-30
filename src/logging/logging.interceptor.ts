@@ -9,7 +9,9 @@ export class LoggingInterceptor implements NestInterceptor {
 
 	getStream() {
 		if (!this.writableStream) {
-			this.writableStream = fs.createWriteStream(path.join(process.env.LOG_PATH, new Date().toISOString() + '.log'))
+			this.writableStream = fs.createWriteStream(
+				path.join(process.env.LOG_PATH, new Date().toISOString() + '.log'),
+			)
 
 			const _write = this.writableStream.write
 
@@ -22,16 +24,17 @@ export class LoggingInterceptor implements NestInterceptor {
 	}
 
 	async intercept(context: ExecutionContext, next: CallHandler<any>): Promise<Observable<any>> {
-		const [{ method, url, params, query, body }] = context.getArgs()
+		const [{ method, url, params, query, body, headers: { authorization } }] = context.getArgs()
 
 		const before = Date.now()
 
 		const requestId = Math.floor(Math.random() * 1000)
 
-		const beforeLog = `[INFO]: [${requestId}] ${new Date(before).toISOString()}, ${method}: ${url}, ` +
-			`PATH_PARAMS: ${JSON.stringify(params)}, ` +
-			`QUERY: ${JSON.stringify(query)}, ` +
-			`BODY: ${JSON.stringify(body)}\n`
+		const beforeLog = `[INFO]: [${requestId}] ${new Date(before).toISOString()}, ${method}: ${url}, `
+			+ `TOKEN: ${authorization} `
+			+ `PATH_PARAMS: ${JSON.stringify(params)}, `
+			+ `QUERY: ${JSON.stringify(query)}, `
+			+ `BODY: ${JSON.stringify(body)}\n`
 
 		const stream = await this.getStream()
 
@@ -41,13 +44,13 @@ export class LoggingInterceptor implements NestInterceptor {
 			.handle()
 			.pipe(
 				tap(async () => {
-					const [_, { statusCode }] = context.getArgs()
+					const [, { statusCode }] = context.getArgs()
 
 					const after = Date.now()
 
-					const afterLog = `[INFO]: [${requestId}] ${new Date(after).toISOString()}, ` +
-						`STATUS: ${statusCode}, ` +
-						`PROCESSING TIME: ${after - before} ms\n`
+					const afterLog = `[INFO]: [${requestId}] ${new Date(after).toISOString()}, `
+						+ `STATUS: ${statusCode}, `
+						+ `PROCESSING TIME: ${after - before} ms\n`
 
 					await stream.write(afterLog)
 				}),

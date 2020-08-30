@@ -45,6 +45,8 @@ export class FeedService {
 		const { affected } = await this.jobFeedRepository.update({ id }, Feed.create(data))
 
 		notFoundAssert(affected, id)
+
+		return data
 	}
 
 	async deleteFeed(id: string) {

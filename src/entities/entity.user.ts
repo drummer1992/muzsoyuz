@@ -12,6 +12,7 @@ export interface IUser {
 	online: boolean
 	hash: string
 	salt: string
+	facebookId: string
 }
 
 @Entity({ name: 'User' })
@@ -25,12 +26,15 @@ export class User extends BasicEntity implements IUser, IStats {
 	static readonly SALT_ROUNDS: number = 10
 
 	@Column({ nullable: true })
+	facebookId: string
+
+	@Column({ nullable: true })
 	dob: Date
 
 	@Column({ nullable: true })
 	city: string
 
-	@Column({ unique: true })
+	@Column({ unique: true, nullable: true })
 	email: string
 
 	@Column({ nullable: true, enum: Gender })

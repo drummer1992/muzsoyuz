@@ -12,11 +12,10 @@ export interface IBasic extends IStats{
 	id: string
 	created: string
 	updated?: string
-	firstName: string
-	lastName?: string
+	name?: string
 	phone?: number
 	altPhone?: number
-	musicalInstrument: Instrument
+	musicalInstrument?: Instrument
 	imageUrl?: string
 }
 
@@ -57,8 +56,5 @@ export abstract class BasicEntity extends Stats implements IBasic {
 	imageUrl: string
 
 	@Column({ nullable: true })
-	firstName: string
-
-	@Column({ nullable: true })
-	lastName: string
+	name: string
 }

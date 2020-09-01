@@ -3,7 +3,11 @@ import { AppModule } from './app.module'
 import { config } from './config'
 
 async function bootstrap(port) {
-  return await NestFactory.create(AppModule).then(app => app.listen(port))
+  const app = await NestFactory.create(AppModule)
+
+  app.enableCors()
+  
+  await app.listen(port)
 }
 
 bootstrap(config.getPort())

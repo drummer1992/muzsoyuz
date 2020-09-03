@@ -27,6 +27,10 @@ class Index {
 		return this.getValue('PORT', true)
 	}
 
+	public getAppPrefix() {
+		return this.getValue('APP_PREFIX', true)
+	}
+
 	public isProduction() {
 		const mode = this.getValue('MODE', false)
 

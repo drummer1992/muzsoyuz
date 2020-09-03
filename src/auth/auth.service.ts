@@ -23,7 +23,7 @@ export class AuthService {
 
 		await user.setPassword(data.password)
 
-		return user
+		return this.login({ username: user.email, sub: this.usersService.createProfile(user) })
 	}
 
 	async validateUser(email, password) {

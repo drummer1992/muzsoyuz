@@ -27,16 +27,14 @@ export class AppController {
 
 	@UseGuards(LocalAuthGuard)
 	@Post('auth/login')
-	login(@Request() req) {
+	login(@Request() req): { token: string } {
 		return this.authService.login(req.user)
 	}
 
 	@Post('auth/register')
 	@UsePipes(ValidationPipe)
-	async register(@Body() data: AuthDto): Promise<object> {
-		return this.authService.login({
-			username: data.email,
-			sub: await this.usersService.createProfile(await this.authService.register(data)) })
+	register(@Body() data: AuthDto): Promise<{ token: string }> {
+		return this.authService.register(data)
 	}
 
 	@Get('oauth/facebook')
@@ -53,13 +51,13 @@ export class AppController {
 
 	@Get('oauth/google/callback')
 	@UseGuards(GoogleAuthGuard)
-	oauthGoogleCallback(@Req() { user }) {
+	oauthGoogleCallback(@Req() { user }): Promise<{ token: string }> {
 		return this.authService.oauthHandler(user)
 	}
 
 	@Get('oauth/facebook/callback')
 	@UseGuards(FacebookAuthGuard)
-	async oauthFacebookCallback(@Req() { user }) {
+	async oauthFacebookCallback(@Req() { user }): Promise<{ token: string }> {
 		return this.authService.oauthHandler(user)
 	}
 }

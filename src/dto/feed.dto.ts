@@ -10,7 +10,7 @@ import {
 import { BasicDto } from './basic.dto'
 import { FeedType } from '../app.interfaces'
 
-export class BasicFeedDto extends BasicDto{
+export class BasicFeedDto extends BasicDto {
 	@IsString()
 	@IsOptional()
 	extraInfo?: string

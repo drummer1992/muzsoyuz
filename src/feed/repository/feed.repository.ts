@@ -11,7 +11,6 @@ export class FeedRepository extends Repository<Feed> {
 		'phone',
 		'altPhone',
 		'musicalInstrument',
-		'imageUrl',
 		'firstName',
 		'lastName',
 		'address',

@@ -13,6 +13,7 @@ export interface IUser {
 	hash: string
 	salt: string
 	facebookId: string
+	imageUrl?: string
 }
 
 @Entity({ name: 'User' })
@@ -54,6 +55,9 @@ export class User extends BasicEntity implements IUser, IStats {
 
 	@Column({ default: true })
 	online: boolean
+
+	@Column({ nullable: true })
+	imageUrl: string
 
 	async validatePassword(password: string) {
 		return this.hash === await bCrypt.hash(password, this.salt)

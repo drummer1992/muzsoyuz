@@ -1,4 +1,4 @@
-import { IsIn, IsNumber, IsOptional, IsString, IsUrl } from 'class-validator'
+import { IsIn, IsNumber, IsOptional, IsString } from 'class-validator'
 import { Instrument } from '../app.interfaces'
 import { IStats } from '../entities/entity.basic'
 
@@ -38,8 +38,4 @@ export abstract class BasicDto extends StatsDto {
 
 	@IsIn(Object.values(Instrument))
 	musicalInstrument: Instrument
-
-	@IsUrl()
-	@IsOptional()
-	imageUrl: string
 }

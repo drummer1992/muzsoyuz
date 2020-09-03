@@ -16,7 +16,6 @@ export interface IBasic extends IStats{
 	phone?: number
 	altPhone?: number
 	musicalInstrument?: Instrument
-	imageUrl?: string
 }
 
 export abstract class Stats implements IStats {
@@ -51,9 +50,6 @@ export abstract class BasicEntity extends Stats implements IBasic {
 
 	@Column({ enum: Instrument, nullable: true })
 	musicalInstrument: Instrument
-
-	@Column({ nullable: true })
-	imageUrl: string
 
 	@Column({ nullable: true })
 	name: string

@@ -6,7 +6,7 @@ import {
 	IsEmail,
 	IsIn,
 	IsOptional,
-	IsString,
+	IsString, IsUrl,
 	Matches,
 	MaxLength,
 	MinLength,
@@ -50,4 +50,8 @@ export class UserDto extends BasicDto {
 	@IsBoolean()
 	@IsOptional()
 	online?: boolean
+
+	@IsUrl()
+	@IsOptional()
+	imageUrl: string
 }

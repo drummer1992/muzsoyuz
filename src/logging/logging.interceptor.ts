@@ -10,7 +10,7 @@ export class LoggingInterceptor implements NestInterceptor {
 	getStream() {
 		if (!this.writableStream) {
 			this.writableStream = fs.createWriteStream(
-				path.join(process.env.LOG_PATH, new Date().toISOString() + '.log'),
+				path.resolve(process.env.LOG_PATH, new Date().toISOString() + '.log'),
 			)
 
 			const _write = this.writableStream.write

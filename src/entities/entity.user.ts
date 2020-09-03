@@ -29,6 +29,9 @@ export class User extends BasicEntity implements IUser, IStats {
 	facebookId: string
 
 	@Column({ nullable: true })
+	googleId: string
+
+	@Column({ nullable: true })
 	dob: Date
 
 	@Column({ nullable: true })

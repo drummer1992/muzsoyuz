@@ -15,7 +15,7 @@ import { AuthService } from './auth/auth.service'
 import { UsersService } from './users/users.service'
 import { AuthDto } from './dto/user.dto'
 import { FacebookAuthGuard } from './auth/guards/facebook-auth.guard'
-import { User } from './entities/entity.user'
+import { GoogleAuthGuard } from './auth/guards/google-auth.guard'
 
 @Controller()
 @UseInterceptors(LoggingInterceptor)
@@ -34,11 +34,9 @@ export class AppController {
 	@Post('auth/register')
 	@UsePipes(ValidationPipe)
 	async register(@Body() data: AuthDto): Promise<object> {
-		const user = await this.authService.register(data)
-
-		const id = await this.usersService.createProfile(user)
-
-		return this.authService.login({ email: data.email, id })
+		return this.authService.login({
+			username: data.email,
+			sub: await this.usersService.createProfile(await this.authService.register(data)) })
 	}
 
 	@Get('oauth/facebook')
@@ -47,21 +45,21 @@ export class AppController {
 		throw new UnauthorizedException()
 	}
 
+	@Get('oauth/google')
+	@UseGuards(GoogleAuthGuard)
+	oauthGoogle() {
+		throw new UnauthorizedException()
+	}
 
-	@Get('oauth/callback')
+	@Get('oauth/google/callback')
+	@UseGuards(GoogleAuthGuard)
+	oauthGoogleCallback(@Req() { user }) {
+		return this.authService.oauthHandler(user)
+	}
+
+	@Get('oauth/facebook/callback')
 	@UseGuards(FacebookAuthGuard)
-	async oauthCallback(@Req() { user }) {
-		let existsUser = await this.usersService.findByFbId(user.id)
-
-		if (!existsUser) {
-			const id = await this.usersService.createProfile(new User({
-				facebookId: user.id,
-				name      : user.name,
-			}))
-
-			existsUser = new User({ id, name: user.name })
-		}
-
-		return this.authService.login({ email: existsUser.name, id: existsUser.id })
+	async oauthFacebookCallback(@Req() { user }) {
+		return this.authService.oauthHandler(user)
 	}
 }

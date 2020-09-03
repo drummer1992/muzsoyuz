@@ -34,12 +34,26 @@ export class AuthService {
 			: null
 	}
 
-	login(user: { email: string, id: string }) {
+	login({ username, sub }) {
 		return {
-			token: this.jwtService.sign({
-				username: user.email,
-				sub     : user.id,
-			}),
+			token: this.jwtService.sign({ username, sub }),
 		}
+	}
+
+	async oauthHandler(user) {
+		const { id, provider, displayName, emails: [email] = [], photos: [imageUrl] = [] } = user
+
+		const existingUser = await this.usersService.findByProviderId(id, provider)
+
+		if (!existingUser) {
+			await this.usersService.createProfile(new User({
+				[`${provider}Id`]: id,
+				name             : displayName || undefined,
+				email            : email || undefined,
+				imageUrl         : imageUrl || undefined,
+			}))
+		}
+
+		return this.login({ username: email || displayName, sub: id })
 	}
 }

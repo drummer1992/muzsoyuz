@@ -1,15 +1,15 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
-import { Strategy } from 'passport-facebook'
+import { OAuth2Strategy } from 'passport-google-oauth'
 
 @Injectable()
-export class FacebookStrategy extends PassportStrategy(Strategy) {
+export class GoogleStrategy extends PassportStrategy(OAuth2Strategy) {
 	constructor() {
 		super({
-			clientID     : process.env.FACEBOOK_CLIENT_ID,
-			clientSecret : process.env.FACEBOOK_CLIENT_SECRET,
-			callbackURL  : process.env.FACEBOOK_CALLBACK_URL,
-			profileFields: ['displayName', 'email', 'photos'],
+			clientID     : process.env.GOOGLE_CLIENT_ID,
+			clientSecret : process.env.GOOGLE_CLIENT_SECRET,
+			callbackURL  : process.env.GOOGLE_CALLBACK_URL,
+			scope: ['email'],
 		})
 	}
 

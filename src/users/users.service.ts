@@ -26,8 +26,8 @@ export class UsersService {
 		return user
 	}
 
-	async findByFbId(id) {
-		return this.usersRepository.findOne({ where: { facebookId: id } })
+	findByProviderId(id, provider) {
+		return this.usersRepository.findOne({ where: { [`${provider}Id`]: id } })
 	}
 
 	ensureUniqueEmail(email: string) {

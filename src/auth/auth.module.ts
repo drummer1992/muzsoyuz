@@ -6,17 +6,25 @@ import { LocalStrategy } from './strategy/local.strategy'
 import { JwtModule } from '@nestjs/jwt'
 import { JwtStrategy } from './strategy/jwt.strategy'
 import { FacebookStrategy } from './strategy/facebook.strategy'
+import { GoogleStrategy } from './strategy/google.strategy'
 
 @Module({
-  imports: [
-    UsersModule,
-    PassportModule,
-    JwtModule.register({
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: process.env.JWT_EXPIRES_IN },
-    }),
-  ],
-  providers: [AuthService, LocalStrategy, JwtStrategy, FacebookStrategy],
-  exports: [AuthService],
+	imports  : [
+		UsersModule,
+		PassportModule,
+		JwtModule.register({
+			secret     : process.env.JWT_SECRET,
+			signOptions: { expiresIn: process.env.JWT_EXPIRES_IN },
+		}),
+	],
+	providers: [
+		AuthService,
+		LocalStrategy,
+		JwtStrategy,
+		FacebookStrategy,
+		GoogleStrategy,
+	],
+	exports  : [AuthService],
 })
-export class AuthModule {}
+export class AuthModule {
+}

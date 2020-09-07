@@ -19,16 +19,16 @@ export interface IBasic extends IStats {
 }
 
 export abstract class Stats implements IStats {
-	@Column({ nullable: true })
+	@Column({ type: 'smallint', nullable: true })
 	yearCommercialExp: number
 
-	@Column({ nullable: true })
+	@Column({ type: 'int', nullable: true })
 	countOfJobs: number
 
-	@Column({ nullable: true })
+	@Column({ type: 'int', nullable: true })
 	countOfLikes: number
 
-	@Column({ nullable: true })
+	@Column({ type: 'int', nullable: true })
 	countOfDisLikes: number
 }
 

@@ -25,10 +25,10 @@ export class Feed extends BasicEntity implements IFeed {
 	@Column({ type: 'point', nullable: true })
 	location: Geolocation
 
-	@Column({ type: 'float', nullable: true, precision: 2, scale: 7 })
+	@Column({ type: 'numeric', nullable: true, precision: 7, scale: 2 })
 	amount: number
 
-	@Column({ type: 'date', nullable: true })
+	@Column({ type: 'timestamp', nullable: true })
 	date: Date
 
 	@Column({ nullable: true, type: 'smallint' })

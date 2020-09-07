@@ -22,11 +22,7 @@ export abstract class StatsDto implements IStats {
 
 export abstract class BasicDto extends StatsDto {
 	@IsString()
-	firstName: string
-
-	@IsString()
-	@IsOptional()
-	lastName?: string
+	name: string
 
 	@IsNumber()
 	@IsOptional()

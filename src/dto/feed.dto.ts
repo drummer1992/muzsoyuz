@@ -8,7 +8,15 @@ import {
 	MinLength,
 } from 'class-validator'
 import { BasicDto } from './basic.dto'
-import { FeedType } from '../app.interfaces'
+import { FeedType, Instrument } from '../app.interfaces'
+
+export class JobFeedFilterDto {
+	@IsIn(Object.values(Instrument))
+	musicalInstrument?: string
+
+	@IsString()
+	city?: string
+}
 
 export class BasicFeedDto extends BasicDto {
 	@IsString()

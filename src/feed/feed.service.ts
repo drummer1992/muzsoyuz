@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { BasicFeedDto, JobFeedDto } from '../dto/feed.dto'
+import { BasicFeedDto, JobFeedDto, JobFeedFilterDto } from '../dto/feed.dto'
 import { InjectRepository } from '@nestjs/typeorm'
 import { businessAssert, notFoundAssert } from '../lib/errors'
 import { FeedRepository } from './repository/feed.repository'
@@ -25,9 +25,12 @@ export class FeedService {
 		return feed
 	}
 
-	getFeeds(type: FeedType) {
+	getFeeds({ musicalInstrument, city }: JobFeedFilterDto = {}, type: FeedType) {
 		return this.jobFeedRepository.find({
-			where: { type },
+			where: {
+				type,
+				musicalInstrument,
+			},
 		})
 	}
 

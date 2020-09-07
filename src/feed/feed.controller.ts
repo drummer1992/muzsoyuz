@@ -12,7 +12,7 @@ import {
 	ValidationPipe,
 } from '@nestjs/common'
 import { ObjectLiteral } from 'typeorm'
-import { BasicFeedDto, JobFeedDto } from '../dto/feed.dto'
+import { BasicFeedDto, JobFeedDto, JobFeedFilterDto } from '../dto/feed.dto'
 import { FeedService } from './feed.service'
 import { Feed } from '../entities/entity.feed'
 import { FeedType } from '../app.interfaces'
@@ -31,8 +31,8 @@ export class FeedController {
 	}
 
 	@Get('job')
-	getJobFeeds(): Promise<Feed[]> {
-		return  this.feedService.getFeeds(FeedType.JOB)
+	getJobFeeds(filter: JobFeedFilterDto): Promise<Feed[]> {
+		return  this.feedService.getFeeds(filter, FeedType.JOB)
 	}
 
 	@UseGuards(JwtAuthGuard)

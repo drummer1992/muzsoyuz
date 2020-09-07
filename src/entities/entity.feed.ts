@@ -19,16 +19,19 @@ export interface IFeed extends IBasic {
 
 @Entity({ name: 'Feed' })
 export class Feed extends BasicEntity implements IFeed {
-	@Column({ nullable: true })
+	@Column({ type: 'varchar', length: 250, nullable: true })
 	address: string
 
-	@Column({ nullable: true })
+	@Column({ type: 'point', nullable: true })
+	location: Geolocation
+
+	@Column({ type: 'float', nullable: true, precision: 2, scale: 7 })
 	amount: number
 
-	@Column({ nullable: true })
+	@Column({ type: 'date', nullable: true })
 	date: Date
 
-	@Column({ nullable: true })
+	@Column({ nullable: true, type: 'smallint' })
 	musicalSets: number
 
 	@ManyToOne(type => User, user => user.id)
@@ -37,16 +40,16 @@ export class Feed extends BasicEntity implements IFeed {
 	@ManyToOne(type => User, user => user.id)
 	customer: string
 
-	@Column()
+	@Column({ type: 'varchar', length: 100 })
 	title: string
 
-	@Column({ nullable: true })
+	@Column({ type: 'text', nullable: true })
 	extraInfo: string
 
-	@Column({ default: true })
+	@Column({ type: 'boolean', default: true })
 	isActive: boolean
 
-	@Column({ enum: FeedType })
+	@Column({ enum: FeedType, type: 'varchar', length: 5 })
 	type: FeedType
 
 	static create(data) {

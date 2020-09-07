@@ -8,7 +8,7 @@ export interface IStats {
 	countOfDisLikes: number
 }
 
-export interface IBasic extends IStats{
+export interface IBasic extends IStats {
 	id: string
 	created: string
 	updated?: string
@@ -39,18 +39,18 @@ export abstract class BasicEntity extends Stats implements IBasic {
 	@Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
 	created: string
 
-	@Column({ nullable: true, onUpdate: 'CURRENT_TIMESTAMP' })
+	@Column({ type: 'timestamp', nullable: true, onUpdate: 'CURRENT_TIMESTAMP' })
 	updated: string
 
-	@Column({ type: 'float', nullable: true })
+	@Column({ type: 'int', nullable: true })
 	phone: number
 
-	@Column({ nullable: true })
+	@Column({ type: 'int', nullable: true })
 	altPhone: number
 
-	@Column({ enum: Instrument, nullable: true })
+	@Column({ type: 'varchar', length: 30, enum: Instrument, nullable: true })
 	musicalInstrument: Instrument
 
-	@Column({ nullable: true })
+	@Column({ type: 'varchar', length: 80, nullable: true })
 	name: string
 }

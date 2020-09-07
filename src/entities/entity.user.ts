@@ -26,37 +26,37 @@ export class User extends BasicEntity implements IUser, IStats {
 
 	static readonly SALT_ROUNDS: number = 10
 
-	@Column({ nullable: true })
+	@Column({ type: 'varchar', length: 30, nullable: true })
 	facebookId: string
 
-	@Column({ nullable: true })
+	@Column({ type: 'varchar', length: 30, nullable: true })
 	googleId: string
 
-	@Column({ nullable: true })
+	@Column({ type: 'date', nullable: true })
 	dob: Date
 
-	@Column({ nullable: true })
+	@Column({ type: 'varchar', length: 80, nullable: true })
 	city: string
 
-	@Column({ unique: true, nullable: true })
+	@Column({ type: 'varchar', length: 250, unique: true, nullable: true })
 	email: string
 
-	@Column({ nullable: true, enum: Gender })
+	@Column({ type: 'varchar', length: 2, nullable: true, enum: Gender })
 	gender: Gender
 
-	@Column({ nullable: true, unique: true })
+	@Column({ type: 'varchar', nullable: true, unique: true })
 	salt: string
 
-	@Column({ enum: UserType, nullable: true })
+	@Column({ type: 'varchar', length: 10, enum: UserType, nullable: true })
 	type: UserType
 
-	@Column({ nullable: true, unique: true })
+	@Column({ type: 'text', nullable: true, unique: true })
 	hash: string
 
-	@Column({ default: true })
+	@Column({ type: 'boolean', default: true })
 	online: boolean
 
-	@Column({ nullable: true })
+	@Column({ type: 'varchar', nullable: true })
 	imageUrl: string
 
 	async validatePassword(password: string) {

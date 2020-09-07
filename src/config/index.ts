@@ -1,6 +1,7 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm'
 import { User } from '../entities/entity.user'
 import { Feed } from '../entities/entity.feed'
+import { City } from '../entities/entity.city'
 
 require('dotenv').config()
 
@@ -47,7 +48,7 @@ class Index {
 			password: this.getValue('POSTGRES_PASSWORD'),
 			database: this.getValue('POSTGRES_DATABASE'),
 
-			entities: [User, Feed],
+			entities: [User, Feed, City],
 			synchronize: true,
 
 			migrationsTableName: 'migration',

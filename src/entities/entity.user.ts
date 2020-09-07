@@ -1,5 +1,5 @@
 import { Column, Entity } from 'typeorm'
-import { BasicEntity, IStats } from './entity.basic'
+import { AppEntity, IStats } from './entity.basic'
 import { UserType, Gender } from '../app.interfaces'
 import * as bCrypt from 'bcrypt'
 
@@ -17,7 +17,7 @@ export interface IUser {
 }
 
 @Entity({ name: 'User' })
-export class User extends BasicEntity implements IUser, IStats {
+export class User extends AppEntity implements IUser, IStats {
 	constructor(user) {
 		super()
 

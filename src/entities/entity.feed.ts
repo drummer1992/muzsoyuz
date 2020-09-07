@@ -1,10 +1,10 @@
 import { Column, Entity, ManyToOne } from 'typeorm'
-import { BasicEntity, IBasic } from './entity.basic'
+import { AppEntity, IApp } from './entity.basic'
 import { User } from './entity.user'
 import { FeedType } from '../app.interfaces'
 import assert = require('assert')
 
-export interface IFeed extends IBasic {
+export interface IFeed extends IApp {
 	address?: string
 	amount: number
 	date?: Date
@@ -18,7 +18,7 @@ export interface IFeed extends IBasic {
 }
 
 @Entity({ name: 'Feed' })
-export class Feed extends BasicEntity implements IFeed {
+export class Feed extends AppEntity implements IFeed {
 	@Column({ type: 'varchar', length: 250, nullable: true })
 	address: string
 

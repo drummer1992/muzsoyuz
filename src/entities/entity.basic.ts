@@ -8,31 +8,20 @@ export interface IStats {
 	countOfDisLikes: number
 }
 
-export interface IBasic extends IStats {
+export interface IBasic {
 	id: string
 	created: string
 	updated?: string
+}
+
+export interface IApp extends IStats {
 	name?: string
 	phone?: number
 	altPhone?: number
 	musicalInstrument?: Instrument
 }
 
-export abstract class Stats implements IStats {
-	@Column({ type: 'smallint', nullable: true })
-	yearCommercialExp: number
-
-	@Column({ type: 'int', nullable: true })
-	countOfJobs: number
-
-	@Column({ type: 'int', nullable: true })
-	countOfLikes: number
-
-	@Column({ type: 'int', nullable: true })
-	countOfDisLikes: number
-}
-
-export abstract class BasicEntity extends Stats implements IBasic {
+export abstract class Basic implements IBasic {
 	@PrimaryGeneratedColumn('uuid')
 	id: string
 
@@ -41,7 +30,9 @@ export abstract class BasicEntity extends Stats implements IBasic {
 
 	@Column({ type: 'timestamp', nullable: true, onUpdate: 'CURRENT_TIMESTAMP' })
 	updated: string
+}
 
+export abstract class AppEntity extends Basic implements IApp {
 	@Column({ type: 'int', nullable: true })
 	phone: number
 
@@ -53,4 +44,16 @@ export abstract class BasicEntity extends Stats implements IBasic {
 
 	@Column({ type: 'varchar', length: 80, nullable: true })
 	name: string
+
+	@Column({ type: 'smallint', nullable: true })
+	yearCommercialExp: number
+
+	@Column({ type: 'int', nullable: true })
+	countOfJobs: number
+
+	@Column({ type: 'int', nullable: true })
+	countOfLikes: number
+
+	@Column({ type: 'int', nullable: true })
+	countOfDisLikes: number
 }

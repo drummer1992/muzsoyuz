@@ -12,16 +12,20 @@ export enum Instrument {
 }
 
 export enum Gender {
-	M  = 'm',
+	M = 'm',
 	F = 'f',
 }
 
 export enum UserType {
 	MUSICIAN = 'musician',
 	MANAGER = 'manager',
+	TEACHER = 'teacher',
+	STUDENT = 'student',
+	MERE_MORTAL = 'mereMortal'
 }
 
 export enum FeedType {
-	JOB = 'job',
-	USER = 'user',
+	MUSICAL_REPLACEMENT = 'musicalReplacement',
+	SELF_PROMOTION = 'selfPromotion',
+	JOB = 'job'
 }

@@ -32,14 +32,14 @@ export class FeedController {
 
 	@Get('job')
 	getJobFeeds(filter: JobFeedFilterDto): Promise<Feed[]> {
-		return  this.feedService.getFeeds(filter, FeedType.JOB)
+		return this.feedService.getFeeds(filter, FeedType.JOB)
 	}
 
 	@UseGuards(JwtAuthGuard)
 	@Post('job')
 	@UsePipes(ValidationPipe)
 	createJobFeed(@Req() { user }, @Body() data: JobFeedDto): Promise<ObjectLiteral> {
-		return this.feedService.createFeed(Object.assign(data, { ownerId: user.id }))
+		return this.feedService.createFeed(Object.assign(data, { user: user.id }))
 	}
 
 	@UseGuards(JwtAuthGuard)

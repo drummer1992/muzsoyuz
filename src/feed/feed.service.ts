@@ -25,13 +25,8 @@ export class FeedService {
 		return feed
 	}
 
-	getFeeds({ musicalInstrument, city }: JobFeedFilterDto = {}, type: FeedType) {
-		return this.jobFeedRepository.find({
-			where: {
-				type,
-				musicalInstrument,
-			},
-		})
+	getFeeds(filters: JobFeedFilterDto, type: FeedType) {
+		return this.jobFeedRepository.getFeeds(filters, type)
 	}
 
 	createFeed(data: JobFeedDto | BasicFeedDto) {

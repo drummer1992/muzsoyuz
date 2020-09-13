@@ -2,6 +2,7 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm'
 import { User } from '../entities/entity.user'
 import { Feed } from '../entities/entity.feed'
 import { City } from '../entities/entity.city'
+import { WorkDay } from '../entities/entity.work.day'
 
 require('dotenv').config()
 
@@ -41,6 +42,8 @@ class Index {
 	public getTypeOrmConfig(): TypeOrmModuleOptions {
 		return {
 			type: 'postgres',
+			logger: 'advanced-console',
+			logging: 'all',
 
 			host: this.getValue('POSTGRES_HOST'),
 			port: parseInt(this.getValue('POSTGRES_PORT')),
@@ -48,7 +51,7 @@ class Index {
 			password: this.getValue('POSTGRES_PASSWORD'),
 			database: this.getValue('POSTGRES_DATABASE'),
 
-			entities: [User, Feed, City],
+			entities: [User, Feed, City, WorkDay],
 			synchronize: true,
 
 			migrationsTableName: 'migration',

@@ -1,7 +1,9 @@
-import { Column, Entity } from 'typeorm'
+import { Column, Entity, OneToMany } from 'typeorm'
 import { AppEntity, IStats } from './entity.basic'
 import { UserType, Gender } from '../app.interfaces'
 import * as bCrypt from 'bcrypt'
+import { WorkDay } from './entity.work.day'
+import { Feed } from './entity.feed'
 
 export interface IUser {
 	dob?: Date
@@ -25,6 +27,12 @@ export class User extends AppEntity implements IUser, IStats {
 	}
 
 	static readonly SALT_ROUNDS: number = 10
+
+	@OneToMany(type => WorkDay, workday => workday.user)
+	workdays: WorkDay[]
+
+	@OneToMany(type => Feed, feed => feed.user)
+	feeds: Feed[]
 
 	@Column({ type: 'varchar', length: 30, nullable: true })
 	facebookId: string

@@ -5,9 +5,9 @@ import { AuthGuard } from '@nestjs/passport'
 export class GoogleAuthGuard extends AuthGuard('google') {
 	handleRequest(err, user) {
 		if (err || !user) {
-			throw new HttpException(err.message, HttpStatus.FORBIDDEN);
+			throw new HttpException(err.message, HttpStatus.FORBIDDEN)
 		}
 
-		return user;
+		return user
 	}
 }

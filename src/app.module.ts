@@ -3,7 +3,7 @@ import { ConfigModule } from '@nestjs/config'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { config } from './config'
 import { AuthModule } from './auth/auth.module'
-import { UsersModule } from './users/users.module'
+import { UserModule } from './users/user.module'
 import { FeedModule } from './feed/feed.module'
 import { AppController } from './app.controller'
 
@@ -11,7 +11,7 @@ import { AppController } from './app.controller'
 	imports    : [
 		ConfigModule.forRoot({ isGlobal: true }),
 		TypeOrmModule.forRoot(config.getTypeOrmConfig()),
-		UsersModule,
+		UserModule,
 		FeedModule,
 		AuthModule,
 	],

@@ -9,9 +9,8 @@ export interface IFeed extends IApp {
 	amount: number
 	date?: Date
 	musicalSets: number
-	customer?: string
 	extraInfo?: string
-	owner: string
+	user: User
 	title: string
 	type: FeedType
 	isActive: boolean
@@ -22,8 +21,9 @@ export class Feed extends AppEntity implements IFeed {
 	@Column({ type: 'varchar', length: 250, nullable: true })
 	address: string
 
-	@Column({ type: 'point', nullable: true })
-	location: Geolocation
+	// TODO: not implemented
+	// @Column({ type: 'point', nullable: true })
+	// location: Geolocation
 
 	@Column({ type: 'numeric', nullable: true, precision: 7, scale: 2 })
 	amount: number
@@ -34,11 +34,8 @@ export class Feed extends AppEntity implements IFeed {
 	@Column({ nullable: true, type: 'smallint' })
 	musicalSets: number
 
-	@ManyToOne(type => User, user => user.id)
-	owner: string
-
-	@ManyToOne(type => User, user => user.id)
-	customer: string
+	@ManyToOne(type => User, user => user.feeds)
+	user: User
 
 	@Column({ type: 'varchar', length: 100 })
 	title: string

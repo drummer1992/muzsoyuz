@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { UsersService } from '../users/users.service'
+import { UserService } from '../users/user.service'
 import { businessAssert } from '../lib/errors'
 import { User } from '../entities/entity.user'
 import { AuthDto } from '../dto/user.dto'
@@ -8,14 +8,14 @@ import { JwtService } from '@nestjs/jwt'
 @Injectable()
 export class AuthService {
 	constructor(
-		private readonly usersService: UsersService,
+		private readonly userService: UserService,
 		private readonly jwtService: JwtService,
 	) {
 	}
 
 	async register(data: AuthDto) {
 		businessAssert(
-			await this.usersService.ensureUniqueEmail(data.email),
+			await this.userService.ensureUniqueEmail(data.email),
 			`User with email: ${data.email} already exists`,
 		)
 
@@ -23,11 +23,11 @@ export class AuthService {
 
 		await user.setPassword(data.password)
 
-		return this.login({ username: user.email, sub: this.usersService.createProfile(user) })
+		return this.login({ username: user.email, sub: this.userService.createProfile(user) })
 	}
 
 	async validateUser(email, password) {
-		const user = await this.usersService.findByEmail(email)
+		const user = await this.userService.findByEmail(email)
 
 		return await user.validatePassword(password)
 			? user
@@ -41,16 +41,18 @@ export class AuthService {
 	}
 
 	async oauthHandler(user) {
-		const { id, provider, displayName, emails: [email] = [], photos: [imageUrl] = [] } = user
+		const { provider, displayName, emails: [email] = [], photos: [image] = [] } = user
 
-		const existingUser = await this.usersService.findByProviderId(id, provider)
+		const existingUser = await this.userService.getIdByProviderId(user.id, provider)
 
-		if (!existingUser) {
-			await this.usersService.createProfile(new User({
-				[`${provider}Id`]: id,
+		let id = existingUser?.id
+
+		if (!id) {
+			id = await this.userService.createProfile(new User({
+				[`${provider}Id`]: user.id,
 				name             : displayName || undefined,
-				email            : email || undefined,
-				imageUrl         : imageUrl || undefined,
+				email            : email?.value || undefined,
+				imageUrl         : image?.value || undefined,
 			}))
 		}
 

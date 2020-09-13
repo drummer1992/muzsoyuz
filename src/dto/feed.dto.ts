@@ -1,4 +1,5 @@
 import {
+	IsBoolean,
 	IsDateString,
 	IsIn,
 	IsNumber,
@@ -16,6 +17,10 @@ export class JobFeedFilterDto {
 
 	@IsString()
 	city?: string
+
+	@IsOptional()
+	@IsBoolean()
+	myFeed: boolean
 }
 
 export class BasicFeedDto extends BasicDto {

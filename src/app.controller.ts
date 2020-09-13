@@ -12,7 +12,7 @@ import {
 import { LoggingInterceptor } from './logging/logging.interceptor'
 import { LocalAuthGuard } from './auth/guards/local-auth.guard'
 import { AuthService } from './auth/auth.service'
-import { UsersService } from './users/users.service'
+import { UserService } from './users/user.service'
 import { AuthDto } from './dto/user.dto'
 import { FacebookAuthGuard } from './auth/guards/facebook-auth.guard'
 import { GoogleAuthGuard } from './auth/guards/google-auth.guard'
@@ -23,7 +23,7 @@ export class AppController {
 	@Inject()
 	private readonly authService: AuthService
 	@Inject()
-	private readonly usersService: UsersService
+	private readonly userService: UserService
 
 	@UseGuards(LocalAuthGuard)
 	@Post('auth/login')
@@ -57,7 +57,7 @@ export class AppController {
 
 	@Get('oauth/facebook/callback')
 	@UseGuards(FacebookAuthGuard)
-	async oauthFacebookCallback(@Req() { user }): Promise<{ token: string }> {
+	oauthFacebookCallback(@Req() { user }): Promise<{ token: string }> {
 		return this.authService.oauthHandler(user)
 	}
 }

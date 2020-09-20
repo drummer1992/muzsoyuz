@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { UserRepository } from './repository/user.repository'
+import { UserRepository } from '../repository/user.repository'
 import { UserDto } from '../dto/user.dto'
 import { InjectRepository } from '@nestjs/typeorm'
 import { businessAssert } from '../lib/errors'
@@ -7,7 +7,7 @@ import { ValidationUtils } from '../utils/validation'
 import { User } from '../entities/entity.user'
 import { ObjectUtils } from '../utils/object'
 import { WorkdayDto, WorkdayFilterDto } from '../dto/workday.dto'
-import { WorkdayRepository } from './repository/workday.repository'
+import { WorkdayRepository } from '../repository/workday.repository'
 
 @Injectable()
 export class UserService {

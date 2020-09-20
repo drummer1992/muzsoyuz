@@ -6,7 +6,7 @@ import {
 	Inject,
 	Param,
 	Patch,
-	Post, Req, UseGuards,
+	Post, Query, Req, UseGuards,
 	UseInterceptors,
 	UsePipes,
 	ValidationPipe,
@@ -25,14 +25,10 @@ export class FeedController {
 	@Inject()
 	private readonly feedService: FeedService
 
-	@Get('job/:id')
-	getJobFeed(@Param() { id }): Promise<Feed> {
-		return this.feedService.getFeed(id, FeedType.JOB)
-	}
-
 	@Get('job')
-	getJobFeeds(filter: JobFeedFilterDto): Promise<Feed[]> {
-		return this.feedService.getFeeds(filter, FeedType.JOB)
+	@UsePipes(ValidationPipe)
+	getJobFeeds(@Query() filter: JobFeedFilterDto): Promise<Feed[]> {
+		return this.feedService.getFeeds(filter, FeedType.MUSICAL_REPLACEMENT)
 	}
 
 	@UseGuards(JwtAuthGuard)

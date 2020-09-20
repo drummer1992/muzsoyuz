@@ -21,9 +21,19 @@ export class Feed extends AppEntity implements IFeed {
 	@Column({ type: 'varchar', length: 250, nullable: true })
 	address: string
 
-	// TODO: not implemented
-	// @Column({ type: 'point', nullable: true })
-	// location: Geolocation
+	@Column({
+		type: 'geometry',
+		nullable: true,
+		transformer: {
+			to(location: any): any {
+				return { type: 'Point', coordinates: [location.lng, location.lat] }
+			},
+			from(geoJson: any): any {
+				return { lng: geoJson.coordinates[0], lat: geoJson.coordinates[1] }
+			},
+		},
+	})
+	location: any
 
 	@Column({ type: 'numeric', nullable: true, precision: 7, scale: 2 })
 	amount: number
@@ -46,7 +56,7 @@ export class Feed extends AppEntity implements IFeed {
 	@Column({ type: 'boolean', default: true })
 	isActive: boolean
 
-	@Column({ enum: FeedType, type: 'varchar', length: 5 })
+	@Column({ enum: FeedType, type: 'varchar', length: 30 })
 	type: FeedType
 
 	static create(data) {

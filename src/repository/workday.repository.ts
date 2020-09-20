@@ -1,8 +1,10 @@
 import { EntityRepository, Repository } from 'typeorm'
-import { WorkDay } from '../../entities/entity.work.day'
-import { WorkdayDto } from '../../dto/workday.dto'
-import { DateUtils } from '../../utils/date'
+import { WorkDay } from '../entities/entity.work.day'
+import { WorkdayDto } from '../dto/workday.dto'
+import { DateUtils } from '../utils/date'
+import { Injectable } from '@nestjs/common'
 
+@Injectable()
 @EntityRepository(WorkDay)
 export class WorkdayRepository extends Repository<WorkDay> {
 	async markWorkingDay(user, dto: WorkdayDto) {

@@ -12,8 +12,9 @@ import { BasicDto } from './basic.dto'
 import { FeedType, Instrument } from '../app.interfaces'
 
 export class JobFeedFilterDto {
+	@IsOptional()
 	@IsIn(Object.values(Instrument))
-	musicalInstrument?: string
+	musicalInstrument: string
 
 	@IsString()
 	city?: string
@@ -41,6 +42,9 @@ export class JobFeedDto extends BasicFeedDto {
 	@IsString()
 	@IsOptional()
 	address: string
+
+	@IsOptional()
+	location: any
 
 	@IsNumber()
 	amount: number

@@ -1,9 +1,11 @@
 import { EntityRepository, Repository } from 'typeorm'
-import { User } from '../../entities/entity.user'
-import { WorkdayFilterDto } from '../../dto/workday.dto'
-import { WorkDay } from '../../entities/entity.work.day'
-import { DateUtils } from '../../utils/date'
+import { User } from '../entities/entity.user'
+import { WorkdayFilterDto } from '../dto/workday.dto'
+import { WorkDay } from '../entities/entity.work.day'
+import { DateUtils } from '../utils/date'
+import { Injectable } from '@nestjs/common'
 
+@Injectable()
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
 	public publicAttributes = [

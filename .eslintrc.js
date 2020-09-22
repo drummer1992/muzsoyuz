@@ -1,194 +1,195 @@
 module.exports = {
-  parser: '@typescript-eslint/parser',
+  parser       : '@typescript-eslint/parser',
   parserOptions: {
-    project: 'tsconfig.json',
+    project   : 'tsconfig.json',
     sourceType: 'module',
   },
-  plugins: ['@typescript-eslint/eslint-plugin'],
-  extends: [
+  plugins      : ['@typescript-eslint/eslint-plugin'],
+  extends      : [
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
     'prettier',
     'prettier/@typescript-eslint',
   ],
-  root: true,
-  env: {
+  root         : true,
+  env          : {
     node: true,
     jest: true,
+    es6 : true,
   },
-  rules: {
-    '@typescript-eslint/interface-name-prefix': 'off',
+  rules        : {
+    '@typescript-eslint/interface-name-prefix'        : 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
-    '@typescript-eslint/no-explicit-any': 'off',
-    "no-multiple-empty-lines": [
-      "error",
+    '@typescript-eslint/no-explicit-any'              : 'off',
+    'no-multiple-empty-lines'                         : [
+      'error',
       {
-        "max": 1
-      }
+        'max': 1,
+      },
     ],
-    "padding-line-between-statements": [
-      "error",
+    'padding-line-between-statements'                 : [
+      'error',
       {
-        "blankLine": "always",
-        "prev": [
-          "const",
-          "let",
-          "var"
+        'blankLine': 'always',
+        'prev'     : [
+          'const',
+          'let',
+          'var',
         ],
-        "next": "*"
+        'next'     : '*',
       },
       {
-        "blankLine": "any",
-        "prev": [
-          "const",
-          "let",
-          "var"
+        'blankLine': 'any',
+        'prev'     : [
+          'const',
+          'let',
+          'var',
         ],
-        "next": [
-          "const",
-          "let",
-          "var"
-        ]
+        'next'     : [
+          'const',
+          'let',
+          'var',
+        ],
       },
       {
-        "blankLine": "always",
-        "prev": "*",
-        "next": "return"
+        'blankLine': 'always',
+        'prev'     : '*',
+        'next'     : 'return',
       },
       {
-        "blankLine": "always",
-        "prev": "*",
-        "next": "block-like"
+        'blankLine': 'always',
+        'prev'     : '*',
+        'next'     : 'block-like',
       },
       {
-        "blankLine": "always",
-        "prev": "block-like",
-        "next": "*"
-      }
+        'blankLine': 'always',
+        'prev'     : 'block-like',
+        'next'     : '*',
+      },
     ],
-    "padded-blocks": [
-      "error",
-      "never"
+    'padded-blocks'                                   : [
+      'error',
+      'never',
     ],
-    "comma-dangle": [
-      "error",
-      "always-multiline"
+    'comma-dangle'                                    : [
+      'error',
+      'always-multiline',
     ],
-    "comma-spacing": [
-      "error",
+    'comma-spacing'                                   : [
+      'error',
       {
-        "before": false,
-        "after": true
-      }
+        'before': false,
+        'after' : true,
+      },
     ],
-    "array-bracket-spacing": [
-      "error",
-      "never"
+    'array-bracket-spacing'                           : [
+      'error',
+      'never',
     ],
-    "require-atomic-updates": "off",
-    "no-mixed-operators": ["error", {
-      "groups": [
-        ["&&", "?:"],
-      ]
+    'require-atomic-updates'                          : 'off',
+    'no-mixed-operators'                              : ['error', {
+      'groups': [
+        ['&&', '?:'],
+      ],
     }],
-    "operator-linebreak": ["error", "before"],
-    "quote-props": [
-      "warn",
-      "as-needed"
+    'operator-linebreak'                              : ['error', 'before'],
+    'quote-props'                                     : [
+      'warn',
+      'as-needed',
     ],
-    "no-constant-condition": [
-      "error",
+    'no-constant-condition'                           : [
+      'error',
       {
-        "checkLoops": false
-      }
+        'checkLoops': false,
+      },
     ],
     // require function declarations instead of expressions
-    "func-style": [
-      "warn",
-      "declaration",
+    'func-style'                                      : [
+      'warn',
+      'declaration',
       {
-        "allowArrowFunctions": true
-      }
+        'allowArrowFunctions': true,
+      },
     ],
     // disallow declaration of variables already declared in the outer scope
     // "no-shadow": "warn",
 
     // require let or const instead of var
-    "require-await": "warn",
-    "no-var": "warn",
-    "no-undef": "warn",
-    "max-len": [
-      "warn",
-      120
+    'require-await'          : 'warn',
+    'no-var'                 : 'warn',
+    'no-undef'               : 'warn',
+    'max-len'                : [
+      'warn',
+      120,
     ],
-    "no-unexpected-multiline": "error",
+    'no-unexpected-multiline': 'error',
     // require or disallow use of semicolons instead of ASI
-    "semi": [
-      "warn",
-      "never"
+    'semi'                   : [
+      'warn',
+      'never',
     ],
     // require the use of === and !== except null comparison
-    "eqeqeq": [
-      "warn",
-      "smart"
+    'eqeqeq'                 : [
+      'warn',
+      'smart',
     ],
     // specify whether double or single quotes should be used
-    "quotes": [
-      "warn",
-      "single",
-      "avoid-escape"
+    'quotes'                 : [
+      'warn',
+      'single',
+      'avoid-escape',
     ],
     // require space before/after arrow function"s arrow
-    "arrow-spacing": [
-      "warn",
+    'arrow-spacing'          : [
+      'warn',
       {
-        "before": true,
-        "after": true
-      }
+        'before': true,
+        'after' : true,
+      },
     ],
-    "arrow-parens": [
-      "warn",
-      "as-needed"
+    'arrow-parens'           : [
+      'warn',
+      'as-needed',
     ],
     // suggest using of const declaration for variables that are never modified after declared
-    "prefer-const": [
-      "warn",
+    'prefer-const'           : [
+      'warn',
       {
-        "destructuring": "all"
-      }
+        'destructuring': 'all',
+      },
     ],
     // restrict what can be thrown as an exception
-    "no-throw-literal": "warn",
+    'no-throw-literal'       : 'warn',
     // disallow Unused Expressions
-    "no-unused-expressions": [
-      "warn",
+    'no-unused-expressions'  : [
+      'warn',
       {
-        "allowShortCircuit": true
-      }
+        'allowShortCircuit': true,
+      },
     ],
     // require padding inside curly braces
-    "object-curly-spacing": [
-      "warn",
-      "always"
+    'object-curly-spacing'   : [
+      'warn',
+      'always',
     ],
-    "no-sequences": "error",
-    "valid-jsdoc": [
+    'no-sequences'           : 'error',
+    'valid-jsdoc'            : [
       2,
       {
-        "requireReturn": false,
-        "requireParamDescription": false,
-        "requireReturnDescription": false,
-        "prefer": {
-          "arg": "param",
-          "argument": "param",
-          "return": "returns"
+        'requireReturn'           : false,
+        'requireParamDescription' : false,
+        'requireReturnDescription': false,
+        'prefer'                  : {
+          'arg'     : 'param',
+          'argument': 'param',
+          'return'  : 'returns',
         },
-        "preferType": {
-          "string": "String",
-          "number": "Number",
-          "function": "Function"
-        }
-      }
-    ]
+        'preferType'              : {
+          'string'  : 'String',
+          'number'  : 'Number',
+          'function': 'Function',
+        },
+      },
+    ],
   },
-};
+}

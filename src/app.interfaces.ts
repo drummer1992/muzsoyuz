@@ -29,3 +29,5 @@ export enum FeedType {
 	SELF_PROMOTION = 'selfPromotion',
 	JOB = 'job'
 }
+
+export type ProviderAttribute = 'googleId' | 'facebookId'

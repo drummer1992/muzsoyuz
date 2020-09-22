@@ -8,6 +8,7 @@ import { User } from '../entities/entity.user'
 import { ObjectUtils } from '../utils/object'
 import { WorkdayDto, WorkdayFilterDto } from '../dto/workday.dto'
 import { WorkdayRepository } from '../repository/workday.repository'
+import { ProviderAttribute } from '../app.interfaces'
 
 @Injectable()
 export class UserService {
@@ -31,14 +32,19 @@ export class UserService {
 		return user
 	}
 
-	getIdByProviderId(id, provider) {
+	getIdsByProviderIdOrEmail(id, email, provider) {
+		const providerAttribute = `${provider}Id` as ProviderAttribute
+
 		return this.userRepository.findOne({
-				where : { [`${provider}Id`]: id },
-				select: ['id'],
-			})
+			where : [
+				{ [`${provider}Id`]: id },
+				{ email: email || undefined },
+			],
+			select: ['id', providerAttribute],
+		})
 	}
 
-	ensureUniqueEmail(email: string) {
+	ensureUniqueUser(email: string) {
 		return this.userRepository.ensureUniqueUser('email', email)
 	}
 
@@ -60,5 +66,9 @@ export class UserService {
 		await this.userRepository.update({ id }, data)
 
 		return data
+	}
+
+	updateProviderId(id, provider, providerId) {
+		return this.userRepository.update({ id }, { [`${provider}Id`]: providerId })
 	}
 }

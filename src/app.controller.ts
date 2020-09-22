@@ -25,8 +25,9 @@ export class AppController {
 	@Inject()
 	private readonly userService: UserService
 
-	@UseGuards(LocalAuthGuard)
 	@Post('auth/login')
+	@UsePipes(ValidationPipe)
+	@UseGuards(LocalAuthGuard)
 	login(@Request() req): { token: string } {
 		return this.authService.login(req.user)
 	}

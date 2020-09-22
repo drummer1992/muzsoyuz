@@ -31,22 +31,22 @@ export class FeedController {
 		return this.feedService.getFeeds(filter, FeedType.MUSICAL_REPLACEMENT)
 	}
 
-	@UseGuards(JwtAuthGuard)
 	@Post('job')
 	@UsePipes(ValidationPipe)
+	@UseGuards(JwtAuthGuard)
 	createJobFeed(@Req() { user }, @Body() data: JobFeedDto): Promise<ObjectLiteral> {
 		return this.feedService.createFeed(Object.assign(data, { user: user.id }))
 	}
 
-	@UseGuards(JwtAuthGuard)
 	@Patch('job/:id')
 	@UsePipes(ValidationPipe)
+	@UseGuards(JwtAuthGuard)
 	updateJobFeed(@Param() { id }, @Body() data): Promise<JobFeedDto | BasicFeedDto> {
 		return this.feedService.updatedFeed(id, data)
 	}
 
-	@UseGuards(JwtAuthGuard)
 	@Delete('job/:id')
+	@UseGuards(JwtAuthGuard)
 	deleteJobFeed(@Param() { id }): Promise<void> {
 		return this.feedService.deleteFeed(id)
 	}

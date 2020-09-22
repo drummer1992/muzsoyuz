@@ -44,7 +44,7 @@ export class Feed extends AppEntity implements IFeed {
 	@Column({ nullable: true, type: 'smallint' })
 	musicalSets: number
 
-	@ManyToOne(type => User, user => user.feeds)
+	@ManyToOne(() => User, user => user.feeds)
 	user: User
 
 	@Column({ type: 'varchar', length: 100 })

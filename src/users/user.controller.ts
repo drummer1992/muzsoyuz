@@ -12,27 +12,27 @@ import { LoggingInterceptor } from '../logging/logging.interceptor'
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard'
 import { WorkdayDto, WorkdayFilterDto } from '../dto/workday.dto'
 
-@UseInterceptors(LoggingInterceptor)
 @Controller('user')
+@UseInterceptors(LoggingInterceptor)
 export class UserController {
 	@Inject()
 	private readonly userService: UserService
 
-	@UseGuards(JwtAuthGuard)
 	@Get('profile')
+	@UseGuards(JwtAuthGuard)
 	getProfile(@Req() { user }) {
 		return this.userService.getProfile(user.id)
 	}
 
-	@UseGuards(JwtAuthGuard)
 	@Patch('profile')
+	@UseGuards(JwtAuthGuard)
 	updateProfile(@Req() { user }, @Body() data: UserDto) {
 		return this.userService.updateProfile(user.id, data)
 	}
 
-	@UseGuards(JwtAuthGuard)
 	@Post('workday')
 	@UsePipes(ValidationPipe)
+	@UseGuards(JwtAuthGuard)
 	markWorkingDay(@Req() { user }, @Body() data: WorkdayDto) {
 		return this.userService.markWorkingDay(user, data)
 	}

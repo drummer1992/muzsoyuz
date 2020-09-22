@@ -15,7 +15,7 @@ export class AuthService {
 
 	async register(data: AuthDto) {
 		businessAssert(
-			await this.userService.ensureUniqueEmail(data.email),
+			await this.userService.ensureUniqueUser(data.email),
 			`User with email: ${data.email} already exists`,
 		)
 
@@ -41,11 +41,13 @@ export class AuthService {
 	}
 
 	async oauthHandler(user) {
+		let id
+
 		const { provider, displayName, emails: [email] = [], photos: [image] = [] } = user
 
-		const existingUser = await this.userService.getIdByProviderId(user.id, provider)
+		const existingUser = await this.userService.getIdsByProviderIdOrEmail(user.id, email?.value, provider)
 
-		let id = existingUser?.id
+		id = existingUser?.id
 
 		if (!id) {
 			id = await this.userService.createProfile(new User({
@@ -54,6 +56,8 @@ export class AuthService {
 				email            : email?.value || undefined,
 				imageUrl         : image?.value || undefined,
 			}))
+		} else if (existingUser && !existingUser[`${provider}Id`]) {
+			await this.userService.updateProviderId(id, provider, user.id)
 		}
 
 		return this.login({ username: email || displayName, sub: id })

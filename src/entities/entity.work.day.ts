@@ -4,7 +4,7 @@ import { User } from './entity.user'
 
 @Entity({ name: 'Workday' })
 export class WorkDay extends Basic {
-	@ManyToOne(type => User, user => user.id)
+	@ManyToOne(() => User, user => user.id)
 	user: string
 
 	@Column({ type:'boolean' })

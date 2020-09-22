@@ -21,7 +21,7 @@ export class AuthDto {
 	@IsString()
 	@MinLength(8)
 	@MaxLength(50)
-	@Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/)
+	@Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[a-z]).*$/)
 	password: string
 }
 

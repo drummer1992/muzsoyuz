@@ -28,10 +28,10 @@ export class User extends AppEntity implements IUser, IStats {
 
 	static readonly SALT_ROUNDS: number = 10
 
-	@OneToMany(type => WorkDay, workday => workday.user)
+	@OneToMany(() => WorkDay, workday => workday.user)
 	workdays: WorkDay[]
 
-	@OneToMany(type => Feed, feed => feed.user)
+	@OneToMany(() => Feed, feed => feed.user)
 	feeds: Feed[]
 
 	@Column({ type: 'varchar', length: 30, nullable: true })

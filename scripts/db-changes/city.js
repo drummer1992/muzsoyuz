@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 const CITY_MAP = {
   Kyiv: [
@@ -13,23 +13,22 @@ const CITY_MAP = {
     [30.42253, 50.34654],
     [30.22561, 50.44537],
   ],
-};
+}
 
 const getInsertQuery = (city, multiPolygon) => {
   return multiPolygon.reduce((prev, point, i) => {
-      const isLastPoint = i === multiPolygon.length - 1;
+      const isLastPoint = i === multiPolygon.length - 1
 
-      const strPoint = point.join(' ') + ',';
-      const str = isLastPoint ? strPoint.slice(0, -1) : strPoint;
+      const strPoint = point.join(' ')
 
-      return prev + str
+      return prev + (isLastPoint ? strPoint : strPoint + ',')
     },
     `INSERT INTO "City" (name, location) VALUES ('${city}', ST_GeomFromText('MULTIPOLYGON(((`,
-  ) + `)))', 4326))`;
-};
+  ) + `)))', 4326))`
+}
 
 module.exports = async client => {
-  const { rows: [{ count }] } = await client.query(`SELECT COUNT(*) from "City"`);
+  const { rows: [{ count }] } = await client.query(`SELECT COUNT(*) from "City"`)
 
   if (Number(count) === 0) {
     const cityKeys = Object.keys(CITY_MAP)
@@ -40,6 +39,6 @@ module.exports = async client => {
       await client.query(query)
     }
 
-    console.log(`Cities was inserted: ${cityKeys.join(', ')}`);
+    console.log(`Cities was inserted: ${cityKeys.join(', ')}`)
   }
-};
+}

@@ -7,7 +7,8 @@ import { WorkDay } from '../entities/entity.work.day'
 require('dotenv').config()
 
 class Index {
-	constructor(private env: { [key: string]: string | undefined }) { }
+	constructor(private env: { [key: string]: string | undefined }) {
+	}
 
 	private getValue(key: string, throwOnMissing = true): string {
 		const value = this.env[key]
@@ -41,17 +42,14 @@ class Index {
 
 	public getTypeOrmConfig(): TypeOrmModuleOptions {
 		return {
-			type: 'postgres',
-			logger: 'advanced-console',
-			logging: 'all',
-
-			host: this.getValue('POSTGRES_HOST'),
-			port: parseInt(this.getValue('POSTGRES_PORT')),
+			type    : 'postgres',
+			host    : this.getValue('POSTGRES_HOST'),
+			port    : parseInt(this.getValue('POSTGRES_PORT')),
 			username: this.getValue('POSTGRES_USER'),
 			password: this.getValue('POSTGRES_PASSWORD'),
 			database: this.getValue('POSTGRES_DATABASE'),
 
-			entities: [User, Feed, City, WorkDay],
+			entities   : [User, Feed, City, WorkDay],
 			synchronize: true,
 
 			migrationsTableName: 'migration',

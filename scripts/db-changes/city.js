@@ -30,15 +30,17 @@ const getInsertQuery = (city, multiPolygon) => {
 module.exports = async client => {
   const { rows: [{ count }] } = await client.query(`SELECT COUNT(*) from "City"`)
 
-  if (Number(count) === 0) {
-    const cityKeys = Object.keys(CITY_MAP)
+  const cityKeys = Object.keys(CITY_MAP)
 
+  if (Number(count) === 0) {
     for (const city of cityKeys) {
       const query = getInsertQuery(city, CITY_MAP[city])
 
       await client.query(query)
     }
 
-    console.log(`Cities was inserted: ${cityKeys.join(', ')}`)
+    console.log(`City was inserted: ${cityKeys.join(', ')}`)
+  } else {
+    console.warn(`City already exists: ${cityKeys.join(', ')}`)
   }
 }

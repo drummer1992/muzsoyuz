@@ -1,10 +1,9 @@
 import { BasicDto } from './basic.dto'
 import { Gender, UserType } from '../app.interfaces'
 import {
-	IsBoolean,
 	IsDateString,
 	IsEmail,
-	IsIn,
+	IsIn, IsNumber,
 	IsOptional,
 	IsString, IsUrl,
 	Matches,
@@ -47,9 +46,9 @@ export class UserDto extends BasicDto {
 	@IsOptional()
 	type?: UserType
 
-	@IsBoolean()
 	@IsOptional()
-	online?: boolean
+	@IsNumber()
+	yearCommercialExp: number
 
 	@IsUrl()
 	@IsOptional()

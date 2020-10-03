@@ -2,7 +2,28 @@ import { Column, Entity, ManyToOne } from 'typeorm'
 import { AppEntity, IApp } from './entity.basic'
 import { User } from './entity.user'
 import { FeedType } from '../app.interfaces'
-import assert = require('assert')
+import { FeedValidator } from '../custom-validators/feed.validator'
+import { argumentAssert } from '../lib/errors'
+
+const BASIC_FEED_VALIDATORS = {
+	title            : FeedValidator.title,
+	extraInfo        : FeedValidator.extraInfo,
+	musicalInstrument: FeedValidator.musicalInstrument,
+}
+
+const MUSICAL_REPLACEMENT_VALIDATION_MAP = {
+	address    : FeedValidator.address,
+	amount     : FeedValidator.amount,
+	date       : FeedValidator.date,
+	musicalSets: FeedValidator.musicalSets,
+	...BASIC_FEED_VALIDATORS,
+}
+
+const SELF_PROMOTION_VALIDATION_MAP = {
+	...BASIC_FEED_VALIDATORS,
+}
+
+const JOB_VALIDATION_MAP = {}
 
 export interface IFeed extends IApp {
 	address?: string
@@ -12,7 +33,7 @@ export interface IFeed extends IApp {
 	extraInfo?: string
 	user: User
 	title: string
-	type: FeedType
+	feedType: FeedType
 	isActive: boolean
 }
 
@@ -21,15 +42,18 @@ export class Feed extends AppEntity implements IFeed {
 	@Column({ type: 'varchar', length: 250, nullable: true })
 	address: string
 
+	@Column({ type: 'varchar', length: 500, nullable: true })
+	addressGeoCoded: string
+
 	@Column({
-		type: 'geometry',
-		nullable: true,
+		type       : 'geometry',
+		nullable   : true,
 		transformer: {
 			to(location: any): any {
-				return { type: 'Point', coordinates: [location.lng, location.lat] }
+				return location && { type: 'Point', coordinates: [location.lng, location.lat] }
 			},
 			from(geoJson: any): any {
-				return { lng: geoJson.coordinates[0], lat: geoJson.coordinates[1] }
+				return geoJson && { lng: geoJson.coordinates[0], lat: geoJson.coordinates[1] }
 			},
 		},
 	})
@@ -57,11 +81,32 @@ export class Feed extends AppEntity implements IFeed {
 	isActive: boolean
 
 	@Column({ enum: FeedType, type: 'varchar', length: 30 })
-	type: FeedType
+	feedType: FeedType
 
 	static create(data) {
-		assert(data, 'DTO is not provided')
+		argumentAssert(data, 'DTO is not provided')
 
 		return Object.assign(new this(), data)
+	}
+
+	static validateDto(dto) {
+		argumentAssert(dto, 'Data is empty')
+		argumentAssert(dto.feedType, 'feedType is required')
+
+		const MAP_BY_FEED_TYPE = {
+			[FeedType.MUSICAL_REPLACEMENT]: MUSICAL_REPLACEMENT_VALIDATION_MAP,
+			[FeedType.SELF_PROMOTION]     : SELF_PROMOTION_VALIDATION_MAP,
+			[FeedType.JOB]                : JOB_VALIDATION_MAP,
+		}
+
+		argumentAssert(FeedValidator.feedType.validate(dto.feedType), FeedValidator.feedType.message(dto.feedType))
+
+		const VALIDATION_MAP = MAP_BY_FEED_TYPE[dto.feedType]
+
+		Object.keys(VALIDATION_MAP).forEach(attribute => {
+			const validator = VALIDATION_MAP[attribute]
+
+			argumentAssert(validator.validate(dto[attribute]), validator.message(dto[attribute]))
+		})
 	}
 }

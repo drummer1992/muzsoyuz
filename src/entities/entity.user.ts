@@ -11,7 +11,6 @@ export interface IUser {
 	email: string
 	gender?: Gender
 	type: UserType
-	online: boolean
 	hash: string
 	salt: string
 	facebookId: string
@@ -60,9 +59,6 @@ export class User extends AppEntity implements IUser, IStats {
 
 	@Column({ type: 'text', nullable: true, unique: true })
 	hash: string
-
-	@Column({ type: 'boolean', default: true })
-	online: boolean
 
 	@Column({ type: 'varchar', nullable: true })
 	imageUrl: string

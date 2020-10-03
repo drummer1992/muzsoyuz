@@ -56,6 +56,8 @@ export class LoggingInterceptor implements NestInterceptor {
 				}),
 
 				catchError(async err => {
+					console.error(err)
+
 					const message = `[ERROR]: [${requestId}] ${new Date().toISOString()}, ${JSON.stringify(err)}\n`
 
 					await stream.write(message)

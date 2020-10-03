@@ -25,6 +25,7 @@ export class UserController {
 	}
 
 	@Patch('profile')
+	@UsePipes(ValidationPipe)
 	@UseGuards(JwtAuthGuard)
 	updateProfile(@Req() { user }, @Body() data: UserDto) {
 		return this.userService.updateProfile(user.id, data)

@@ -21,7 +21,9 @@ export abstract class Request {
 					try {
 						resolve(body && JSON.parse(body))
 					} catch (e) {
-						throw new InternalServerErrorException(e.message)
+						console.error(e.message)
+
+						throw new InternalServerErrorException()
 					}
 				})
 			})

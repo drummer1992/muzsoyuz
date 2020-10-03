@@ -1,5 +1,4 @@
 import {
-	IsBoolean,
 	IsDateString,
 	IsIn,
 	IsNumber,
@@ -11,17 +10,21 @@ import {
 import { BasicDto } from './basic.dto'
 import { FeedType, Instrument } from '../app.interfaces'
 
-export class JobFeedFilterDto {
+export class FeedFilterDto {
 	@IsOptional()
 	@IsIn(Object.values(Instrument))
 	musicalInstrument: string
 
+	@IsOptional()
 	@IsString()
 	city?: string
 
+	@IsIn(Object.values(FeedType))
+	feedType: string
+
 	@IsOptional()
-	@IsBoolean()
-	myFeed: boolean
+	@IsString()
+	props: string
 }
 
 export class BasicFeedDto extends BasicDto {
@@ -35,10 +38,10 @@ export class BasicFeedDto extends BasicDto {
 	title: string
 
 	@IsIn(Object.values(FeedType))
-	type: string
+	feedType: string
 }
 
-export class JobFeedDto extends BasicFeedDto {
+export class MusicalReplacementDto extends BasicFeedDto {
 	@IsString()
 	@IsOptional()
 	address: string
@@ -57,6 +60,6 @@ export class JobFeedDto extends BasicFeedDto {
 	musicalSets: number
 }
 
-export class UserFeedDto extends BasicFeedDto {
+export class SelfPromotionDto extends BasicFeedDto {
 
 }

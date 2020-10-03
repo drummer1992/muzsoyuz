@@ -3,7 +3,6 @@ import { UserRepository } from '../repository/user.repository'
 import { UserDto } from '../dto/user.dto'
 import { InjectRepository } from '@nestjs/typeorm'
 import { businessAssert } from '../lib/errors'
-import { ValidationUtils } from '../utils/validation'
 import { User } from '../entities/entity.user'
 import { ObjectUtils } from '../utils/object'
 import { WorkdayDto, WorkdayFilterDto } from '../dto/workday.dto'
@@ -61,8 +60,6 @@ export class UserService {
 	}
 
 	async updateProfile(id: string, data: UserDto) {
-		ValidationUtils.validateDTO(data, this.userRepository.publicAttributes)
-
 		await this.userRepository.update({ id }, data)
 
 		return data

@@ -40,14 +40,14 @@ export abstract class OpenCage {
 	}
 
 	private static resolveQuery(query) {
-		const { q, ...restQuery } = query
+		const { key: apiKey, ...restQuery } = query
 
 		return Object.keys(restQuery).reduce(
-			(acc, key) => acc + `&${key}=${query[key]}`, `?q=${q}`,
+			(acc, key) => acc + `&${key}=${query[key]}`, `?key=${apiKey}`,
 		)
 	}
 
-	static async geoCode({ address, location, country, language, limit, minConfidence }: IGeoCode) {
+	static async geoCode({ address, location, country, language, limit }: IGeoCode) {
 		if (!this.isRequestAllowed) {
 			await OpenCage.wait()
 		}
@@ -55,13 +55,11 @@ export abstract class OpenCage {
 		this.blockGeoRequests()
 
 		const query = {
-			q             : this.resolveLocationQuery(address, location),
 			key           : process.env.OPEN_CAGE_API_KEY,
+			q             : this.resolveLocationQuery(address, location),
 			countrycode   : country || 'ua',
 			language      : language || 'ru',
 			limit         : limit || 1,
-			min_confidence: minConfidence || 10,
-			no_annotations: 1,
 		}
 
 		const { results: [point] } = await Request.get(`${process.env.OPEN_CAGE_API_URL}${this.resolveQuery(query)}`)

@@ -1,46 +1,52 @@
 import { EntityRepository, ObjectLiteral, Repository } from 'typeorm'
 import { Injectable } from '@nestjs/common'
-import { JobFeedDto, JobFeedFilterDto, UserFeedDto } from '../dto/feed.dto'
+import { MusicalReplacementDto, FeedFilterDto, SelfPromotionDto } from '../dto/feed.dto'
 import { Feed } from '../entities/entity.feed'
-import { FeedType } from '../app.interfaces'
 import { City } from '../entities/entity.city'
+import { InvalidArgumentsError } from '../lib/errors'
+
+const parseLocation = feed => {
+	if (feed.location) {
+		feed.location = JSON.parse(feed.location)
+	}
+
+	return feed
+}
 
 @Injectable()
 @EntityRepository(Feed)
 export class FeedRepository extends Repository<Feed> {
-	public publicAttributes = [
-		'yearCommercialExp',
-		'phone',
-		'altPhone',
-		'musicalInstrument',
-		'name',
-		'user',
-		'address',
-		'amount',
-		'date',
-		'musicalSets',
-		'title',
-		'extraInfo',
-		'isActive',
-		'type',
-		'ownerId',
-	]
-
-	createFeed(data: JobFeedDto | UserFeedDto): Promise<ObjectLiteral> {
-		return this.insert(Feed.create(data)).then(({ identifiers }) => identifiers)
+	createFeed(data: MusicalReplacementDto | SelfPromotionDto): Promise<ObjectLiteral> {
+		return this.insert(Feed.create(data)).then(({ identifiers: [identifier] }) => identifier)
 	}
 
-	async getFeeds(filters: JobFeedFilterDto, feedType: FeedType): Promise<Feed[]> {
-		const feeds = await this.createQueryBuilder('feed')
-			.select('feed.*, ST_AsGeoJSON(feed.location) as location')
-			.from(City, 'city')
-			.where(`city.name='${filters.city}'`)
-			.andWhere(`feed.type='${feedType}'`)
-			.andWhere('ST_Intersects(ST_SetSRID(feed.location, 4326), ST_SetSRID(city.location, 4326))')
-			.execute()
+	async getFeeds(filters: FeedFilterDto): Promise<Feed[]> {
+		let props = 'feed.*, location'
 
-		return feeds.map(feed => (
-			feed.location ? { ...feed, location: JSON.parse(feed.location) } : feed
-		))
+		if (filters.props) {
+			props = filters.props.split(',').map(attr => `feed.${attr}`).join(',')
+		}
+
+		props = props.replace('location', 'ST_AsGeoJSON(feed.location) as location')
+
+		const query = await this.createQueryBuilder('feed')
+			.select(props)
+			.where(`feed.feedType='${filters.feedType}'`)
+
+		if (filters.city) {
+			query
+				.from(City, 'city')
+				.andWhere(`city.name='${filters.city}'`)
+				.andWhere('ST_Intersects(ST_SetSRID(feed.location, 4326), ST_SetSRID(city.location, 4326))')
+		}
+
+		const feeds = await query.execute()
+			.catch(e => {
+				console.error(e.message)
+
+				throw new InvalidArgumentsError('invalid filters')
+			})
+
+		return feeds.map(parseLocation)
 	}
 }

@@ -2,28 +2,6 @@ import { Column, Entity, ManyToOne } from 'typeorm'
 import { AppEntity, IApp } from './entity.basic'
 import { User } from './entity.user'
 import { FeedType } from '../app.interfaces'
-import { FeedValidator } from '../custom-validators/feed.validator'
-import { argumentAssert } from '../lib/errors'
-
-const BASIC_FEED_VALIDATORS = {
-	title            : FeedValidator.title,
-	extraInfo        : FeedValidator.extraInfo,
-	musicalInstrument: FeedValidator.musicalInstrument,
-}
-
-const MUSICAL_REPLACEMENT_VALIDATION_MAP = {
-	address    : FeedValidator.address,
-	amount     : FeedValidator.amount,
-	date       : FeedValidator.date,
-	musicalSets: FeedValidator.musicalSets,
-	...BASIC_FEED_VALIDATORS,
-}
-
-const SELF_PROMOTION_VALIDATION_MAP = {
-	...BASIC_FEED_VALIDATORS,
-}
-
-const JOB_VALIDATION_MAP = {}
 
 export interface IFeed extends IApp {
 	address?: string
@@ -84,28 +62,6 @@ export class Feed extends AppEntity implements IFeed {
 	feedType: FeedType
 
 	static create(data) {
-		argumentAssert(data, 'DTO is not provided')
-
 		return Object.assign(new this(), data)
-	}
-
-	static validateDto(dto) {
-		argumentAssert(dto, 'Data is empty')
-
-		const VALIDATION_MAP_BY_FEED_TYPE = {
-			[FeedType.MUSICAL_REPLACEMENT]: MUSICAL_REPLACEMENT_VALIDATION_MAP,
-			[FeedType.SELF_PROMOTION]     : SELF_PROMOTION_VALIDATION_MAP,
-			[FeedType.JOB]                : JOB_VALIDATION_MAP,
-		}
-
-		argumentAssert(FeedValidator.feedType.validate(dto.feedType), FeedValidator.feedType.message(dto.feedType))
-
-		const VALIDATION_MAP = VALIDATION_MAP_BY_FEED_TYPE[dto.feedType]
-
-		Object.keys(VALIDATION_MAP).forEach(attribute => {
-			const validator = VALIDATION_MAP[attribute]
-
-			argumentAssert(validator.validate(dto[attribute]), validator.message(dto[attribute]))
-		})
 	}
 }

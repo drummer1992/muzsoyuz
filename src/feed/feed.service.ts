@@ -7,6 +7,7 @@ import { Feed } from '../entities/entity.feed'
 import { isUUID } from 'class-validator'
 import { OpenCage } from '../utils/geo'
 import { CityRepository } from '../repository/city.repository'
+import { FeedValidator } from '../custom-validators/feed.validator'
 
 @Injectable()
 export class FeedService {
@@ -23,7 +24,7 @@ export class FeedService {
 	}
 
 	async createFeed(userId, data) {
-		Feed.validateDto(data)
+		FeedValidator.validateDto(data)
 
 		if (data.address) {
 			const geoResponse = await OpenCage.geoCode({ address: data.address })

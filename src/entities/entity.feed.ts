@@ -91,7 +91,6 @@ export class Feed extends AppEntity implements IFeed {
 
 	static validateDto(dto) {
 		argumentAssert(dto, 'Data is empty')
-		argumentAssert(dto.feedType, 'feedType is required')
 
 		const VALIDATION_MAP_BY_FEED_TYPE = {
 			[FeedType.MUSICAL_REPLACEMENT]: MUSICAL_REPLACEMENT_VALIDATION_MAP,

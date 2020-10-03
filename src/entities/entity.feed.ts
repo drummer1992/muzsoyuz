@@ -93,7 +93,7 @@ export class Feed extends AppEntity implements IFeed {
 		argumentAssert(dto, 'Data is empty')
 		argumentAssert(dto.feedType, 'feedType is required')
 
-		const MAP_BY_FEED_TYPE = {
+		const VALIDATION_MAP_BY_FEED_TYPE = {
 			[FeedType.MUSICAL_REPLACEMENT]: MUSICAL_REPLACEMENT_VALIDATION_MAP,
 			[FeedType.SELF_PROMOTION]     : SELF_PROMOTION_VALIDATION_MAP,
 			[FeedType.JOB]                : JOB_VALIDATION_MAP,
@@ -101,7 +101,7 @@ export class Feed extends AppEntity implements IFeed {
 
 		argumentAssert(FeedValidator.feedType.validate(dto.feedType), FeedValidator.feedType.message(dto.feedType))
 
-		const VALIDATION_MAP = MAP_BY_FEED_TYPE[dto.feedType]
+		const VALIDATION_MAP = VALIDATION_MAP_BY_FEED_TYPE[dto.feedType]
 
 		Object.keys(VALIDATION_MAP).forEach(attribute => {
 			const validator = VALIDATION_MAP[attribute]

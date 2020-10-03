@@ -82,7 +82,7 @@ export abstract class FeedValidator {
 	}
 
 	static validateDto(dto) {
-		argumentAssert(dto, 'Data is not provided')
+		argumentAssert(dto && Object.keys(dto).length, 'Data is not provided')
 
 		argumentAssert(FeedValidator.feedType.validate(dto.feedType), {
 			feedType: FeedValidator.feedType.message(dto.feedType),
@@ -92,10 +92,7 @@ export abstract class FeedValidator {
 
 		const errors = Object.keys(VALIDATION_MAP)
 			.filter(attribute => !VALIDATION_MAP[attribute].validate(dto[attribute]))
-			.reduce((acc, attribute) => ({
-				...acc,
-				[attribute]: VALIDATION_MAP[attribute].message(dto[attribute]),
-			}), {})
+			.map(attribute => VALIDATION_MAP[attribute].message(dto[attribute]))
 
 		if (Object.keys(errors).length) {
 			throw new InvalidArgumentsError(errors)

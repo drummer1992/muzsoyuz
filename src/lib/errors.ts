@@ -1,14 +1,22 @@
 import { HttpException, HttpStatus, UnauthorizedException } from '@nestjs/common'
 
 export class InvalidArgumentsError extends HttpException {
-	constructor(error) {
-		super(error, HttpStatus.BAD_REQUEST)
+	constructor(message) {
+		super({
+			statusCode: HttpStatus.BAD_REQUEST,
+			message,
+			error     : 'Bad Request',
+		}, HttpStatus.BAD_REQUEST)
 	}
 }
 
 export class BusinessError extends HttpException {
 	constructor(message) {
-		super(message, HttpStatus.BAD_REQUEST)
+		super({
+			statusCode: HttpStatus.BAD_REQUEST,
+			message,
+			error     : 'Bad Request',
+		}, HttpStatus.BAD_REQUEST)
 	}
 }
 

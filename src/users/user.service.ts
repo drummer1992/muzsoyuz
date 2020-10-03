@@ -4,7 +4,6 @@ import { UserDto } from '../dto/user.dto'
 import { InjectRepository } from '@nestjs/typeorm'
 import { businessAssert } from '../lib/errors'
 import { User } from '../entities/entity.user'
-import { ObjectUtils } from '../utils/object'
 import { WorkdayDto, WorkdayFilterDto } from '../dto/workday.dto'
 import { WorkdayRepository } from '../repository/workday.repository'
 import { ProviderAttribute } from '../app.interfaces'
@@ -19,8 +18,8 @@ export class UserService {
 	) {
 	}
 
-	async getProfile(id: string) {
-		return ObjectUtils.omit(await this.userRepository.findOne(id), ['salt', 'hash'])
+	getProfile(id: string, props?: string[]) {
+		return  this.userRepository.getProfile(id, props)
 	}
 
 	async findByEmail(email: string): Promise<User> {

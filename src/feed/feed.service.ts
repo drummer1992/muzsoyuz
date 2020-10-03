@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { BasicFeedDto, MusicalReplacementDto, FeedFilterDto } from '../dto/feed.dto'
 import { InjectRepository } from '@nestjs/typeorm'
-import { businessAssert, notFoundAssert } from '../lib/errors'
+import { argumentAssert, notFoundAssert } from '../lib/errors'
 import { FeedRepository } from '../repository/feed.repository'
 import { Feed } from '../entities/entity.feed'
 import { isUUID } from 'class-validator'
@@ -40,7 +40,7 @@ export class FeedService {
 	}
 
 	async updatedFeed(id: string, data: MusicalReplacementDto | BasicFeedDto) {
-		businessAssert(isUUID(id), `Not valid id: [${id}]`)
+		argumentAssert(isUUID(id), `Not valid id: [${id}]`)
 
 		const { affected } = await this.feedRepository.update({ id }, Feed.create(data))
 
@@ -50,7 +50,7 @@ export class FeedService {
 	}
 
 	async deleteFeed(id: string) {
-		businessAssert(isUUID(id), `Not valid id: [${id}]`)
+		argumentAssert(isUUID(id), `Not valid id: [${id}]`)
 
 		const { affected } = await this.feedRepository.delete({ id })
 

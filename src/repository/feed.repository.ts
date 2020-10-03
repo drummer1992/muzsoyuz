@@ -24,7 +24,9 @@ export class FeedRepository extends Repository<Feed> {
 		let props = 'feed.*, location'
 
 		if (filters.props) {
-			props = filters.props.split(',').map(attr => `feed.${attr}`).join(',')
+			filters.props = 'id,' + filters.props
+
+			props = filters.props.split(',').map(attr => `feed."${attr}"`).join(',')
 		}
 
 		props = props.replace('location', 'ST_AsGeoJSON(feed.location) as location')

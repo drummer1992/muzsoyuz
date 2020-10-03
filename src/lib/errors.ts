@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, UnauthorizedException } from '@nestjs/common
 
 export class InvalidArgumentsError extends HttpException {
 	constructor(error) {
-		super(typeof error === 'string' ? { error } : error, HttpStatus.BAD_REQUEST)
+		super(error, HttpStatus.BAD_REQUEST)
 	}
 }
 

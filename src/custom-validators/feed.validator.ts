@@ -50,42 +50,42 @@ export abstract class FeedValidator {
 		},
 	}
 
+ 	private static BASIC_FEED_VALIDATORS = {
+		title            : FeedValidator.title,
+		extraInfo        : FeedValidator.extraInfo,
+		musicalInstrument: FeedValidator.musicalInstrument,
+	}
+
+	private static MUSICAL_REPLACEMENT_VALIDATION_MAP = {
+		address    : FeedValidator.address,
+		amount     : FeedValidator.amount,
+		date       : FeedValidator.date,
+		musicalSets: FeedValidator.musicalSets,
+		...FeedValidator.BASIC_FEED_VALIDATORS,
+	}
+
+	private static SELF_PROMOTION_VALIDATION_MAP = {
+		...FeedValidator.BASIC_FEED_VALIDATORS,
+	}
+
+	private static JOB_VALIDATION_MAP = {
+		...FeedValidator.BASIC_FEED_VALIDATORS,
+	}
+
+	private static VALIDATION_MAP_BY_FEED_TYPE = {
+		[FeedType.MUSICAL_REPLACEMENT]: FeedValidator.MUSICAL_REPLACEMENT_VALIDATION_MAP,
+		[FeedType.SELF_PROMOTION]     : FeedValidator.SELF_PROMOTION_VALIDATION_MAP,
+		[FeedType.JOB]                : FeedValidator.JOB_VALIDATION_MAP,
+	}
+
 	static validateDto(dto) {
-		const BASIC_FEED_VALIDATORS = {
-			title            : this.title,
-			extraInfo        : this.extraInfo,
-			musicalInstrument: this.musicalInstrument,
-		}
-
-		const MUSICAL_REPLACEMENT_VALIDATION_MAP = {
-			address    : this.address,
-			amount     : this.amount,
-			date       : this.date,
-			musicalSets: this.musicalSets,
-			...BASIC_FEED_VALIDATORS,
-		}
-
-		const SELF_PROMOTION_VALIDATION_MAP = {
-			...BASIC_FEED_VALIDATORS,
-		}
-
-		const JOB_VALIDATION_MAP = {
-			...BASIC_FEED_VALIDATORS,
-		}
-
-		const VALIDATION_MAP_BY_FEED_TYPE = {
-			[FeedType.MUSICAL_REPLACEMENT]: MUSICAL_REPLACEMENT_VALIDATION_MAP,
-			[FeedType.SELF_PROMOTION]     : SELF_PROMOTION_VALIDATION_MAP,
-			[FeedType.JOB]                : JOB_VALIDATION_MAP,
-		}
-
 		argumentAssert(dto, 'Data is not provided')
 
 		argumentAssert(FeedValidator.feedType.validate(dto.feedType), {
 			feedType: FeedValidator.feedType.message(dto.feedType),
 		})
 
-		const VALIDATION_MAP = VALIDATION_MAP_BY_FEED_TYPE[dto.feedType]
+		const VALIDATION_MAP = FeedValidator.VALIDATION_MAP_BY_FEED_TYPE[dto.feedType]
 
 		const errors = Object.keys(VALIDATION_MAP)
 			.filter(attribute => !VALIDATION_MAP[attribute].validate(dto[attribute]))

@@ -1,6 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
 import { Strategy } from 'passport-facebook'
+import { config } from '../../config'
 
 @Injectable()
 export class FacebookStrategy extends PassportStrategy(Strategy) {
@@ -8,7 +9,7 @@ export class FacebookStrategy extends PassportStrategy(Strategy) {
 		super({
 			clientID     : process.env.FACEBOOK_CLIENT_ID,
 			clientSecret : process.env.FACEBOOK_CLIENT_SECRET,
-			callbackURL  : process.env.REACT_FACEBOOK_CALLBACK_URL,
+			callbackURL  : config.getProviderCallback('facebook'),
 			profileFields: ['displayName', 'email', 'photos'],
 		})
 	}

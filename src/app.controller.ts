@@ -7,7 +7,7 @@ import {
 	Inject,
 	UsePipes,
 	ValidationPipe,
-	Body, Get, Req, UnauthorizedException,
+	Body, Get, Req, UnauthorizedException, Res,
 } from '@nestjs/common'
 import { LoggingInterceptor } from './logging/logging.interceptor'
 import { LocalAuthGuard } from './auth/guards/local-auth.guard'
@@ -60,5 +60,12 @@ export class AppController {
 	@UseGuards(FacebookAuthGuard)
 	oauthFacebookCallback(@Req() { user }): Promise<{ token: string }> {
 		return this.authService.oauthHandler(user)
+	}
+
+	@Get('auth/logout')
+	@UseGuards(LocalAuthGuard)
+	logout(@Req() req, @Res() res) {
+		req.logout()
+		res.redirect()
 	}
 }

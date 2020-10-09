@@ -21,17 +21,40 @@ class Index {
 	}
 
 	public ensureValues(keys: string[]) {
-		keys.forEach(k => this.getValue(k, true))
+		keys.forEach(k => this.getValue(k))
 
 		return this
 	}
 
 	public getPort() {
-		return this.getValue('PORT', true)
+		return this.getValue('PORT')
 	}
 
-	public getAppPrefix() {
-		return this.getValue('APP_PREFIX', true)
+	public getClientHost() {
+		return this.getValue('CLIENT_HOST')
+	}
+
+	public getServerHost() {
+		return this.getValue('SERVER_HOST')
+	}
+
+	public getServerAPIPrefix() {
+		return this.getValue('API_PREFIX')
+	}
+
+	public getProviderCallback(provider, isServer = false) {
+		const PROVIDERS_MAP = {
+			google  : 'GOOGLE_CALLBACK_URL',
+			facebook: 'FACEBOOK_CALLBACK_URL',
+		}
+
+		let path = `${isServer ? this.getServerHost() : this.getClientHost()}`
+
+		if (isServer) {
+			path += `/${this.getServerAPIPrefix()}`
+		}
+
+		return `${path}/${this.getValue(PROVIDERS_MAP[provider])}`
 	}
 
 	public isProduction() {

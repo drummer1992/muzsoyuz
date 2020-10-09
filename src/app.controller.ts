@@ -66,6 +66,5 @@ export class AppController {
 	@UseGuards(LocalAuthGuard)
 	logout(@Req() req, @Res() res) {
 		req.logout()
-		res.redirect()
 	}
 }

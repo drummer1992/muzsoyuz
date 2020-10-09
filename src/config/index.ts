@@ -10,7 +10,7 @@ class Index {
 	constructor(private env: { [key: string]: string | undefined }) {
 	}
 
-	private getValue(key: string, throwOnMissing = true): string {
+	private getValue(key: string, throwOnMissing: boolean = true): string {
 		const value = this.env[key]
 
 		if (!value && throwOnMissing) {
@@ -42,7 +42,7 @@ class Index {
 		return this.getValue('API_PREFIX')
 	}
 
-	public getProviderCallback(provider, isServer = false) {
+	public getProviderCallback(provider: string, isServer: boolean = false) {
 		const PROVIDERS_MAP = {
 			google  : 'GOOGLE_CALLBACK_URL',
 			facebook: 'FACEBOOK_CALLBACK_URL',

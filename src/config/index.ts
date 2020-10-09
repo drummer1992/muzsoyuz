@@ -48,7 +48,7 @@ class Index {
 			facebook: 'FACEBOOK_CALLBACK_URL',
 		}
 
-		let path = `${isServer ? this.getServerHost() : this.getClientHost()}`
+		let path = isServer ? this.getServerHost() : this.getClientHost()
 
 		if (isServer) {
 			path += `/${this.getServerAPIPrefix()}`

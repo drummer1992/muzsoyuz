@@ -64,7 +64,7 @@ export class UserService {
 		return data
 	}
 
-	updateProviderId(id, provider, providerId) {
+	enrichWithProviderId(id, provider, providerId) {
 		return this.userRepository.update({ id }, { [`${provider}Id`]: providerId })
 	}
 }

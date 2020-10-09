@@ -12,11 +12,12 @@ import {
 	ValidationPipe,
 } from '@nestjs/common'
 import { ObjectLiteral } from 'typeorm'
-import { BasicFeedDto, MusicalReplacementDto, FeedFilterDto } from '../dto/feed.dto'
+import { FeedFilterDto, FeedDto } from '../dto/feed.dto'
 import { FeedService } from './feed.service'
 import { Feed } from '../entities/entity.feed'
 import { LoggingInterceptor } from '../logging/logging.interceptor'
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard'
+import { FeedValidationPipe } from '../pipes/feed.validation.pipe'
 
 @Controller('feed')
 @UseInterceptors(LoggingInterceptor)
@@ -24,26 +25,25 @@ export class FeedController {
 	@Inject()
 	private readonly feedService: FeedService
 
-	@Get('job')
+	@Get()
 	@UsePipes(ValidationPipe)
 	getFeeds(@Query() filter: FeedFilterDto): Promise<Feed[]> {
 		return this.feedService.getFeeds(filter)
 	}
 
-	@Post('job')
+	@Post()
 	@UseGuards(JwtAuthGuard)
-	createFeed(@Req() { user }, @Body() data): Promise<ObjectLiteral> {
+	createFeed(@Req() { user }, @Body(FeedValidationPipe) data: FeedDto): Promise<ObjectLiteral> {
 		return this.feedService.createFeed(user.id, data)
 	}
 
-	@Patch('job/:id')
-	@UsePipes(ValidationPipe)
+	@Patch(':id')
 	@UseGuards(JwtAuthGuard)
-	updateJobFeed(@Param() { id }, @Body() data): Promise<MusicalReplacementDto | BasicFeedDto> {
+	updateJobFeed(@Param() { id }, @Body(FeedValidationPipe) data: FeedDto): Promise<FeedDto> {
 		return this.feedService.updatedFeed(id, data)
 	}
 
-	@Delete('job/:id')
+	@Delete(':id')
 	@UseGuards(JwtAuthGuard)
 	deleteJobFeed(@Param() { id }): Promise<void> {
 		return this.feedService.deleteFeed(id)

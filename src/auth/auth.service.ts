@@ -57,7 +57,7 @@ export class AuthService {
 				imageUrl         : image?.value || undefined,
 			}))
 		} else if (existingUser && !existingUser[`${provider}Id`]) {
-			await this.userService.updateProviderId(id, provider, user.id)
+			await this.userService.enrichWithProviderId(id, provider, user.id)
 		}
 
 		return this.login({ username: email || displayName, sub: id })

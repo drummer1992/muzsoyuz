@@ -1,12 +1,4 @@
-import {
-	IsDateString,
-	IsIn,
-	IsNumber,
-	IsOptional,
-	IsString,
-	MaxLength,
-	MinLength,
-} from 'class-validator'
+import { IsDateString, IsIn, IsNumber, IsOptional, IsString, MaxLength, MinLength } from 'class-validator'
 import { BasicDto } from './basic.dto'
 import { FeedType, Instrument } from '../app.interfaces'
 
@@ -63,3 +55,9 @@ export class MusicalReplacementDto extends BasicFeedDto {
 export class SelfPromotionDto extends BasicFeedDto {
 
 }
+
+export class JobDto extends BasicFeedDto {
+
+}
+
+export type FeedDto = JobDto | SelfPromotionDto | MusicalReplacementDto

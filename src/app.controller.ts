@@ -7,7 +7,7 @@ import {
 	Inject,
 	UsePipes,
 	ValidationPipe,
-	Body, Get, Req, UnauthorizedException, Res,
+	Body, Get, Req, UnauthorizedException,
 } from '@nestjs/common'
 import { LoggingInterceptor } from './logging/logging.interceptor'
 import { LocalAuthGuard } from './auth/guards/local-auth.guard'
@@ -64,7 +64,7 @@ export class AppController {
 
 	@Get('auth/logout')
 	@UseGuards(LocalAuthGuard)
-	logout(@Req() req, @Res() res) {
+	logout(@Req() req) {
 		req.logout()
 	}
 }

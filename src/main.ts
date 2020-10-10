@@ -11,7 +11,7 @@ async function bootstrap(port) {
   await app.listen(port)
 }
 
-bootstrap(config.getPort())
+bootstrap(config.getPort(true))
   .catch(e => {
     console.error(e)
     process.exit(-1)

@@ -10,7 +10,7 @@ class Index {
 	constructor(private env: { [key: string]: string | undefined }) {
 	}
 
-	private getValue(key: string, throwOnMissing: boolean = true): string {
+	private getValue(key: string, throwOnMissing = true): string {
 		const value = this.env[key]
 
 		if (!value && throwOnMissing) {
@@ -26,23 +26,23 @@ class Index {
 		return this
 	}
 
-	public getPort() {
-		return this.getValue('PORT')
+	public getPort(isServer) {
+		return this.getValue(isServer ? 'SERVER_PORT' : 'CLIENT_PORT')
 	}
 
 	public getClientHost() {
-		return this.getValue('CLIENT_HOST')
+		return `${this.getValue('CLIENT_HOST')}:${this.getPort(false)}`
 	}
 
 	public getServerHost() {
-		return this.getValue('SERVER_HOST')
+		return `${this.getValue('SERVER_HOST')}:${this.getPort(true)}`
 	}
 
 	public getServerAPIPrefix() {
 		return this.getValue('API_PREFIX')
 	}
 
-	public getProviderCallback(provider: string, isServer: boolean = false) {
+	public getProviderCallback(provider: string, isServer = false) {
 		const PROVIDERS_MAP = {
 			google  : 'GOOGLE_CALLBACK_URL',
 			facebook: 'FACEBOOK_CALLBACK_URL',

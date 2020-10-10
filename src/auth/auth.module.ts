@@ -7,9 +7,10 @@ import { JwtModule } from '@nestjs/jwt'
 import { JwtStrategy } from './strategy/jwt.strategy'
 import { FacebookStrategy } from './strategy/facebook.strategy'
 import { GoogleStrategy } from './strategy/google.strategy'
+import { AuthController } from './auth.controller'
 
 @Module({
-	imports  : [
+	imports    : [
 		UserModule,
 		PassportModule,
 		JwtModule.register({
@@ -17,14 +18,14 @@ import { GoogleStrategy } from './strategy/google.strategy'
 			signOptions: { expiresIn: process.env.JWT_EXPIRES_IN },
 		}),
 	],
-	providers: [
+	providers  : [
 		AuthService,
 		LocalStrategy,
 		JwtStrategy,
 		FacebookStrategy,
 		GoogleStrategy,
 	],
-	exports  : [AuthService],
+	controllers: [AuthController],
 })
 export class AuthModule {
 }

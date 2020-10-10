@@ -51,7 +51,7 @@ class Index {
 		let path = isServer ? this.getServerHost() : this.getClientHost()
 
 		if (isServer) {
-			path += `/${this.getServerAPIPrefix()}`
+			path += `/${this.getServerAPIPrefix()}/auth`
 		}
 
 		return `${path}/${this.getValue(PROVIDERS_MAP[provider])}`

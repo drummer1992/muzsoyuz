@@ -5,7 +5,6 @@ import { config } from './config'
 import { AuthModule } from './auth/auth.module'
 import { UserModule } from './users/user.module'
 import { FeedModule } from './feed/feed.module'
-import { AppController } from './app.controller'
 
 @Module({
 	imports    : [
@@ -15,7 +14,6 @@ import { AppController } from './app.controller'
 		FeedModule,
 		AuthModule,
 	],
-	controllers: [AppController],
 })
 
 export class AppModule {}

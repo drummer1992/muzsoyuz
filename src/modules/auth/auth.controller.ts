@@ -61,10 +61,4 @@ export class AuthController {
 	oauthFacebookCallback(@Req() { user }): Promise<{ token: string }> {
 		return this.authService.oauthHandler(user)
 	}
-
-	@Get('logout')
-	@UseGuards(LocalAuthGuard)
-	logout(@Req() req) {
-		req.logout()
-	}
 }

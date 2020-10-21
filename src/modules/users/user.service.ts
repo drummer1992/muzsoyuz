@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common'
-import { UserRepository } from '../repository/user.repository'
-import { UserDto } from '../dto/user.dto'
+import { UserRepository } from '../../repository/user.repository'
+import { UserDto } from '../../dto/user.dto'
 import { InjectRepository } from '@nestjs/typeorm'
-import { businessAssert } from '../lib/errors'
-import { User } from '../entities/entity.user'
-import { WorkdayDto, WorkdayFilterDto } from '../dto/workday.dto'
-import { WorkdayRepository } from '../repository/workday.repository'
-import { ProviderAttribute } from '../app.interfaces'
+import { businessAssert } from '../../lib/errors'
+import { User } from '../../entities/entity.user'
+import { WorkdayDto, WorkdayFilterDto } from '../../dto/workday.dto'
+import { WorkdayRepository } from '../../repository/workday.repository'
+import { ProviderAttribute } from '../../app.interfaces'
 
 @Injectable()
 export class UserService {

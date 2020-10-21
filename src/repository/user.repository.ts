@@ -4,7 +4,7 @@ import { WorkdayFilterDto } from '../dto/workday.dto'
 import { WorkDay } from '../entities/entity.work.day'
 import { DateUtils } from '../utils/date'
 import { Injectable } from '@nestjs/common'
-import { ArrayUtils } from '../utils/ArrayUtils'
+import { ArrayUtils } from '../utils/array'
 
 @Injectable()
 @EntityRepository(User)

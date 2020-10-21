@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
 import { Strategy } from 'passport-facebook'
-import { config } from '../../config'
+import { config } from '../../../config'
 
 @Injectable()
 export class FacebookStrategy extends PassportStrategy(Strategy) {

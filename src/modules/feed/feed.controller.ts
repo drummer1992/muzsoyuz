@@ -5,19 +5,21 @@ import {
 	Get,
 	Inject,
 	Param,
-	Patch,
-	Post, Query, Req, UseGuards,
+	Post, Put, Query, Req, UseGuards,
 	UseInterceptors,
 	UsePipes,
 	ValidationPipe,
 } from '@nestjs/common'
 import { ObjectLiteral } from 'typeorm'
-import { FeedFilterDto, FeedDto } from '../dto/feed.dto'
+import { FeedFilterDto, FeedDto } from '../../dto/feed.dto'
 import { FeedService } from './feed.service'
-import { Feed } from '../entities/entity.feed'
-import { LoggingInterceptor } from '../logging/logging.interceptor'
+import { Feed } from '../../entities/entity.feed'
+import { LoggingInterceptor } from '../../logging/logging.interceptor'
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard'
-import { FeedValidationPipe } from '../pipes/feed.validation.pipe'
+import {
+	OptionalFeedValidationPipe,
+	RequiredFeedValidationPipe,
+} from '../../pipes/feed.validation.pipe'
 
 @Controller('feed')
 @UseInterceptors(LoggingInterceptor)
@@ -33,13 +35,13 @@ export class FeedController {
 
 	@Post()
 	@UseGuards(JwtAuthGuard)
-	createFeed(@Req() { user }, @Body(FeedValidationPipe) data: FeedDto): Promise<ObjectLiteral> {
+	createFeed(@Req() { user }, @Body(RequiredFeedValidationPipe) data: FeedDto): Promise<ObjectLiteral> {
 		return this.feedService.createFeed(user.id, data)
 	}
 
-	@Patch(':id')
+	@Put(':id')
 	@UseGuards(JwtAuthGuard)
-	updateJobFeed(@Param() { id }, @Body(FeedValidationPipe) data: FeedDto): Promise<FeedDto> {
+	updateJobFeed(@Param() { id }, @Body(OptionalFeedValidationPipe) data: FeedDto): Promise<FeedDto> {
 		return this.feedService.updatedFeed(id, data)
 	}
 

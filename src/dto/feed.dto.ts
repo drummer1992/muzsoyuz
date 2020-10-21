@@ -42,7 +42,7 @@ export class MusicalReplacementDto extends BasicFeedDto {
 	location: any
 
 	@IsNumber()
-	amount: number
+	salary: number
 
 	@IsDateString()
 	date: Date
@@ -53,7 +53,8 @@ export class MusicalReplacementDto extends BasicFeedDto {
 }
 
 export class SelfPromotionDto extends BasicFeedDto {
-
+	@IsDateString()
+	date: Date
 }
 
 export class JobDto extends BasicFeedDto {

@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
 import { OAuth2Strategy } from 'passport-google-oauth'
-import { config } from '../../config'
+import { config } from '../../../config'
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(OAuth2Strategy) {

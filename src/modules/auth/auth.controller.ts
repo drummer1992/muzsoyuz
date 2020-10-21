@@ -12,10 +12,10 @@ import {
 import { AuthService } from './auth.service'
 import { UserService } from '../users/user.service'
 import { LocalAuthGuard } from './guards/local-auth.guard'
-import { AuthDto } from '../dto/user.dto'
+import { AuthDto } from '../../dto/user.dto'
 import { FacebookAuthGuard } from './guards/facebook-auth.guard'
 import { GoogleAuthGuard } from './guards/google-auth.guard'
-import { LoggingInterceptor } from '../logging/logging.interceptor'
+import { LoggingInterceptor } from '../../logging/logging.interceptor'
 
 @Controller('auth')
 @UseInterceptors(LoggingInterceptor)

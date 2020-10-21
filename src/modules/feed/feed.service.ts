@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common'
-import { BasicFeedDto, MusicalReplacementDto, FeedFilterDto } from '../dto/feed.dto'
+import { BasicFeedDto, MusicalReplacementDto, FeedFilterDto } from '../../dto/feed.dto'
 import { InjectRepository } from '@nestjs/typeorm'
-import { argumentAssert, notFoundAssert } from '../lib/errors'
-import { FeedRepository } from '../repository/feed.repository'
-import { Feed } from '../entities/entity.feed'
+import { argumentAssert, notFoundAssert } from '../../lib/errors'
+import { FeedRepository } from '../../repository/feed.repository'
+import { Feed } from '../../entities/entity.feed'
 import { isUUID } from 'class-validator'
-import { OpenCage } from '../utils/geo'
-import { CityRepository } from '../repository/city.repository'
+import { OpenCage } from '../../utils/geo'
+import { CityRepository } from '../../repository/city.repository'
 
 @Injectable()
 export class FeedService {

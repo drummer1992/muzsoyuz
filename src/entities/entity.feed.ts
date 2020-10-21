@@ -5,7 +5,7 @@ import { FeedType } from '../app.interfaces'
 
 export interface IFeed extends IApp {
 	address?: string
-	amount: number
+	salary: number
 	date?: Date
 	musicalSets: number
 	extraInfo?: string
@@ -38,7 +38,7 @@ export class Feed extends AppEntity implements IFeed {
 	location: any
 
 	@Column({ type: 'numeric', nullable: true, precision: 7, scale: 2 })
-	amount: number
+	salary: number
 
 	@Column({ type: 'timestamp', nullable: true })
 	date: Date

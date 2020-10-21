@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common'
 import { UserService } from '../users/user.service'
-import { businessAssert } from '../lib/errors'
-import { User } from '../entities/entity.user'
-import { AuthDto } from '../dto/user.dto'
+import { businessAssert } from '../../lib/errors'
+import { User } from '../../entities/entity.user'
+import { AuthDto } from '../../dto/user.dto'
 import { JwtService } from '@nestjs/jwt'
 
 @Injectable()

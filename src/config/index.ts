@@ -3,6 +3,8 @@ import { User } from '../entities/entity.user'
 import { Feed } from '../entities/entity.feed'
 import { City } from '../entities/entity.city'
 import { WorkDay } from '../entities/entity.work.day'
+import { ChatMessage } from '../entities/entity.chat.message'
+import { ChatRoom } from '../entities/entity.chat.room'
 
 require('dotenv').config()
 
@@ -27,7 +29,7 @@ class Index {
 	}
 
 	public getPort(isServer) {
-		return this.getValue(isServer ? 'SERVER_PORT' : 'CLIENT_PORT')
+		return parseInt(this.getValue(isServer ? 'SERVER_PORT' : 'CLIENT_PORT'))
 	}
 
 	public getClientHost() {
@@ -72,7 +74,15 @@ class Index {
 			password: this.getValue('POSTGRES_PASSWORD'),
 			database: this.getValue('POSTGRES_DATABASE'),
 
-			entities   : [User, Feed, City, WorkDay],
+			entities   : [
+				User,
+				Feed,
+				City,
+				WorkDay,
+				ChatMessage,
+				ChatRoom,
+			],
+
 			synchronize: true,
 
 			migrationsTableName: 'migration',

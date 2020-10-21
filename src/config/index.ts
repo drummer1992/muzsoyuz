@@ -5,6 +5,7 @@ import { City } from '../entities/entity.city'
 import { WorkDay } from '../entities/entity.work.day'
 import { ChatMessage } from '../entities/entity.chat.message'
 import { ChatRoom } from '../entities/entity.chat.room'
+import { EntityInstrument } from '../entities/entity.instrument'
 
 require('dotenv').config()
 
@@ -74,13 +75,14 @@ class Index {
 			password: this.getValue('POSTGRES_PASSWORD'),
 			database: this.getValue('POSTGRES_DATABASE'),
 
-			entities   : [
+			entities: [
 				User,
 				Feed,
 				City,
 				WorkDay,
 				ChatMessage,
 				ChatRoom,
+				EntityInstrument,
 			],
 
 			synchronize: true,

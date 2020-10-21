@@ -1,14 +1,16 @@
 export enum Instrument {
-	GUITAR = 'guitar',
-	DRUMS = 'drums',
-	VOICE = 'voice',
-	BAS = 'bas',
-	KEYS = 'keys',
-	SAX = 'sax',
-	TRUMPET = 'trumpet',
+	GUITAR   = 'guitar',
+	DRUMS    = 'drums',
+	VOICE    = 'voice',
+	BAS      = 'bas',
+	KEYS     = 'keys',
+	SAX      = 'sax',
+	PANDORA  = 'pandora',
+	VIOLIN   = 'violin',
+	TRUMPET  = 'trumpet',
 	TROMBONE = 'trombone',
-	BAND = 'band',
-	OTHER = 'other',
+	BAND     = 'band',
+	OTHER    = 'other',
 }
 
 export enum Gender {
@@ -17,17 +19,17 @@ export enum Gender {
 }
 
 export enum UserType {
-	MUSICIAN = 'musician',
-	MANAGER = 'manager',
-	TEACHER = 'teacher',
-	STUDENT = 'student',
+	MUSICIAN    = 'musician',
+	MANAGER     = 'manager',
+	TEACHER     = 'teacher',
+	STUDENT     = 'student',
 	MERE_MORTAL = 'mereMortal'
 }
 
 export enum FeedType {
 	MUSICAL_REPLACEMENT = 'musicalReplacement',
-	SELF_PROMOTION = 'selfPromotion',
-	JOB = 'job'
+	SELF_PROMOTION      = 'selfPromotion',
+	JOB                 = 'job'
 }
 
 export type ProviderAttribute = 'googleId' | 'facebookId'

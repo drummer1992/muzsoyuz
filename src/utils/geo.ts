@@ -60,6 +60,7 @@ export abstract class OpenCage {
 			countrycode   : country || 'ua',
 			language      : language || 'ru',
 			limit         : limit || 1,
+			min_confidence: 8,
 		}
 
 		const { results: [point] } = await Request.get(`${process.env.OPEN_CAGE_API_URL}${this.resolveQuery(query)}`)

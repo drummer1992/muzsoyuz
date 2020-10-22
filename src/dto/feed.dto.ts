@@ -5,7 +5,7 @@ import { FeedType, Instrument } from '../app.interfaces'
 export class FeedFilterDto {
 	@IsOptional()
 	@IsIn(Object.values(Instrument))
-	musicalInstrument: string
+	role: string
 
 	@IsOptional()
 	@IsString()
@@ -17,6 +17,9 @@ export class FeedFilterDto {
 	@IsOptional()
 	@IsString()
 	props: string
+
+	@IsOptional()
+	id: string
 }
 
 export class BasicFeedDto extends BasicDto {
@@ -49,7 +52,7 @@ export class MusicalReplacementDto extends BasicFeedDto {
 
 	@IsNumber()
 	@IsIn([1, 2, 3, 4, 5])
-	musicalSets: number
+	sets: number
 }
 
 export class SelfPromotionDto extends BasicFeedDto {

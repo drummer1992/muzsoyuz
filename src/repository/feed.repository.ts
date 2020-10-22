@@ -4,6 +4,7 @@ import { MusicalReplacementDto, FeedFilterDto, SelfPromotionDto } from '../dto/f
 import { Feed } from '../entities/entity.feed'
 import { City } from '../entities/entity.city'
 import { InvalidArgumentsError } from '../lib/errors'
+import { EntityInstrument } from '../entities/entity.instrument'
 
 const parseLocation = feed => {
 	if (feed.location) {
@@ -25,8 +26,11 @@ export class FeedRepository extends Repository<Feed> {
 
 		if (filters.props) {
 			filters.props = 'id,' + filters.props
-
 			props = filters.props.split(',').map(attr => `feed."${attr}"`).join(',')
+
+			if (props.includes('imageURL')) {
+				props = props.replace('feed."imageURL"', 'instrument."imageURL"')
+			}
 		}
 
 		props = props.replace('location', 'ST_AsGeoJSON(feed.location) as location')
@@ -38,8 +42,10 @@ export class FeedRepository extends Repository<Feed> {
 		if (filters.city) {
 			query
 				.from(City, 'city')
+				.from(EntityInstrument, 'instrument')
 				.andWhere(`city.name='${filters.city}'`)
 				.andWhere('ST_Intersects(ST_SetSRID(feed.location, 4326), ST_SetSRID(city.location, 4326))')
+				.andWhere('instrument.name=feed.role')
 		}
 
 		const feeds = await query.execute()

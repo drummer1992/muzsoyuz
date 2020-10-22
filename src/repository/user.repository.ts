@@ -12,7 +12,7 @@ export class UserRepository extends Repository<User> {
 	public publicAttributes = [
 		'yearCommercialExp',
 		'phone',
-		'musicalInstrument',
+		'role',
 		'imageUrl',
 		'name',
 		'dob',
@@ -21,7 +21,7 @@ export class UserRepository extends Repository<User> {
 		'gender',
 		'type',
 	]
-	// props ? ArrayUtils.intersection(this.publicAttributes, []) :
+
 	private readonly selectStatement = this.publicAttributes.map(attr => `"${attr}"`).join(',')
 
 	async ensureUniqueUser(attribute, value) {
@@ -51,8 +51,8 @@ export class UserRepository extends Repository<User> {
 		return this.createQueryBuilder('user')
 			.select(this.selectStatement)
 			.innerJoin(WorkDay, 'workdays',  'user.id="workdays"."userId"')
-			.where(`"musicalInstrument" ${filter.musicalInstrument ? '= :musicalInstrument' : 'IS NOT NULL'}`, {
-				musicalInstrument: filter.musicalInstrument,
+			.where(`"role" ${filter.role ? '= :role' : 'IS NOT NULL'}`, {
+				role: filter.role,
 			})
 			.andWhere('workdays.date BETWEEN :from AND :to', {
 				from: filter.from || DateUtils.addDays(now, -1),

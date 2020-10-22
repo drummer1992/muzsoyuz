@@ -18,7 +18,7 @@ export interface IApp extends IStats {
 	name?: string
 	phone?: number
 	altPhone?: number
-	musicalInstrument?: Instrument
+	role?: Instrument
 }
 
 export abstract class Basic implements IBasic {
@@ -40,7 +40,7 @@ export abstract class AppEntity extends Basic implements IApp {
 	altPhone: number
 
 	@Column({ type: 'varchar', length: 30, enum: Instrument, nullable: true })
-	musicalInstrument: Instrument
+	role: Instrument
 
 	@Column({ type: 'varchar', length: 80, nullable: true })
 	name: string

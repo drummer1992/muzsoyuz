@@ -33,5 +33,5 @@ export abstract class BasicDto extends StatsDto {
 	altPhone: number
 
 	@IsIn(Object.values(Instrument))
-	musicalInstrument: Instrument
+	role: Instrument
 }

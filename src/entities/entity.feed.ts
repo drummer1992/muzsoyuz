@@ -7,7 +7,7 @@ export interface IFeed extends IApp {
 	address?: string
 	salary: number
 	date?: Date
-	musicalSets: number
+	sets: number
 	extraInfo?: string
 	user: User
 	title: string
@@ -44,7 +44,7 @@ export class Feed extends AppEntity implements IFeed {
 	date: Date
 
 	@Column({ nullable: true, type: 'smallint' })
-	musicalSets: number
+	sets: number
 
 	@ManyToOne(() => User, user => user.feeds)
 	user: User

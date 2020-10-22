@@ -28,13 +28,15 @@ abstract class FeedValidator {
 	}
 
 	static date = {
-		validate: value => DateUtils.isDate(value, x => new Date(x).getTime() > Date.now()),
+		validate: value => DateUtils.isDate(value, x => {
+			return new Date(x).getTime() > DateUtils.addDays(DateUtils.trimTime(Date.now()), -1).getTime()
+		}),
 		message : value => `date must be not in past and should have type of Date, actual: ${value}`,
 	}
 
-	static musicalSets = {
+	static sets = {
 		validate: value => NumberUtils.isNumber(value, x => x && x <= 5),
-		message : value => `musicalSets must be a number between 1 and 5, actual: ${value}`,
+		message : value => `sets must be a number between 1 and 5, actual: ${value}`,
 	}
 
 	static extraInfo = {
@@ -47,26 +49,26 @@ abstract class FeedValidator {
 		message : value => `title must be a string with length between 10 and 250, actual: ${value}`,
 	}
 
-	static musicalInstrument = {
+	static role = {
 		validate: value => FeedValidator.musicalInstruments.includes(value),
 		message : value => {
-			return 'musicalInstrument must be one of ['
+			return 'role must be one of ['
 				+ FeedValidator.musicalInstruments.join(', ')
 				+ `], actual: ${value}`
 		},
 	}
 
 	private static BASIC_FEED_VALIDATORS = {
-		title            : FeedValidator.title,
-		extraInfo        : FeedValidator.extraInfo,
-		musicalInstrument: FeedValidator.musicalInstrument,
+		title    : FeedValidator.title,
+		extraInfo: FeedValidator.extraInfo,
+		role     : FeedValidator.role,
 	}
 
 	private static MUSICAL_REPLACEMENT_VALIDATION_MAP = {
-		address    : FeedValidator.address,
-		salary     : FeedValidator.salary,
-		date       : FeedValidator.date,
-		musicalSets: FeedValidator.musicalSets,
+		address: FeedValidator.address,
+		salary : FeedValidator.salary,
+		date   : FeedValidator.date,
+		sets   : FeedValidator.sets,
 	}
 
 	private static SELF_PROMOTION_VALIDATION_MAP = {}

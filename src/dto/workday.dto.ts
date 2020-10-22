@@ -21,7 +21,7 @@ export class WorkdayFilterDto {
 
 	@IsOptional()
 	@IsIn(Object.values(Instrument))
-	musicalInstrument: Instrument
+	role: Instrument
 
 	@IsIn(Object.values(UserType))
 	userType: UserType

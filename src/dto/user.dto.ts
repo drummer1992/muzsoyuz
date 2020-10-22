@@ -52,5 +52,5 @@ export class UserDto extends BasicDto {
 
 	@IsUrl()
 	@IsOptional()
-	imageUrl: string
+	imageURL: string
 }

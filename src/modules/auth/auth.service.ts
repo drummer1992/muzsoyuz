@@ -54,7 +54,7 @@ export class AuthService {
 				[`${provider}Id`]: user.id,
 				name             : displayName || undefined,
 				email            : email?.value || undefined,
-				imageUrl         : image?.value || undefined,
+				imageURL         : image?.value || undefined,
 			}))
 		} else if (existingUser && !existingUser[`${provider}Id`]) {
 			await this.userService.enrichWithProviderId(id, provider, user.id)

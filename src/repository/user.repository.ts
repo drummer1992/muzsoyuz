@@ -13,7 +13,7 @@ export class UserRepository extends Repository<User> {
 		'yearCommercialExp',
 		'phone',
 		'role',
-		'imageUrl',
+		'imageURL',
 		'name',
 		'dob',
 		'city',

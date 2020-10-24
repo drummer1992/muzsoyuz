@@ -1,4 +1,4 @@
-export enum Instrument {
+export enum Instruments {
 	GUITAR   = 'guitar',
 	DRUMS    = 'drums',
 	VOICE    = 'voice',
@@ -18,7 +18,7 @@ export enum Gender {
 	F = 'f',
 }
 
-export enum UserType {
+export enum UserTypes {
 	MUSICIAN    = 'musician',
 	MANAGER     = 'manager',
 	TEACHER     = 'teacher',
@@ -26,10 +26,9 @@ export enum UserType {
 	MERE_MORTAL = 'mereMortal'
 }
 
-export enum FeedType {
+export enum JobTypes {
 	MUSICAL_REPLACEMENT = 'musicalReplacement',
 	SELF_PROMOTION      = 'selfPromotion',
-	JOB                 = 'job'
 }
 
-export type ProviderAttribute = 'googleId' | 'facebookId'
+export type ProviderAttributes = 'googleId' | 'facebookId'

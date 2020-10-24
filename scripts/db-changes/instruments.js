@@ -37,6 +37,10 @@ module.exports = async client => {
       imageURL: 'https://i.ibb.co/59vWJd7/guitar.png',
     },
     {
+      name    : Instrument.BAS,
+      imageURL: 'https://i.ibb.co/59vWJd7/guitar.png',
+    },
+    {
       name    : Instrument.VOICE,
       imageURL: 'https://i.ibb.co/Vvcm1s5/mic.png',
     },

@@ -1,5 +1,5 @@
 import { IsIn, IsNumber, IsOptional, IsString } from 'class-validator'
-import { Instrument } from '../app.interfaces'
+import { Instruments } from '../app.interfaces'
 import { IStats } from '../entities/entity.basic'
 
 export abstract class StatsDto implements IStats {
@@ -32,6 +32,6 @@ export abstract class BasicDto extends StatsDto {
 	@IsOptional()
 	altPhone: number
 
-	@IsIn(Object.values(Instrument))
-	role: Instrument
+	@IsIn(Object.values(Instruments))
+	role: Instruments
 }

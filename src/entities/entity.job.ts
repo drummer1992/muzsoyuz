@@ -1,9 +1,9 @@
 import { Column, Entity, ManyToOne } from 'typeorm'
 import { AppEntity, IApp } from './entity.basic'
 import { User } from './entity.user'
-import { FeedType } from '../app.interfaces'
+import { JobTypes } from '../app.interfaces'
 
-export interface IFeed extends IApp {
+export interface IJob extends IApp {
 	address?: string
 	salary: number
 	date?: Date
@@ -11,12 +11,12 @@ export interface IFeed extends IApp {
 	extraInfo?: string
 	user: User
 	title: string
-	feedType: FeedType
+	jobType: JobTypes
 	isActive: boolean
 }
 
-@Entity({ name: 'Feed' })
-export class Feed extends AppEntity implements IFeed {
+@Entity({ name: 'Job' })
+export class Job extends AppEntity implements IJob {
 	@Column({ type: 'varchar', length: 250, nullable: true })
 	address: string
 
@@ -46,7 +46,7 @@ export class Feed extends AppEntity implements IFeed {
 	@Column({ nullable: true, type: 'smallint' })
 	sets: number
 
-	@ManyToOne(() => User, user => user.feeds)
+	@ManyToOne(() => User, user => user.jobs)
 	user: User
 
 	@Column({ type: 'varchar', length: 100 })
@@ -58,8 +58,8 @@ export class Feed extends AppEntity implements IFeed {
 	@Column({ type: 'boolean', default: true })
 	isActive: boolean
 
-	@Column({ enum: FeedType, type: 'varchar', length: 30 })
-	feedType: FeedType
+	@Column({ enum: JobTypes, type: 'varchar', length: 30 })
+	jobType: JobTypes
 
 	static create(data) {
 		return Object.assign(new this(), data)

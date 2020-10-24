@@ -1,5 +1,5 @@
 import { IsBoolean, IsDate, IsDateString, IsIn, IsOptional } from 'class-validator'
-import { Instrument, UserType } from '../app.interfaces'
+import { Instruments, UserTypes } from '../app.interfaces'
 
 export class WorkdayDto {
 	@IsDate()
@@ -20,11 +20,11 @@ export class WorkdayFilterDto {
 	to: Date
 
 	@IsOptional()
-	@IsIn(Object.values(Instrument))
-	role: Instrument
+	@IsIn(Object.values(Instruments))
+	role: Instruments
 
-	@IsIn(Object.values(UserType))
-	userType: UserType
+	@IsIn(Object.values(UserTypes))
+	userType: UserTypes
 
 	@IsBoolean()
 	dayOff: boolean

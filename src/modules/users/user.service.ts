@@ -6,7 +6,7 @@ import { businessAssert } from '../../lib/errors'
 import { User } from '../../entities/entity.user'
 import { WorkdayDto, WorkdayFilterDto } from '../../dto/workday.dto'
 import { WorkdayRepository } from '../../repository/workday.repository'
-import { ProviderAttribute } from '../../app.interfaces'
+import { ProviderAttributes } from '../../app.interfaces'
 
 @Injectable()
 export class UserService {
@@ -31,7 +31,7 @@ export class UserService {
 	}
 
 	getIdsByProviderIdOrEmail(id, email, provider) {
-		const providerAttribute = `${provider}Id` as ProviderAttribute
+		const providerAttribute = `${provider}Id` as ProviderAttributes
 
 		return this.userRepository.findOne({
 			where : [

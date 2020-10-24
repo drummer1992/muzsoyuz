@@ -1,28 +1,28 @@
 import { Injectable } from '@nestjs/common'
-import { BasicFeedDto, MusicalReplacementDto, FeedFilterDto } from '../../dto/feed.dto'
+import { JobFilterDto, JobDto } from '../../dto/job.dto'
 import { InjectRepository } from '@nestjs/typeorm'
 import { argumentAssert, notFoundAssert } from '../../lib/errors'
-import { FeedRepository } from '../../repository/feed.repository'
-import { Feed } from '../../entities/entity.feed'
+import { JobRepository } from '../../repository/job.repository'
+import { Job } from '../../entities/entity.job'
 import { isUUID } from 'class-validator'
 import { OpenCage } from '../../utils/geo'
 import { CityRepository } from '../../repository/city.repository'
 
 @Injectable()
-export class FeedService {
+export class JobService {
 	constructor(
-		@InjectRepository(FeedRepository)
-		private feedRepository: FeedRepository,
+		@InjectRepository(JobRepository)
+		private jobRepository: JobRepository,
 		@InjectRepository(CityRepository)
 		private cityRepository: CityRepository,
 	) {
 	}
 
-	getFeeds(filters: FeedFilterDto) {
-		return this.feedRepository.getFeeds(filters)
+	getOffers(filters: JobFilterDto) {
+		return this.jobRepository.getOffers(filters)
 	}
 
-	async createFeed(userId, data) {
+	async createOffer(userId, data) {
 		if (data.address) {
 			const geoResponse = await OpenCage.geoCode({ address: data.address })
 
@@ -33,23 +33,23 @@ export class FeedService {
 			})
 		}
 
-		return this.feedRepository.createFeed(data)
+		return this.jobRepository.createOffer(data)
 	}
 
-	async updatedFeed(id: string, data: MusicalReplacementDto | BasicFeedDto) {
+	async updatedOffer(id: string, data: JobDto) {
 		argumentAssert(isUUID(id), `Not valid id: [${id}]`)
 
-		const { affected } = await this.feedRepository.update({ id }, Feed.create(data))
+		const { affected } = await this.jobRepository.update({ id }, Job.create(data))
 
 		notFoundAssert(affected, id)
 
 		return data
 	}
 
-	async deleteFeed(id: string) {
+	async deleteOffer(id: string) {
 		argumentAssert(isUUID(id), `Not valid id: [${id}]`)
 
-		const { affected } = await this.feedRepository.delete({ id })
+		const { affected } = await this.jobRepository.delete({ id })
 
 		notFoundAssert(affected, id)
 	}

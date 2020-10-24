@@ -1,18 +1,18 @@
 import { IsDateString, IsIn, IsNumber, IsOptional, IsString, MaxLength, MinLength } from 'class-validator'
 import { BasicDto } from './basic.dto'
-import { FeedType, Instrument } from '../app.interfaces'
+import { JobTypes, Instruments } from '../app.interfaces'
 
-export class FeedFilterDto {
+export class JobFilterDto {
 	@IsOptional()
-	@IsIn(Object.values(Instrument))
+	@IsIn(Object.values(Instruments))
 	role: string
 
 	@IsOptional()
 	@IsString()
 	city?: string
 
-	@IsIn(Object.values(FeedType))
-	feedType: string
+	@IsIn(Object.values(JobTypes))
+	jobType: string
 
 	@IsOptional()
 	@IsString()
@@ -22,7 +22,7 @@ export class FeedFilterDto {
 	id: string
 }
 
-export class BasicFeedDto extends BasicDto {
+export class BasicJobDto extends BasicDto {
 	@IsString()
 	@IsOptional()
 	extraInfo?: string
@@ -32,11 +32,11 @@ export class BasicFeedDto extends BasicDto {
 	@MaxLength(250)
 	title: string
 
-	@IsIn(Object.values(FeedType))
-	feedType: string
+	@IsIn(Object.values(JobTypes))
+	jobType: string
 }
 
-export class MusicalReplacementDto extends BasicFeedDto {
+export class MusicalReplacementDto extends BasicJobDto {
 	@IsString()
 	@IsOptional()
 	address: string
@@ -55,13 +55,9 @@ export class MusicalReplacementDto extends BasicFeedDto {
 	sets: number
 }
 
-export class SelfPromotionDto extends BasicFeedDto {
+export class SelfPromotionDto extends BasicJobDto {
 	@IsDateString()
 	date: Date
 }
 
-export class JobDto extends BasicFeedDto {
-
-}
-
-export type FeedDto = JobDto | SelfPromotionDto | MusicalReplacementDto
+export type JobDto = SelfPromotionDto | MusicalReplacementDto

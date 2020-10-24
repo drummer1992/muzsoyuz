@@ -1,5 +1,5 @@
 import { PrimaryGeneratedColumn, Column } from 'typeorm'
-import { Instrument } from '../app.interfaces'
+import { Instruments } from '../app.interfaces'
 
 export interface IStats {
 	yearCommercialExp: number
@@ -18,7 +18,7 @@ export interface IApp extends IStats {
 	name?: string
 	phone?: number
 	altPhone?: number
-	role?: Instrument
+	role?: Instruments
 }
 
 export abstract class Basic implements IBasic {
@@ -39,8 +39,8 @@ export abstract class AppEntity extends Basic implements IApp {
 	@Column({ type: 'int', nullable: true })
 	altPhone: number
 
-	@Column({ type: 'varchar', length: 30, enum: Instrument, nullable: true })
-	role: Instrument
+	@Column({ type: 'varchar', length: 30, enum: Instruments, nullable: true })
+	role: Instruments
 
 	@Column({ type: 'varchar', length: 80, nullable: true })
 	name: string

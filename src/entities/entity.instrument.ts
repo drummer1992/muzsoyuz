@@ -1,12 +1,12 @@
 import { Column, Entity } from 'typeorm'
 import { Basic } from './entity.basic'
-import { Instrument } from '../app.interfaces'
+import { Instruments } from '../app.interfaces'
 
 @Entity({ name: 'Instrument' })
-export class EntityInstrument extends Basic {
-	@Column({ type: 'varchar', length: 15, enum: Instrument })
-	name: Instrument
+export class Instrument extends Basic {
+	@Column({ type: 'varchar', length: 15, enum: Instruments })
+	name: Instruments
 
-	@Column({ type: 'varchar', enum: Instrument })
+	@Column({ type: 'varchar', enum: Instruments })
 	imageURL: string
 }

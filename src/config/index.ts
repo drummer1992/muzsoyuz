@@ -1,11 +1,11 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm'
 import { User } from '../entities/entity.user'
-import { Feed } from '../entities/entity.feed'
+import { Job } from '../entities/entity.job'
 import { City } from '../entities/entity.city'
 import { WorkDay } from '../entities/entity.work.day'
 import { ChatMessage } from '../entities/entity.chat.message'
 import { ChatRoom } from '../entities/entity.chat.room'
-import { EntityInstrument } from '../entities/entity.instrument'
+import { Instrument } from '../entities/entity.instrument'
 
 require('dotenv').config()
 
@@ -77,12 +77,12 @@ class Index {
 
 			entities: [
 				User,
-				Feed,
+				Job,
 				City,
 				WorkDay,
 				ChatMessage,
 				ChatRoom,
-				EntityInstrument,
+				Instrument,
 			],
 
 			synchronize: true,

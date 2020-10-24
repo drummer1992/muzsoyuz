@@ -1,16 +1,16 @@
 import { Column, Entity, OneToMany } from 'typeorm'
 import { AppEntity, IStats } from './entity.basic'
-import { UserType, Gender } from '../app.interfaces'
+import { UserTypes, Gender } from '../app.interfaces'
 import * as bCrypt from 'bcrypt'
 import { WorkDay } from './entity.work.day'
-import { Feed } from './entity.feed'
+import { Job } from './entity.job'
 
 export interface IUser {
 	dob?: Date
 	city?: string
 	email: string
 	gender?: Gender
-	type: UserType
+	type: UserTypes
 	hash: string
 	salt: string
 	facebookId: string
@@ -30,8 +30,8 @@ export class User extends AppEntity implements IUser, IStats {
 	@OneToMany(() => WorkDay, workday => workday.user)
 	workdays: WorkDay[]
 
-	@OneToMany(() => Feed, feed => feed.user)
-	feeds: Feed[]
+	@OneToMany(() => Job, job => job.user)
+	jobs: Job[]
 
 	@Column({ type: 'varchar', length: 30, nullable: true })
 	facebookId: string
@@ -54,8 +54,8 @@ export class User extends AppEntity implements IUser, IStats {
 	@Column({ type: 'varchar', nullable: true, unique: true })
 	salt: string
 
-	@Column({ type: 'varchar', length: 10, enum: UserType, nullable: true })
-	type: UserType
+	@Column({ type: 'varchar', length: 10, enum: UserTypes, nullable: true })
+	type: UserTypes
 
 	@Column({ type: 'text', nullable: true, unique: true })
 	hash: string

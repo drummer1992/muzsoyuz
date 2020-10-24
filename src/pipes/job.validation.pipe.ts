@@ -1,17 +1,17 @@
 import { Injectable, PipeTransform } from '@nestjs/common'
-import { FeedType, Instrument } from '../app.interfaces'
+import { JobTypes, Instruments } from '../app.interfaces'
 import { StringUtils } from '../utils/string'
 import { NumberUtils } from '../utils/number'
 import { DateUtils } from '../utils/date'
 import { argumentAssert, InvalidArgumentsError } from '../lib/errors'
 
-abstract class FeedValidator {
-	private static feedTypes = Object.values(FeedType)
-	private static musicalInstruments = Object.values(Instrument)
+abstract class JobValidator {
+	private static jobTypes = Object.values(JobTypes)
+	private static musicalInstruments = Object.values(Instruments)
 
-	static feedType = {
-		validate: value => FeedValidator.feedTypes.includes(value),
-		message : value => `feedType must be one of [${FeedValidator.feedTypes.join(', ')}], actual: ${value}`,
+	static jobType = {
+		validate: value => JobValidator.jobTypes.includes(value),
+		message : value => `jobType must be one of [${JobValidator.jobTypes.join(', ')}], actual: ${value}`,
 	}
 
 	static address = {
@@ -50,56 +50,52 @@ abstract class FeedValidator {
 	}
 
 	static role = {
-		validate: value => FeedValidator.musicalInstruments.includes(value),
+		validate: value => JobValidator.musicalInstruments.includes(value),
 		message : value => {
 			return 'role must be one of ['
-				+ FeedValidator.musicalInstruments.join(', ')
+				+ JobValidator.musicalInstruments.join(', ')
 				+ `], actual: ${value}`
 		},
 	}
 
-	private static BASIC_FEED_VALIDATORS = {
-		title    : FeedValidator.title,
-		extraInfo: FeedValidator.extraInfo,
-		role     : FeedValidator.role,
+	private static BASIC_JOB_VALIDATORS = {
+		title    : JobValidator.title,
+		extraInfo: JobValidator.extraInfo,
+		role     : JobValidator.role,
 	}
 
 	private static MUSICAL_REPLACEMENT_VALIDATION_MAP = {
-		address: FeedValidator.address,
-		salary : FeedValidator.salary,
-		date   : FeedValidator.date,
-		sets   : FeedValidator.sets,
+		address: JobValidator.address,
+		salary : JobValidator.salary,
+		date   : JobValidator.date,
+		sets   : JobValidator.sets,
 	}
 
 	private static SELF_PROMOTION_VALIDATION_MAP = {}
 
-	private static JOB_VALIDATION_MAP = {}
-
-	private static VALIDATION_MAP_BY_FEED_TYPE = {
-		[FeedType.MUSICAL_REPLACEMENT]: FeedValidator.MUSICAL_REPLACEMENT_VALIDATION_MAP,
-		[FeedType.SELF_PROMOTION]     : FeedValidator.SELF_PROMOTION_VALIDATION_MAP,
-		[FeedType.JOB]                : FeedValidator.JOB_VALIDATION_MAP,
+	private static VALIDATION_MAP_BY_JOB_TYPE = {
+		[JobTypes.MUSICAL_REPLACEMENT]: JobValidator.MUSICAL_REPLACEMENT_VALIDATION_MAP,
+		[JobTypes.SELF_PROMOTION]     : JobValidator.SELF_PROMOTION_VALIDATION_MAP,
 	}
 
 	validate(value: any, optional: boolean): any {
 		argumentAssert(value && Object.keys(value).length, 'Data is not provided')
 
 		if (!optional) {
-			argumentAssert(FeedValidator.feedType.validate(value.feedType), {
-				feedType: FeedValidator.feedType.message(value.feedType),
+			argumentAssert(JobValidator.jobType.validate(value.jobType), {
+				jobType: JobValidator.jobType.message(value.jobType),
 			})
 		}
 
-		let VALIDATION_MAP = FeedValidator.VALIDATION_MAP_BY_FEED_TYPE[value.feedType]
+		let VALIDATION_MAP = JobValidator.VALIDATION_MAP_BY_JOB_TYPE[value.jobType]
 
 		if (!VALIDATION_MAP) {
 			VALIDATION_MAP = {
-				...FeedValidator.MUSICAL_REPLACEMENT_VALIDATION_MAP,
-				...FeedValidator.SELF_PROMOTION_VALIDATION_MAP,
-				...FeedValidator.JOB_VALIDATION_MAP,
+				...JobValidator.MUSICAL_REPLACEMENT_VALIDATION_MAP,
+				...JobValidator.SELF_PROMOTION_VALIDATION_MAP,
 			}
 		} else {
-			Object.assign(VALIDATION_MAP, FeedValidator.BASIC_FEED_VALIDATORS)
+			Object.assign(VALIDATION_MAP, JobValidator.BASIC_JOB_VALIDATORS)
 		}
 
 		const byErred = attribute => {
@@ -127,14 +123,14 @@ abstract class FeedValidator {
 }
 
 @Injectable()
-export class RequiredFeedValidationPipe extends FeedValidator implements PipeTransform {
+export class RequiredJobValidationPipe extends JobValidator implements PipeTransform {
 	transform(value: any): any {
 		return this.validate(value, false)
 	}
 }
 
 @Injectable()
-export class OptionalFeedValidationPipe extends FeedValidator implements PipeTransform {
+export class OptionalJobValidationPipe extends JobValidator implements PipeTransform {
 	transform(value: any): any {
 		return this.validate(value, true)
 	}

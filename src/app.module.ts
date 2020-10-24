@@ -4,7 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { config } from './config'
 import { AuthModule } from './modules/auth/auth.module'
 import { UserModule } from './modules/users/user.module'
-import { FeedModule } from './modules/feed/feed.module'
+import { JobModule } from './modules/job/job.module'
 import { ChatModule } from './modules/chat/chat.module'
 
 @Module({
@@ -12,7 +12,7 @@ import { ChatModule } from './modules/chat/chat.module'
 		ConfigModule.forRoot({ isGlobal: true }),
 		TypeOrmModule.forRoot(config.getTypeOrmConfig()),
 		UserModule,
-		FeedModule,
+		JobModule,
 		AuthModule,
 		ChatModule,
 	],

@@ -73,7 +73,7 @@ export class JobRepository extends Repository<Job> {
 	}
 
 	createOffer(data: MusicalReplacementDto | SelfPromotionDto): Promise<ObjectLiteral> {
-		return this.insert(Job.create(data))
+		return this.insert(new Job(data))
 			.then(({ identifiers: [identifier] }) => identifier)
 	}
 }

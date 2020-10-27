@@ -60,8 +60,4 @@ export class Job extends AppEntity implements IJob {
 
 	@Column({ enum: JobTypes, type: 'varchar', length: 30 })
 	jobType: JobTypes
-
-	static create(data) {
-		return Object.assign(new this(), data)
-	}
 }

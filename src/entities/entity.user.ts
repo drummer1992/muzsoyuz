@@ -19,12 +19,6 @@ export interface IUser {
 
 @Entity({ name: 'User' })
 export class User extends AppEntity implements IUser, IStats {
-	constructor(user) {
-		super()
-
-		Object.assign(this, user)
-	}
-
 	static readonly SALT_ROUNDS: number = 10
 
 	@OneToMany(() => WorkDay, workday => workday.user)

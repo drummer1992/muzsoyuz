@@ -39,7 +39,7 @@ export class JobService {
 	async updatedOffer(id: string, data: JobDto) {
 		argumentAssert(isUUID(id), `Not valid id: [${id}]`)
 
-		const { affected } = await this.jobRepository.update({ id }, Job.create(data))
+		const { affected } = await this.jobRepository.update({ id }, new Job(data))
 
 		notFoundAssert(affected, id)
 

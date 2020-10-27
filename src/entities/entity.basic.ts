@@ -22,6 +22,10 @@ export interface IApp extends IStats {
 }
 
 export abstract class Basic implements IBasic {
+	constructor(data) {
+		Object.assign(this, data)
+	}
+
 	@PrimaryGeneratedColumn('uuid')
 	id: string
 

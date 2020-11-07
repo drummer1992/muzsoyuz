@@ -1,15 +1,10 @@
 /* eslint-disable */
 import { Request } from './request'
 import { SECOND } from './date'
-import assert = require('assert')
 
-interface IGeoCode {
+interface GeoCodeOptions {
 	address?: string
-	location?: { latitude: number, longitude: number },
-	country?: string,
-	language?: string,
-	limit?: number,
-	minConfidence?: number
+	location?: { lat: number, lng: number },
 }
 
 export abstract class OpenCage {
@@ -33,38 +28,26 @@ export abstract class OpenCage {
 		})
 	}
 
-	private static resolveLocationQuery(address, location) {
-		assert(address || location, 'address or location are required')
-
-		return `${encodeURIComponent(address ? address : `${location.lat},${location.lng}`)}`
-	}
-
-	private static resolveQuery(query) {
-		const { key: apiKey, ...restQuery } = query
-
-		return Object.keys(restQuery).reduce(
-			(acc, key) => acc + `&${key}=${query[key]}`, `?key=${apiKey}`,
-		)
-	}
-
-	static async geoCode({ address, location, country, language, limit }: IGeoCode) {
+	static async geoCode({ address, location }: GeoCodeOptions) {
 		if (!this.isRequestAllowed) {
 			await OpenCage.wait()
 		}
 
 		this.blockGeoRequests()
 
-		const query = {
-			key           : process.env.OPEN_CAGE_API_KEY,
-			q             : this.resolveLocationQuery(address, location),
-			countrycode   : country || 'ua',
-			language      : language || 'ru',
-			limit         : limit || 1,
-			min_confidence: 8,
-		}
+		// @ts-ignore
+		const response = await Request.get(`${process.env.OPEN_CAGE_API_URL}`)
+			.query({
+				key           : process.env.OPEN_CAGE_API_KEY,
+				q             : `${encodeURIComponent(address ? address : `${location.lat},${location.lng}`)}`,
+				countrycode   : 'ua',
+				language      : 'ru',
+				limit         : 1,
+				min_confidence: 8,
+			})
 
-		const { results: [point] } = await Request.get(`${process.env.OPEN_CAGE_API_URL}${this.resolveQuery(query)}`)
+		const point = response?.results?.[0]
 
-		return point && { address: point.formatted, location: point.geometry }
+		return { addressGeoCoded: point?.formatted, location: point?.geometry }
 	}
 }

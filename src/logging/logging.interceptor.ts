@@ -1,66 +1,40 @@
-import { CallHandler, ExecutionContext, NestInterceptor } from '@nestjs/common'
+import { CallHandler, ExecutionContext, Logger, NestInterceptor } from '@nestjs/common'
 import { Observable } from 'rxjs'
 import { tap, catchError } from 'rxjs/operators'
-import * as fs from 'fs'
-import * as path from 'path'
+
+const reqLogger = new Logger('ClientRequest')
+const resLogger = new Logger('ClientResponse')
 
 export class LoggingInterceptor implements NestInterceptor {
-	private writableStream
-
-	getStream() {
-		if (!this.writableStream) {
-			this.writableStream = fs.createWriteStream(
-				path.resolve(process.env.LOG_PATH, new Date().toISOString() + '.log'),
-			)
-
-			const _write = this.writableStream.write
-
-			this.writableStream.write = (data, encoding = 'utf8') => new Promise((resolve, reject) => {
-				_write.call(this.writableStream, data, encoding, err => err ? reject(err) : resolve())
-			})
-		}
-
-		return this.writableStream
-	}
-
 	async intercept(context: ExecutionContext, next: CallHandler<any>): Promise<Observable<any>> {
-		const [{ method, url, params, query, body, headers: { authorization } }] = context.getArgs()
+		const [{ method, url, body, headers: { authorization } }] = context.getArgs()
 
 		const before = Date.now()
 
 		const requestId = Math.floor(Math.random() * 1000)
 
-		const beforeLog = `[INFO]: [${requestId}] ${new Date(before).toISOString()}, ${method}: ${url}, `
-			+ `TOKEN: ${authorization} `
-			+ `PATH_PARAMS: ${JSON.stringify(params)}, `
-			+ `QUERY: ${JSON.stringify(query)}, `
-			+ `BODY: ${JSON.stringify(body)}\n`
+		const message = `[${requestId}] ${method}: ${url} ${authorization}, ${JSON.stringify(body)}`
 
-		const stream = await this.getStream()
-
-		await stream.write(beforeLog)
+		reqLogger.log(message)
 
 		return next
 			.handle()
 			.pipe(
-				tap(async () => {
+				tap(async response => {
 					const [, { statusCode }] = context.getArgs()
 
 					const after = Date.now()
 
-					const afterLog = `[INFO]: [${requestId}] ${new Date(after).toISOString()}, `
-						+ `STATUS: ${statusCode}, `
-						+ `PROCESSING TIME: ${after - before} ms\n`
+					const message = `[${requestId}], status: ${statusCode}, `
+					+ `response: ${JSON.stringify(response)} ${after - before} ms`
 
-					await stream.write(afterLog)
+					resLogger.log(message)
 				}),
 
 				catchError(async err => {
-					console.error(err)
+					const message = `[${requestId}], ${JSON.stringify(err)}`
 
-					const message = `[ERROR]: [${requestId}] ${new Date().toISOString()}, ${JSON.stringify(err)}\n`
-
-					await stream.write(message)
+					resLogger.error(message)
 
 					return err
 				}),

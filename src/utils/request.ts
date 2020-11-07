@@ -1,5 +1,9 @@
 'use strict'
 
+import { Logger } from '@nestjs/common'
+
+const logger = new Logger('ServerRequest')
+
 const url = require('url')
 
 enum Methods {
@@ -198,6 +202,8 @@ export class Request {
 
 	send(body?: object): Promise<any> {
 		this.body = body || this.body
+
+		logger.log(this.url)
 
 		return nodeRequest({
 			path   : this.url,

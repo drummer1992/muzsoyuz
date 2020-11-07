@@ -23,7 +23,9 @@ export class JobService {
 	}
 
 	async createOffer(userId, data) {
-		data.address && Object.assign(data, await OpenCage.geoCode(data))
+		if (data.address || data.location) {
+			Object.assign(data, await OpenCage.geoCode(data))
+		}
 
 		return this.jobRepository.createOffer(data)
 	}

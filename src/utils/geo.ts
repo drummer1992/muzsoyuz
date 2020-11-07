@@ -7,6 +7,11 @@ interface GeoCodeOptions {
 	location?: { lat: number, lng: number },
 }
 
+interface GeoResponse {
+	addressGeoCoded: any
+	location?: { lat: number, lng: number }
+}
+
 export abstract class OpenCage {
 	private static isRequestAllowed = true
 
@@ -28,7 +33,7 @@ export abstract class OpenCage {
 		})
 	}
 
-	static async geoCode({ address, location }: GeoCodeOptions) {
+	static async geoCode({ address, location }: GeoCodeOptions): Promise<GeoResponse> {
 		if (!this.isRequestAllowed) {
 			await OpenCage.wait()
 		}
@@ -36,15 +41,16 @@ export abstract class OpenCage {
 		this.blockGeoRequests()
 
 		// @ts-ignore
-		const response = await Request.get(`${process.env.OPEN_CAGE_API_URL}`)
+		const response = await Request.get(process.env.OPEN_CAGE_API_URL)
 			.query({
 				key           : process.env.OPEN_CAGE_API_KEY,
-				q             : `${encodeURIComponent(address ? address : `${location.lat},${location.lng}`)}`,
+				q             : encodeURIComponent(address ? address : `${location.lat},${location.lng}`),
 				countrycode   : 'ua',
 				language      : 'ru',
 				limit         : 1,
 				min_confidence: 8,
 			})
+			.catch(console.error)
 
 		const point = response?.results?.[0]
 

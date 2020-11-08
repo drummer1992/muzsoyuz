@@ -13,7 +13,6 @@ const client = new Client({
 })
 
 const scripts = [
-  require('./logs'),
   require('./city'),
   require('./instruments'),
 ]

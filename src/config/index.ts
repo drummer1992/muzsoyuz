@@ -3,8 +3,6 @@ import { User } from '../entities/entity.user'
 import { Job } from '../entities/entity.job'
 import { City } from '../entities/entity.city'
 import { WorkDay } from '../entities/entity.work.day'
-import { ChatMessage } from '../entities/entity.chat.message'
-import { ChatRoom } from '../entities/entity.chat.room'
 import { Instrument } from '../entities/entity.instrument'
 
 require('dotenv').config()
@@ -62,9 +60,6 @@ class Index {
 
 	public isProduction() {
 		const mode = this.getValue('MODE', false)
-
-		console.log({ isProduction: mode !== 'DEV' })
-
 		return mode !== 'DEV'
 	}
 
@@ -81,8 +76,6 @@ class Index {
 				Job,
 				City,
 				WorkDay,
-				ChatMessage,
-				ChatRoom,
 				Instrument,
 			],
 

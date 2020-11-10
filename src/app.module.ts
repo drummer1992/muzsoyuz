@@ -5,7 +5,6 @@ import { config } from './config'
 import { AuthModule } from './modules/auth/auth.module'
 import { UserModule } from './modules/users/user.module'
 import { JobModule } from './modules/job/job.module'
-import { ChatModule } from './modules/chat/chat.module'
 
 @Module({
 	imports: [
@@ -14,7 +13,6 @@ import { ChatModule } from './modules/chat/chat.module'
 		UserModule,
 		JobModule,
 		AuthModule,
-		ChatModule,
 	],
 })
 

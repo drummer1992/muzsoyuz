@@ -63,23 +63,19 @@ class Index {
 	public isProduction() {
 		const mode = this.getValue('MODE', false)
 
+		console.log({ isProduction: mode !== 'DEV' })
+
 		return mode !== 'DEV'
 	}
 
 	public getTypeOrmConfig(): TypeOrmModuleOptions {
-		const options = this.isProduction()
-			? { url: this.getValue('DATABASE_URL') }
-			: {
-				host    : this.getValue('POSTGRES_HOST'),
-				port    : parseInt(this.getValue('POSTGRES_PORT')),
-				username: this.getValue('POSTGRES_USER'),
-				password: this.getValue('POSTGRES_PASSWORD'),
-				database: this.getValue('POSTGRES_DATABASE'),
-			}
-
 		return {
 			type    : 'postgres',
-			...options,
+			host    : this.getValue('POSTGRES_HOST'),
+			port    : parseInt(this.getValue('POSTGRES_PORT')),
+			username: this.getValue('POSTGRES_USER'),
+			password: this.getValue('POSTGRES_PASSWORD'),
+			database: this.getValue('POSTGRES_DATABASE'),
 			entities: [
 				User,
 				Job,
@@ -109,16 +105,13 @@ process.env.PORT = process.env.PORT || 9000 as any
 
 const config = new Index(process.env)
 
-const requiredVariables = config.isProduction()
-	? ['DATABASE_URL']
-	: [
-		'POSTGRES_HOST',
-		'POSTGRES_PORT',
-		'POSTGRES_USER',
-		'POSTGRES_PASSWORD',
-		'POSTGRES_DATABASE',
-	]
-
-config.ensureValues(requiredVariables)
+config.ensureValues([
+	'PORT',
+	'POSTGRES_HOST',
+	'POSTGRES_PORT',
+	'POSTGRES_USER',
+	'POSTGRES_PASSWORD',
+	'POSTGRES_DATABASE',
+])
 
 export { config }

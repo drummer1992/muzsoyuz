@@ -4,17 +4,13 @@ require('dotenv').config({ path: require('path').resolve(__dirname, '../../.env'
 
 const { Client } = require('pg')
 
-const options = process.env.MODE === 'PROD'
-  ? { connectionString: process.env.DATABASE_URL }
-  : {
-    user    : process.env.POSTGRES_USER,
-    host    : process.env.POSTGRES_HOST,
-    database: process.env.POSTGRES_DATABASE,
-    password: process.env.POSTGRES_PASSWORD,
-    port    : process.env.POSTGRES_PORT,
-  }
-
-const client = new Client(options)
+const client = new Client({
+  user    : process.env.POSTGRES_USER,
+  host    : process.env.POSTGRES_HOST,
+  database: process.env.POSTGRES_DATABASE,
+  password: process.env.POSTGRES_PASSWORD,
+  port    : process.env.POSTGRES_PORT,
+})
 
 const scripts = [
   require('./city'),

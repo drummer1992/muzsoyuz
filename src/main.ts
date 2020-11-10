@@ -8,7 +8,7 @@ async function bootstrap() {
   app.enableCors()
   app.setGlobalPrefix(config.getServerAPIPrefix())
 
-  await app.listen(process.env.PORT || 9000)
+  await app.listen(config.getPort(true))
 }
 
 bootstrap()

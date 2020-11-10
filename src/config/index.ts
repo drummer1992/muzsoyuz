@@ -101,8 +101,6 @@ class Index {
 	}
 }
 
-process.env.PORT = process.env.PORT || 9000 as any
-
 const config = new Index(process.env)
 
 config.ensureValues([

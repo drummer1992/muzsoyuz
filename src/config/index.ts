@@ -30,7 +30,7 @@ class Index {
 	}
 
 	public getPort(isServer) {
-		return parseInt(this.getValue(isServer ? 'SERVER_PORT' : 'CLIENT_PORT'))
+		return parseInt(this.getValue(isServer ? 'PORT' : 'CLIENT_PORT'))
 	}
 
 	public getClientHost() {
@@ -67,14 +67,19 @@ class Index {
 	}
 
 	public getTypeOrmConfig(): TypeOrmModuleOptions {
+		const options = this.isProduction()
+			? { url: this.getValue('DATABASE_URL') }
+			: {
+				host    : this.getValue('POSTGRES_HOST'),
+				port    : parseInt(this.getValue('POSTGRES_PORT')),
+				username: this.getValue('POSTGRES_USER'),
+				password: this.getValue('POSTGRES_PASSWORD'),
+				database: this.getValue('POSTGRES_DATABASE'),
+			}
+
 		return {
 			type    : 'postgres',
-			host    : this.getValue('POSTGRES_HOST'),
-			port    : parseInt(this.getValue('POSTGRES_PORT')),
-			username: this.getValue('POSTGRES_USER'),
-			password: this.getValue('POSTGRES_PASSWORD'),
-			database: this.getValue('POSTGRES_DATABASE'),
-
+			...options,
 			entities: [
 				User,
 				Job,
@@ -100,13 +105,20 @@ class Index {
 	}
 }
 
+process.env.PORT = process.env.PORT || 9000 as any
+
 const config = new Index(process.env)
-	.ensureValues([
+
+const requiredVariables = config.isProduction()
+	? ['DATABASE_URL']
+	: [
 		'POSTGRES_HOST',
 		'POSTGRES_PORT',
 		'POSTGRES_USER',
 		'POSTGRES_PASSWORD',
 		'POSTGRES_DATABASE',
-	])
+	]
+
+config.ensureValues(requiredVariables)
 
 export { config }

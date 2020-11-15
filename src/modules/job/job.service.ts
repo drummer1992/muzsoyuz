@@ -7,6 +7,7 @@ import { Job } from '../../entities/entity.job'
 import { isUUID } from 'class-validator'
 import { OpenCage } from '../../utils/geo'
 import { CityRepository } from '../../repository/city.repository'
+import { User } from '../../entities/entity.user'
 
 @Injectable()
 export class JobService {
@@ -27,7 +28,7 @@ export class JobService {
 			Object.assign(data, await OpenCage.geoCode(data))
 		}
 
-		data.userId = userId
+		data.user = new User({ id: userId })
 
 		return this.jobRepository.createOffer(data)
 	}

@@ -31,4 +31,10 @@ export enum JobTypes {
 	SELF_PROMOTION      = 'selfPromotion',
 }
 
+export enum TABLES {
+	INSTRUMENT = 'instrument',
+	JOB        = 'job',
+	CITY       = 'city',
+}
+
 export type ProviderAttributes = 'googleId' | 'facebookId'

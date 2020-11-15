@@ -5,16 +5,17 @@ import { Job } from '../entities/entity.job'
 import { City } from '../entities/entity.city'
 import { InvalidArgumentsError } from '../lib/errors'
 import { Instrument } from '../entities/entity.instrument'
+import { TABLES } from '../app.interfaces'
 
 @Injectable()
 @EntityRepository(Job)
 export class JobRepository extends Repository<Job> {
 	protected getTableName(attr) {
 		const TABLE_BY_ATTRIBUTES_MAP = {
-			imageURL: Instrument.name,
+			imageURL: TABLES.INSTRUMENT,
 		}
 
-		return TABLE_BY_ATTRIBUTES_MAP[attr] || Job.name
+		return TABLE_BY_ATTRIBUTES_MAP[attr] || TABLES.JOB
 	}
 
 	protected parseLocation(job) {
@@ -26,7 +27,7 @@ export class JobRepository extends Repository<Job> {
 	}
 
 	protected resolveProps(clientProps) {
-		let props = `${Job.name}.*`
+		let props = `${TABLES.JOB}.*`
 
 		if (clientProps) {
 			props = clientProps.split(',')
@@ -36,8 +37,8 @@ export class JobRepository extends Repository<Job> {
 
 		if (props.includes('location')) {
 			props = props.replace(
-				`${Job.name}."location"`,
-				`ST_AsGeoJSON(${Job.name}.location) as location`,
+				`${TABLES.JOB}."location"`,
+				`ST_AsGeoJSON(${TABLES.JOB}.location) as location`,
 			)
 		}
 
@@ -47,21 +48,21 @@ export class JobRepository extends Repository<Job> {
 	async getOffers(filters: JobFilterDto): Promise<Job[]> {
 		const props = this.resolveProps(filters.props)
 
-		const query = await this.createQueryBuilder(Job.name)
+		const query = await this.createQueryBuilder(TABLES.JOB)
 			.select(props)
-			.where(`${Job.name}.jobType='${filters.jobType}'`)
+			.where(`${TABLES.JOB}.jobType='${filters.jobType}'`)
 
 		if (filters.city) {
 			query
-				.from(City, City.name)
-				.andWhere(`${City.name}.name='${filters.city}'`)
-				.andWhere(`ST_Intersects(ST_SetSRID(${Job.name}.location, 4326), ST_SetSRID(${City.name}.location, 4326))`)
+				.from(City, TABLES.CITY)
+				.andWhere(`${TABLES.CITY}.name='${filters.city}'`)
+				.andWhere(`ST_Intersects(ST_SetSRID(${TABLES.JOB}.location, 4326), ST_SetSRID(${TABLES.CITY}.location, 4326))`)
 		}
 
 		if (props.includes('imageURL')) {
 			query
-				.from(Instrument, Instrument.name)
-				.andWhere(`${Instrument.name}.name=job.role`)
+				.from(Instrument, TABLES.INSTRUMENT)
+				.andWhere(`${TABLES.INSTRUMENT}.name=job.role`)
 		}
 
 		const offers = await query.execute()

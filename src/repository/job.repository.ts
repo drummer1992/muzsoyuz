@@ -10,12 +10,11 @@ import { Instrument } from '../entities/entity.instrument'
 @EntityRepository(Job)
 export class JobRepository extends Repository<Job> {
 	protected getTableName(attr) {
-		switch (attr) {
-			case 'imageURL':
-				return 'instrument'
-			default:
-				return 'job'
+		const TABLE_BY_ATTRIBUTES_MAP = {
+			imageURL: Instrument.name,
 		}
+
+		return TABLE_BY_ATTRIBUTES_MAP[attr] || Job.name
 	}
 
 	protected parseLocation(job) {
@@ -27,7 +26,7 @@ export class JobRepository extends Repository<Job> {
 	}
 
 	protected resolveProps(clientProps) {
-		let props = 'job.*'
+		let props = `${Job.name}.*`
 
 		if (clientProps) {
 			props = clientProps.split(',')
@@ -36,7 +35,10 @@ export class JobRepository extends Repository<Job> {
 		}
 
 		if (props.includes('location')) {
-			props = props.replace('job."location"', 'ST_AsGeoJSON(job.location) as location')
+			props = props.replace(
+				`${Job.name}."location"`,
+				`ST_AsGeoJSON(${Job.name}.location) as location`,
+			)
 		}
 
 		return props
@@ -45,21 +47,21 @@ export class JobRepository extends Repository<Job> {
 	async getOffers(filters: JobFilterDto): Promise<Job[]> {
 		const props = this.resolveProps(filters.props)
 
-		const query = await this.createQueryBuilder('job')
+		const query = await this.createQueryBuilder(Job.name)
 			.select(props)
-			.where(`job.jobType='${filters.jobType}'`)
+			.where(`${Job.name}.jobType='${filters.jobType}'`)
 
 		if (filters.city) {
 			query
-				.from(City, 'city')
-				.andWhere(`city.name='${filters.city}'`)
-				.andWhere('ST_Intersects(ST_SetSRID(job.location, 4326), ST_SetSRID(city.location, 4326))')
+				.from(City, City.name)
+				.andWhere(`${City.name}.name='${filters.city}'`)
+				.andWhere(`ST_Intersects(ST_SetSRID(${Job.name}.location, 4326), ST_SetSRID(${City.name}.location, 4326))`)
 		}
 
 		if (props.includes('imageURL')) {
 			query
-				.from(Instrument, 'instrument')
-				.andWhere('instrument.name=job.role')
+				.from(Instrument, Instrument.name)
+				.andWhere(`${Instrument.name}.name=job.role`)
 		}
 
 		const offers = await query.execute()

@@ -27,6 +27,8 @@ export class JobService {
 			Object.assign(data, await OpenCage.geoCode(data))
 		}
 
+		data.userId = userId
+
 		return this.jobRepository.createOffer(data)
 	}
 

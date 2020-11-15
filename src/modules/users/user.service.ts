@@ -50,8 +50,12 @@ export class UserService {
 		return this.userRepository.createProfile(user)
 	}
 
-	markWorkingDay(user, dto: WorkdayDto) {
-		return this.workdayRepository.markWorkingDay(user, dto)
+	createWorkingDay(userId, dto: WorkdayDto) {
+		return this.workdayRepository.createWorkingDay(userId, dto)
+	}
+
+	updateWorkingDay(userId, dto: WorkdayDto) {
+		return this.workdayRepository.updateWorkingDay(userId, dto)
 	}
 
 	findUsersByBusyness(filter: WorkdayFilterDto) {

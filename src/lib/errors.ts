@@ -46,9 +46,9 @@ export const businessAssert = (condition, message) => {
 	}
 }
 
-export const notFoundAssert = (condition, id) => {
+export const notFoundAssert = (condition, message) => {
 	if (!condition) {
-		throw new NotFoundError(`Unable to find entity by id: ${id}`)
+		throw new NotFoundError(message || 'Unable to find entity')
 	}
 }
 

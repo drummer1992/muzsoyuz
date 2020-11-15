@@ -33,21 +33,26 @@ export class JobService {
 		return this.jobRepository.createOffer(data)
 	}
 
-	async updatedOffer(id: string, data: JobDto) {
+	async updatedOffer(id: string, userId: string, data: JobDto) {
 		argumentAssert(isUUID(id), `Not valid id: [${id}]`)
 
-		const { affected } = await this.jobRepository.update({ id }, new Job(data))
+		const { affected } = await this.jobRepository.update({
+				id,
+				user: new User({ id: userId }),
+			},
+			new Job(data),
+		)
 
-		notFoundAssert(affected, id)
+		notFoundAssert(affected, `Offer by id [${id}] not found`)
 
 		return data
 	}
 
-	async deleteOffer(id: string) {
+	async deleteOffer(id: string, userId: string) {
 		argumentAssert(isUUID(id), `Not valid id: [${id}]`)
 
-		const { affected } = await this.jobRepository.delete({ id })
+		const { affected } = await this.jobRepository.delete({ id, user: new User({ id: userId }) })
 
-		notFoundAssert(affected, id)
+		notFoundAssert(affected, `Offer by id [${id}] not found`)
 	}
 }

@@ -41,13 +41,13 @@ export class JobController {
 
 	@Put(':id')
 	@UseGuards(JwtAuthGuard)
-	updatedOffer(@Param() { id }, @Body(OptionalJobValidationPipe) data: JobDto): Promise<JobDto> {
-		return this.jobService.updatedOffer(id, data)
+	updatedOffer(@Param() { id }, @Body(OptionalJobValidationPipe) data: JobDto, @Req() { user }): Promise<JobDto> {
+		return this.jobService.updatedOffer(id, user.id, data)
 	}
 
 	@Delete(':id')
 	@UseGuards(JwtAuthGuard)
-	deleteOffer(@Param() { id }): Promise<void> {
-		return this.jobService.deleteOffer(id)
+	deleteOffer(@Param() { id }, @Req() { user }): Promise<void> {
+		return this.jobService.deleteOffer(id, user.id)
 	}
 }

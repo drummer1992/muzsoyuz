@@ -3,7 +3,7 @@ import {
 	Controller,
 	Get,
 	Inject,
-	Patch, Post, Query, Req, UseGuards,
+	Patch, Post, Put, Query, Req, UseGuards,
 	UseInterceptors, UsePipes, ValidationPipe,
 } from '@nestjs/common'
 import { UserDto } from '../../dto/user.dto'
@@ -34,8 +34,15 @@ export class UserController {
 	@Post('workday')
 	@UsePipes(ValidationPipe)
 	@UseGuards(JwtAuthGuard)
-	markWorkingDay(@Req() { user }, @Body() data: WorkdayDto) {
-		return this.userService.markWorkingDay(user, data)
+	createWorkingDay(@Req() { user }, @Body() data: WorkdayDto) {
+		return this.userService.createWorkingDay(user.id, data)
+	}
+
+	@Put('workday')
+	@UsePipes(ValidationPipe)
+	@UseGuards(JwtAuthGuard)
+	updateWorkingDay(@Req() { user }, @Body() data: WorkdayDto) {
+		return this.userService.updateWorkingDay(user.id, data)
 	}
 
 	@Post('findByBusyness')

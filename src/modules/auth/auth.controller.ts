@@ -29,7 +29,7 @@ export class AuthController {
 	@Post('login')
 	@UsePipes(ValidationPipe)
 	@UseGuards(LocalAuthGuard)
-	login(@Request() req): { token: string } {
+	login(@Req() req): { token: string } {
 		return this.authService.login({
 			username: req.user.email,
 			sub     : req.user.id,

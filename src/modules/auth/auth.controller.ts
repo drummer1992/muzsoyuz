@@ -44,8 +44,8 @@ export class AuthController {
 
 	@Get('validateToken')
 	@UseGuards(JwtAuthGuard)
-	validateToken() {
-
+	validateToken(@Req() { user }) {
+		return user.id
 	}
 
 	@Get('oauth/facebook')

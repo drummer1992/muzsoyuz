@@ -16,6 +16,7 @@ import { AuthDto } from '../../dto/user.dto'
 import { FacebookAuthGuard } from './guards/facebook-auth.guard'
 import { GoogleAuthGuard } from './guards/google-auth.guard'
 import { LoggingInterceptor } from '../../logging/logging.interceptor'
+import { JwtAuthGuard } from './guards/jwt-auth.guard'
 
 @Controller('auth')
 @UseInterceptors(LoggingInterceptor)
@@ -39,6 +40,12 @@ export class AuthController {
 	@UsePipes(ValidationPipe)
 	register(@Body() data: AuthDto): Promise<{ token: string }> {
 		return this.authService.register(data)
+	}
+
+	@Get('validateToken')
+	@UseGuards(JwtAuthGuard)
+	validateToken() {
+
 	}
 
 	@Get('oauth/facebook')

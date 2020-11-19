@@ -3,7 +3,6 @@ import {
 	Get,
 	Inject,
 	Post, Req,
-	Request,
 	UnauthorizedException,
 	UseGuards, UseInterceptors,
 	UsePipes,
@@ -16,7 +15,6 @@ import { AuthDto } from '../../dto/user.dto'
 import { FacebookAuthGuard } from './guards/facebook-auth.guard'
 import { GoogleAuthGuard } from './guards/google-auth.guard'
 import { LoggingInterceptor } from '../../logging/logging.interceptor'
-import { JwtAuthGuard } from './guards/jwt-auth.guard'
 
 @Controller('auth')
 @UseInterceptors(LoggingInterceptor)
@@ -29,10 +27,10 @@ export class AuthController {
 	@Post('login')
 	@UsePipes(ValidationPipe)
 	@UseGuards(LocalAuthGuard)
-	login(@Req() req): { token: string } {
+	login(@Req() { user }): { token: string } {
 		return this.authService.login({
-			username: req.user.email,
-			sub     : req.user.id,
+			username: user.email,
+			sub     : user.id,
 		})
 	}
 
@@ -40,12 +38,6 @@ export class AuthController {
 	@UsePipes(ValidationPipe)
 	register(@Body() data: AuthDto): Promise<{ token: string }> {
 		return this.authService.register(data)
-	}
-
-	@Get('validateToken')
-	@UseGuards(JwtAuthGuard)
-	validateToken(@Req() { user }) {
-		return user.id
 	}
 
 	@Get('oauth/facebook')

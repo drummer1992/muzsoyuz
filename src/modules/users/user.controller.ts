@@ -18,12 +18,6 @@ export class UserController {
 	@Inject()
 	private readonly userService: UserService
 
-	@Get('validateToken')
-	@UseGuards(JwtAuthGuard)
-	validateToken(@Req() { user }) {
-		return user.id
-	}
-
 	@Get('profile')
 	@UseGuards(JwtAuthGuard)
 	getProfile(@Req() { user }, @Query('props') props) {

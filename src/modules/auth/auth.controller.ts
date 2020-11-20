@@ -1,12 +1,15 @@
 import {
-	Body, Controller,
+	Body,
 	Get,
 	Inject,
 	Post, Req,
 	UnauthorizedException,
-	UseGuards, UseInterceptors,
+	UseGuards,
+	UseInterceptors,
 	UsePipes,
 	ValidationPipe,
+	Request,
+	Controller,
 } from '@nestjs/common'
 import { AuthService } from './auth.service'
 import { UserService } from '../users/user.service'
@@ -27,10 +30,10 @@ export class AuthController {
 	@Post('login')
 	@UsePipes(ValidationPipe)
 	@UseGuards(LocalAuthGuard)
-	login(@Req() { user }): { token: string } {
+	login(@Request() req): { token: string } {
 		return this.authService.login({
-			username: user.email,
-			sub     : user.id,
+			username: req.user.email,
+			sub     : req.user.id,
 		})
 	}
 

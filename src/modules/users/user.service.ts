@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { UserRepository } from '../../repository/user.repository'
 import { UserDto } from '../../dto/user.dto'
 import { InjectRepository } from '@nestjs/typeorm'
-import { businessAssert } from '../../lib/errors'
+import { notFoundAssert } from '../../lib/errors'
 import { User } from '../../entities/entity.user'
 import { WorkdayDto, WorkdayFilterDto } from '../../dto/workday.dto'
 import { WorkdayRepository } from '../../repository/workday.repository'
@@ -19,13 +19,13 @@ export class UserService {
 	}
 
 	getProfile(id: string, props?: string[]) {
-		return  this.userRepository.getProfile(id, props)
+		return this.userRepository.getProfile(id, props)
 	}
 
 	async findByEmail(email: string): Promise<User> {
 		const user = await this.userRepository.findOne({ where: { email } })
 
-		businessAssert(user, `Unable to found user by email: ${email}`)
+		notFoundAssert(user, `Unable to found user by email: ${email}`)
 
 		return user
 	}

@@ -23,7 +23,12 @@ export class AuthService {
 
 		await user.setPassword(data.password)
 
-		return this.login({ username: user.email, sub: this.userService.createProfile(user) })
+		const profile = await this.userService.createProfile(user)
+
+		return {
+			profile,
+			token: this.login({ username: user.email, sub: profile.id }),
+		}
 	}
 
 	async validateUser(email, password) {
@@ -35,31 +40,28 @@ export class AuthService {
 	}
 
 	login({ username, sub }) {
-		return {
-			token: this.jwtService.sign({ username, sub }),
-		}
+		return this.jwtService.sign({ username, sub })
 	}
 
 	async oauthHandler(user) {
-		let id
-
 		const { provider, displayName, emails: [email] = [], photos: [image] = [] } = user
 
-		const existingUser = await this.userService.getIdsByProviderIdOrEmail(user.id, email?.value, provider)
+		let profile = await this.userService.getProfileByProviderOrEmail(user.id, email?.value, provider)
 
-		id = existingUser?.id
-
-		if (!id) {
-			id = await this.userService.createProfile(new User({
+		if (!profile) {
+			profile = await this.userService.createProfile(new User({
 				[`${provider}Id`]: user.id,
 				name             : displayName || undefined,
 				email            : email?.value || undefined,
 				imageURL         : image?.value || undefined,
-			}))
-		} else if (existingUser && !existingUser[`${provider}Id`]) {
-			await this.userService.enrichWithProviderId(id, provider, user.id)
+			})) as User
+		} else if (profile && !profile[`${provider}Id`]) {
+			await this.userService.enrichWithProviderId(profile.id, provider, user.id)
 		}
 
-		return this.login({ username: email || displayName, sub: id })
+		return {
+			profile,
+			token: this.login({ username: email || displayName, sub: profile.id }),
+		}
 	}
 }

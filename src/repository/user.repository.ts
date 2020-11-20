@@ -5,6 +5,7 @@ import { WorkDay } from '../entities/entity.work.day'
 import { DateUtils } from '../utils/date'
 import { Injectable } from '@nestjs/common'
 import { ArrayUtils } from '../utils/array'
+import { ObjectUtils } from '../utils/object'
 
 @Injectable()
 @EntityRepository(User)
@@ -28,17 +29,17 @@ export class UserRepository extends Repository<User> {
 		return !(await this.count({ where: { [attribute]: value } }))
 	}
 
-	async createProfile(user: User): Promise<string> {
-		const { identifiers: [{ id }] } = await this.insert(user)
+	async createProfile(user: User) {
+		const profile = await this.save(user)
 
-		return id
+		return ObjectUtils.omit(profile, ['hash', 'salt']) as User
 	}
 
 	getProfile(id, props) {
 		props = props && props.split(',')
 
 		return this.findOne({
-			where: { id },
+			where : { id },
 			select: ['id'].concat(props
 				? ArrayUtils.intersection(this.publicAttributes, props)
 				: this.publicAttributes) as any,
@@ -50,13 +51,13 @@ export class UserRepository extends Repository<User> {
 
 		return this.createQueryBuilder('user')
 			.select(this.selectStatement)
-			.innerJoin(WorkDay, 'workdays',  'user.id="workdays"."userId"')
+			.innerJoin(WorkDay, 'workdays', 'user.id="workdays"."userId"')
 			.where(`"role" ${filter.role ? '= :role' : 'IS NOT NULL'}`, {
 				role: filter.role,
 			})
 			.andWhere('workdays.date BETWEEN :from AND :to', {
 				from: filter.from || DateUtils.addDays(now, -1),
-				to: filter.to || DateUtils.addDays(now, 1),
+				to  : filter.to || DateUtils.addDays(now, 1),
 			})
 			.andWhere('type = :userType', { userType: filter.userType })
 			.andWhere('"workdays"."dayOff" = :dayOff', { dayOff: filter.dayOff })

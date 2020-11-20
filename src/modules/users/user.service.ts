@@ -6,7 +6,6 @@ import { notFoundAssert } from '../../lib/errors'
 import { User } from '../../entities/entity.user'
 import { WorkdayDto, WorkdayFilterDto } from '../../dto/workday.dto'
 import { WorkdayRepository } from '../../repository/workday.repository'
-import { ProviderAttributes } from '../../app.interfaces'
 
 @Injectable()
 export class UserService {
@@ -30,15 +29,12 @@ export class UserService {
 		return user
 	}
 
-	getIdsByProviderIdOrEmail(id, email, provider) {
-		const providerAttribute = `${provider}Id` as ProviderAttributes
-
+	getProfileByProviderOrEmail(id, email, provider) {
 		return this.userRepository.findOne({
 			where : [
 				{ [`${provider}Id`]: id },
 				{ email: email || undefined },
 			],
-			select: ['id', providerAttribute],
 		})
 	}
 

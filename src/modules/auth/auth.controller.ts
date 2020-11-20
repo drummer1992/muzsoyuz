@@ -8,7 +8,6 @@ import {
 	UseInterceptors,
 	UsePipes,
 	ValidationPipe,
-	Request,
 	Controller,
 } from '@nestjs/common'
 import { AuthService } from './auth.service'
@@ -30,11 +29,11 @@ export class AuthController {
 	@Post('login')
 	@UsePipes(ValidationPipe)
 	@UseGuards(LocalAuthGuard)
-	login(@Request() req): { token: string } {
-		return this.authService.login({
-			username: req.user.email,
-			sub     : req.user.id,
-		})
+	async login(@Req() { user }) {
+		return {
+			token  : this.authService.login({ username: user.email, sub: user.id }),
+			profile: await this.userService.getProfile(user.id),
+		}
 	}
 
 	@Post('register')

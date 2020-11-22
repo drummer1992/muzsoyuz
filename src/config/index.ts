@@ -8,7 +8,6 @@ import { Instrument } from '../entities/entity.instrument'
 require('dotenv').config()
 
 const fs = require('fs')
-const path = require('path')
 
 class Index {
 	constructor(private env: { [key: string]: string | undefined }) {
@@ -38,8 +37,8 @@ class Index {
 			const certPath = this.getValue('SSL_CERT_PATH', true)
 
 			return {
-				key : fs.readFileSync(path.join(__dirname, keyPath)),
-				cert: fs.readFileSync(path.join(__dirname, certPath)),
+				key : fs.readFileSync(keyPath),
+				cert: fs.readFileSync(certPath),
 			}
 		}
 	}

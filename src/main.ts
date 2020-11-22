@@ -3,16 +3,18 @@ import { AppModule } from './app.module'
 import { config } from './config'
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule)
+	const httpsOptions = config.getHttpsOptions()
 
-  app.enableCors()
-  app.setGlobalPrefix(config.getServerAPIPrefix())
+	const app = await NestFactory.create(AppModule, { httpsOptions })
 
-  await app.listen(config.getPort(true))
+	app.enableCors()
+	app.setGlobalPrefix(config.getServerAPIPrefix())
+
+	await app.listen(config.getPort(true))
 }
 
 bootstrap()
-  .catch(e => {
-    console.error(e)
-    process.exit(-1)
-  })
+	.catch(e => {
+		console.error(e)
+		process.exit(-1)
+	})

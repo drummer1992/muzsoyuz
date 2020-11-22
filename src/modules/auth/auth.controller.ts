@@ -56,13 +56,13 @@ export class AuthController {
 
 	@Get('oauth/google/callback')
 	@UseGuards(GoogleAuthGuard)
-	oauthGoogleCallback(@Req() { user }): Promise<{ token: string }> {
+	oauthGoogleCallback(@Req() { user }) {
 		return this.authService.oauthHandler(user)
 	}
 
 	@Get('oauth/facebook/callback')
 	@UseGuards(FacebookAuthGuard)
-	oauthFacebookCallback(@Req() { user }): Promise<{ token: string }> {
+	oauthFacebookCallback(@Req() { user }) {
 		return this.authService.oauthHandler(user)
 	}
 }

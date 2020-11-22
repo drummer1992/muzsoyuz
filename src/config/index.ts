@@ -7,9 +7,6 @@ import { Instrument } from '../entities/entity.instrument'
 
 require('dotenv').config()
 
-const fs = require('fs')
-const path = require('path')
-
 class Index {
 	constructor(private env: { [key: string]: string | undefined }) {
 	}
@@ -28,20 +25,6 @@ class Index {
 		keys.forEach(k => this.getValue(k))
 
 		return this
-	}
-
-	public getHttpsOptions() {
-		const ssl = this.getValue('SSL', false) === 'true'
-
-		if (ssl) {
-			const keyPath = this.getValue('SSL_KEY_PATH', true)
-			const certPath = this.getValue('SSL_CERT_PATH', true)
-
-			return {
-				key : fs.readFileSync(path.join(__dirname, keyPath)),
-				cert: fs.readFileSync(path.join(__dirname, certPath)),
-			}
-		}
 	}
 
 	public getPort(isServer) {

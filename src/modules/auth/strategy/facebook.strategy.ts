@@ -14,9 +14,10 @@ export class FacebookStrategy extends PassportStrategy(Strategy) {
 		})
 	}
 
-	validate(accessToken, refreshToken, profile, done) {
+	validate(accessToken, refreshToken, info, profile, done) {
 		console.log({
 			done,
+			info,
 			profile,
 			accessToken,
 			refreshToken,

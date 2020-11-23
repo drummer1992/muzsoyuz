@@ -7,16 +7,17 @@ import { config } from '../../../config'
 export class GoogleStrategy extends PassportStrategy(OAuth2Strategy) {
 	constructor() {
 		super({
-			clientID     : process.env.GOOGLE_CLIENT_ID,
-			clientSecret : process.env.GOOGLE_CLIENT_SECRET,
-			callbackURL  : config.getProviderCallback('google'),
-			scope: ['email'],
+			clientID    : process.env.GOOGLE_CLIENT_ID,
+			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+			callbackURL : config.getProviderCallback('google'),
+			scope       : ['email'],
 		})
 	}
 
-	validate(accessToken, refreshToken, profile, done) {
+	validate(accessToken, refreshToken, info, profile, done) {
 		console.log({
 			done,
+			info,
 			profile,
 			accessToken,
 			refreshToken,

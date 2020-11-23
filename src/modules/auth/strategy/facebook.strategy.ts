@@ -14,14 +14,11 @@ export class FacebookStrategy extends PassportStrategy(Strategy) {
 		})
 	}
 
-	validate(accessToken, refreshToken, info, profile, done) {
-		console.log({
-			done,
-			info,
-			profile,
-			accessToken,
-			refreshToken,
-		})
+	validate(accessToken, refreshToken, profile, done) {
+		console.log({ accessToken })
+		console.log({ refreshToken })
+		console.log({ profile })
+		console.log({ done })
 
 		if (!accessToken || !profile) {
 			return done(new UnauthorizedException())

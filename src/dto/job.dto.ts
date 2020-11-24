@@ -1,25 +1,22 @@
 import { IsDateString, IsIn, IsNumber, IsOptional, IsString, MaxLength, MinLength } from 'class-validator'
-import { BasicDto } from './basic.dto'
+import { BasicDto, PaginationDto } from './basic.dto'
 import { JobTypes, Instruments } from '../app.interfaces'
+import { IsArrayOf } from '../validators/array-of-string'
 
-export class JobFilterDto {
+export class JobFilterDto extends PaginationDto {
 	@IsOptional()
-	@IsIn(Object.values(Instruments))
+	id: string
+
+	@IsOptional()
+	@IsArrayOf(Object.values(Instruments))
 	role: string
 
 	@IsOptional()
 	@IsString()
 	city?: string
 
-	@IsIn(Object.values(JobTypes))
+	@IsArrayOf(Object.values(JobTypes))
 	jobType: string
-
-	@IsOptional()
-	@IsString()
-	props: string
-
-	@IsOptional()
-	id: string
 }
 
 export class BasicJobDto extends BasicDto {

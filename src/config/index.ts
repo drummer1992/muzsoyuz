@@ -50,6 +50,7 @@ class Index {
 
 	public isProduction() {
 		const mode = this.getValue('MODE', false)
+
 		return mode !== 'DEV'
 	}
 

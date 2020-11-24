@@ -15,14 +15,6 @@ export class GoogleStrategy extends PassportStrategy(OAuth2Strategy) {
 	}
 
 	validate(accessToken, refreshToken, profile, done, info) {
-		console.log({
-			done,
-			info,
-			profile,
-			accessToken,
-			refreshToken,
-		})
-
 		if (!accessToken || !profile) {
 			return done(new UnauthorizedException())
 		}

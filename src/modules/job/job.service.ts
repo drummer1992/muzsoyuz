@@ -19,8 +19,8 @@ export class JobService {
 	) {
 	}
 
-	getOffers(filters: JobFilterDto) {
-		return this.jobRepository.getOffers(filters)
+	findOffers(filters: JobFilterDto) {
+		return this.jobRepository.findOffers(filters)
 	}
 
 	async createOffer(userId, data) {

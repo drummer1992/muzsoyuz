@@ -35,3 +35,21 @@ export abstract class BasicDto extends StatsDto {
 	@IsIn(Object.values(Instruments))
 	role: Instruments
 }
+
+export abstract class PaginationDto {
+	@IsOptional()
+	@IsString({ each: true })
+	props: string
+
+	@IsOptional()
+	@IsString()
+	orderBy: string
+
+	@IsOptional()
+	@IsNumber()
+	limit: null
+
+	@IsOptional()
+	@IsNumber()
+	offset: null
+}

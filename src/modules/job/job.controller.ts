@@ -2,10 +2,9 @@ import {
 	Body,
 	Controller,
 	Delete,
-	Get,
 	Inject,
 	Param,
-	Post, Put, Query, Req, UseGuards,
+	Post, Put, Req, UseGuards,
 	UseInterceptors,
 	UsePipes,
 	ValidationPipe,
@@ -27,10 +26,10 @@ export class JobController {
 	@Inject()
 	private readonly jobService: JobService
 
-	@Get()
+	@Post('find')
 	@UsePipes(ValidationPipe)
-	getOffers(@Query() filter: JobFilterDto): Promise<Job[]> {
-		return this.jobService.getOffers(filter)
+	findOffers(@Body() filter: JobFilterDto): Promise<Job[]> {
+		return this.jobService.findOffers(filter)
 	}
 
 	@Post()

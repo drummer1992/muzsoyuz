@@ -6,7 +6,7 @@ const reqLogger = new Logger('ClientRequest')
 const resLogger = new Logger('ClientResponse')
 
 export class LoggingInterceptor implements NestInterceptor {
-	intercept(context: ExecutionContext, next: CallHandler<any>): Observable<any> {
+	async intercept(context: ExecutionContext, next: CallHandler<any>): Promise<Observable<any>> {
 		const [{ method, url, body, headers: { authorization } }] = context.getArgs()
 
 		const before = Date.now()
@@ -20,7 +20,7 @@ export class LoggingInterceptor implements NestInterceptor {
 		return next
 			.handle()
 			.pipe(
-				tap(response => {
+				tap(async response => {
 					const [, { statusCode }] = context.getArgs()
 
 					const after = Date.now()
@@ -31,7 +31,7 @@ export class LoggingInterceptor implements NestInterceptor {
 					resLogger.log(message)
 				}),
 
-				catchError(err => {
+				catchError(async err => {
 					const message = `[${requestId}], ${JSON.stringify(err)}`
 
 					resLogger.error(message)

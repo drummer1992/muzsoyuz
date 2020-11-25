@@ -24,15 +24,16 @@ export abstract class BasicDto extends StatsDto {
 	@IsString()
 	name: string
 
-	@IsNumber()
+	@IsString()
 	@IsOptional()
-	phone: number
+	phone: string
 
-	@IsNumber()
+	@IsString()
 	@IsOptional()
-	altPhone: number
+	altPhone: string
 
 	@IsIn(Object.values(Instruments))
+	@IsOptional()
 	role: Instruments
 }
 

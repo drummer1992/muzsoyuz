@@ -2,6 +2,7 @@ import { Column, Entity, ManyToOne } from 'typeorm'
 import { AppEntity, IApp } from './entity.basic'
 import { User } from './entity.user'
 import { JobTypes } from '../app.interfaces'
+import { Instrument } from './entity.instrument'
 
 export interface IJob extends IApp {
 	address?: string
@@ -13,6 +14,9 @@ export interface IJob extends IApp {
 	title: string
 	jobType: JobTypes
 	isActive: boolean
+	city: string
+	cityGeoCoded: string
+	instrument: Instrument
 }
 
 @Entity({ name: 'Job' })
@@ -22,6 +26,12 @@ export class Job extends AppEntity implements IJob {
 
 	@Column({ type: 'varchar', length: 500, nullable: true })
 	addressGeoCoded: string
+
+	@Column({ type: 'varchar', length: 30, nullable: true })
+	city: string
+
+	@Column({ type: 'varchar', length: 30, nullable: true })
+	cityGeoCoded: string
 
 	@Column({
 		type       : 'geometry',
@@ -37,13 +47,13 @@ export class Job extends AppEntity implements IJob {
 	})
 	location: any
 
-	@Column({ type: 'numeric', nullable: true, precision: 7, scale: 2 })
+	@Column({ type: 'numeric', nullable: false, precision: 7, scale: 2 })
 	salary: number
 
-	@Column({ type: 'timestamp', nullable: true })
+	@Column({ type: 'timestamp', nullable: false })
 	date: Date
 
-	@Column({ nullable: true, type: 'smallint' })
+	@Column({ nullable: false, type: 'smallint' })
 	sets: number
 
 	@ManyToOne(() => User, user => user.jobs)
@@ -60,4 +70,7 @@ export class Job extends AppEntity implements IJob {
 
 	@Column({ enum: JobTypes, type: 'varchar', length: 30 })
 	jobType: JobTypes
+
+	@ManyToOne(() => Instrument, instrument => instrument.jobs)
+	instrument: Instrument
 }

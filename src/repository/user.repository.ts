@@ -4,7 +4,6 @@ import { WorkdayFilterDto } from '../dto/workday.dto'
 import { WorkDay } from '../entities/entity.work.day'
 import { DateUtils } from '../utils/date'
 import { Injectable } from '@nestjs/common'
-import { ArrayUtils } from '../utils/array'
 import { ObjectUtils } from '../utils/object'
 
 @Injectable()
@@ -17,9 +16,7 @@ export class UserRepository extends Repository<User> {
 		'imageURL',
 		'name',
 		'dob',
-		'city',
 		'email',
-		'gender',
 		'type',
 	]
 
@@ -33,17 +30,6 @@ export class UserRepository extends Repository<User> {
 		const profile = await this.save(user)
 
 		return ObjectUtils.omit(profile, ['hash', 'salt']) as User
-	}
-
-	getProfile(id, props) {
-		props = props && props.split(',')
-
-		return this.findOne({
-			where : { id },
-			select: ['id'].concat(props
-				? ArrayUtils.intersection(this.publicAttributes, props)
-				: this.publicAttributes) as any,
-		})
 	}
 
 	findUsersByBusyness(filter: WorkdayFilterDto) {

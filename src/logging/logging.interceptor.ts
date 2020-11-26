@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { CallHandler, ExecutionContext, Logger, NestInterceptor } from '@nestjs/common'
 import { Observable } from 'rxjs'
 import { tap, catchError } from 'rxjs/operators'
@@ -13,7 +14,11 @@ export class LoggingInterceptor implements NestInterceptor {
 
 		const requestId = Math.floor(Math.random() * 1000)
 
-		const message = `[${requestId}] ${method}: ${url} ${authorization}, ${JSON.stringify(body)}`
+		const bodyForPrint = { ...body }
+
+		body.password && (bodyForPrint.password = '*'.repeat(body.password.length))
+
+		const message = `[${requestId}] ${method}: ${url} ${authorization}, ${JSON.stringify(bodyForPrint)}`
 
 		reqLogger.log(message)
 
@@ -32,11 +37,11 @@ export class LoggingInterceptor implements NestInterceptor {
 				}),
 
 				catchError(async err => {
-					const message = `[${requestId}], ${JSON.stringify(err)}`
+					const message = `[${requestId}], ${JSON.stringify(err.stack)}`
 
 					resLogger.error(message)
 
-					return err
+					throw err
 				}),
 			)
 	}

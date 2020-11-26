@@ -4,16 +4,14 @@ import {
 	Get,
 	Inject,
 	Patch, Post, Put, Query, Req, UseGuards,
-	UseInterceptors, UsePipes, ValidationPipe,
+	UsePipes, ValidationPipe,
 } from '@nestjs/common'
-import { UserDto } from '../../dto/user.dto'
-import { UserService } from './user.service'
-import { LoggingInterceptor } from '../../logging/logging.interceptor'
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard'
-import { WorkdayDto, WorkdayFilterDto } from '../../dto/workday.dto'
+import { UserDto } from '../dto/user.dto'
+import { UserService } from '../services/user.service'
+import { JwtAuthGuard } from '../services/auth/guards/jwt-auth.guard'
+import { WorkdayDto, WorkdayFilterDto } from '../dto/workday.dto'
 
 @Controller('user')
-@UseInterceptors(LoggingInterceptor)
 export class UserController {
 	@Inject()
 	private readonly userService: UserService

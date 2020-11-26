@@ -46,9 +46,6 @@ export abstract class AppEntity extends Basic implements IApp {
 	@Column({ type: 'varchar', length: 30, enum: Instruments, nullable: true })
 	role: Instruments
 
-	@Column({ type: 'varchar', length: 80, nullable: true })
-	name: string
-
 	@Column({ type: 'smallint', nullable: true })
 	yearCommercialExp: number
 

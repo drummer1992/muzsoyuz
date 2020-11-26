@@ -38,9 +38,6 @@ export class MusicalReplacementDto extends BasicJobDto {
 	@IsOptional()
 	address: string
 
-	@IsOptional()
-	location: any
-
 	@IsNumber()
 	salary: number
 

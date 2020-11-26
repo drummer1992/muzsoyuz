@@ -6,8 +6,13 @@ export const DAY = HOUR * 24
 export abstract class DateUtils {
 	private static readonly WEEK_DAYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
 
-	static isDate(dateAsString, predicate) {
-		return !Number.isNaN(new Date(dateAsString)) && (!predicate || predicate(dateAsString))
+	static isDate(dateAsString) {
+		return !Number.isNaN(new Date(dateAsString))
+	}
+
+	static isFutureDate(date) {
+		return new Date(date).getTime() > this.addDays(this.trimTime(Date.now()), -1)
+			.getTime()
 	}
 
 	static getWeekDay(date) {

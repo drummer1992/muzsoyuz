@@ -8,7 +8,8 @@ interface GeoCodeOptions {
 }
 
 interface GeoResponse {
-	addressGeoCoded: any
+	addressGeoCoded?: string
+	cityGeoCoded?: string
 	location?: { lat: number, lng: number }
 }
 
@@ -33,27 +34,38 @@ export abstract class OpenCage {
 		})
 	}
 
-	static async geoCode({ address, location }: GeoCodeOptions): Promise<GeoResponse> {
-		if (!this.isRequestAllowed) {
-			await OpenCage.wait()
+	static async geoCode(data: GeoCodeOptions): Promise<GeoResponse> {
+		const { address, location } = data || {}
+
+		const result = {}
+
+		if (address || location) {
+			if (!this.isRequestAllowed) {
+				await OpenCage.wait()
+			}
+
+			this.blockGeoRequests()
+
+			const response: any = await Request.get(process.env.OPEN_CAGE_API_URL)
+				.query({
+					key           : process.env.OPEN_CAGE_API_KEY,
+					q             : encodeURIComponent(address ? address : `${location.lat},${location.lng}`),
+					countrycode   : 'ua',
+					language      : 'ru',
+					limit         : 1,
+					min_confidence: 8,
+				})
+				.catch(console.error)
+
+			const point = response?.results?.[0]
+
+			Object.assign(result, {
+				addressGeoCoded: point?.formatted,
+				cityGeoCoded   : point?.components?.city,
+				location       : point?.geometry,
+			})
 		}
 
-		this.blockGeoRequests()
-
-		// @ts-ignore
-		const response = await Request.get(process.env.OPEN_CAGE_API_URL)
-			.query({
-				key           : process.env.OPEN_CAGE_API_KEY,
-				q             : encodeURIComponent(address ? address : `${location.lat},${location.lng}`),
-				countrycode   : 'ua',
-				language      : 'ru',
-				limit         : 1,
-				min_confidence: 8,
-			})
-			.catch(console.error)
-
-		const point = response?.results?.[0]
-
-		return { addressGeoCoded: point?.formatted, location: point?.geometry }
+		return result
 	}
 }

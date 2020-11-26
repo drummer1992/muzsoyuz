@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
 import { OAuth2Strategy } from 'passport-google-oauth'

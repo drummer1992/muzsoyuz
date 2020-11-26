@@ -22,9 +22,6 @@ export abstract class StatsDto implements IStats {
 
 export abstract class BasicDto extends StatsDto {
 	@IsString()
-	name: string
-
-	@IsString()
 	@IsOptional()
 	phone: string
 

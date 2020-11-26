@@ -1,5 +1,4 @@
-'use strict'
-
+/* eslint-disable */
 import { Logger } from '@nestjs/common'
 
 const logger = new Logger('ServerRequest')

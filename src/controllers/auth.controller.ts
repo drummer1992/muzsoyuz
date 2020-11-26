@@ -5,21 +5,18 @@ import {
 	Post, Req,
 	UnauthorizedException,
 	UseGuards,
-	UseInterceptors,
 	UsePipes,
 	ValidationPipe,
 	Controller,
 } from '@nestjs/common'
-import { AuthService } from './auth.service'
-import { UserService } from '../users/user.service'
-import { LocalAuthGuard } from './guards/local-auth.guard'
-import { AuthDto } from '../../dto/user.dto'
-import { FacebookAuthGuard } from './guards/facebook-auth.guard'
-import { GoogleAuthGuard } from './guards/google-auth.guard'
-import { LoggingInterceptor } from '../../logging/logging.interceptor'
+import { AuthService } from '../services/auth.service'
+import { UserService } from '../services/user.service'
+import { LocalAuthGuard } from '../services/auth/guards/local-auth.guard'
+import { AuthDto } from '../dto/user.dto'
+import { FacebookAuthGuard } from '../services/auth/guards/facebook-auth.guard'
+import { GoogleAuthGuard } from '../services/auth/guards/google-auth.guard'
 
 @Controller('auth')
-@UseInterceptors(LoggingInterceptor)
 export class AuthController {
 	@Inject()
 	private readonly authService: AuthService

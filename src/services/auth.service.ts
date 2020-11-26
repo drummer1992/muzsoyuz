@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common'
-import { UserService } from '../users/user.service'
-import { businessAssert } from '../../lib/errors'
-import { User } from '../../entities/entity.user'
-import { AuthDto } from '../../dto/user.dto'
+import { UserService } from './user.service'
+import { businessAssert } from '../errors'
+import { User } from '../entities/entity.user'
+import { AuthDto } from '../dto/user.dto'
 import { JwtService } from '@nestjs/jwt'
 
 @Injectable()
@@ -34,9 +34,7 @@ export class AuthService {
 	async validateUser(email, password) {
 		const user = await this.userService.findByEmail(email)
 
-		const passwordIsValid = await user.validatePassword(password)
-
-		return passwordIsValid && user
+		return await user.validatePassword(password) && user
 	}
 
 	login({ username, sub }) {

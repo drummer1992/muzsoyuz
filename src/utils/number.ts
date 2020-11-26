@@ -1,5 +1,5 @@
 export abstract class NumberUtils {
-	static isNumber(num, predicate: (params: any) => boolean) {
-		return !Number.isNaN(Number(num)) && (!predicate || predicate(num))
+	static isNumber(num) {
+		return !Number.isNaN(Number(num))
 	}
 }

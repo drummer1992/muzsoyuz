@@ -5,23 +5,20 @@ import {
 	Inject,
 	Param,
 	Post, Put, Req, UseGuards,
-	UseInterceptors,
 	UsePipes,
 	ValidationPipe,
 } from '@nestjs/common'
 import { ObjectLiteral } from 'typeorm'
-import { JobFilterDto, JobDto } from '../../dto/job.dto'
-import { JobService } from './job.service'
-import { Job } from '../../entities/entity.job'
-import { LoggingInterceptor } from '../../logging/logging.interceptor'
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard'
+import { JobFilterDto, JobDto } from '../dto/job.dto'
+import { JobService } from '../services/job.service'
+import { Job } from '../entities/entity.job'
+import { JwtAuthGuard } from '../services/auth/guards/jwt-auth.guard'
 import {
 	OptionalJobValidationPipe,
 	RequiredJobValidationPipe,
-} from '../../pipes/job.validation.pipe'
+} from '../pipes/job.validation.pipe'
 
 @Controller('job')
-@UseInterceptors(LoggingInterceptor)
 export class JobController {
 	@Inject()
 	private readonly jobService: JobService
@@ -40,7 +37,11 @@ export class JobController {
 
 	@Put(':id')
 	@UseGuards(JwtAuthGuard)
-	updatedOffer(@Param() { id }, @Body(OptionalJobValidationPipe) data: JobDto, @Req() { user }): Promise<JobDto> {
+	updatedOffer(
+		@Param() { id },
+		@Body(OptionalJobValidationPipe) data: JobDto,
+		@Req() { user },
+	): Promise<JobDto> {
 		return this.jobService.updatedOffer(id, user.id, data)
 	}
 

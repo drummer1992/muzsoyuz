@@ -1,5 +1,5 @@
 import { BasicDto } from './basic.dto'
-import { Gender, UserTypes } from '../app.interfaces'
+import {  UserTypes } from '../app.interfaces'
 import {
 	IsDateString,
 	IsEmail,
@@ -33,13 +33,14 @@ export class UserDto extends BasicDto {
 	@IsOptional()
 	city?: string
 
+	@IsString()
 	@IsOptional()
-	@IsIn(Object.values(Gender))
-	gender?: Gender
+	name: string
 
 	@IsEmail()
 	@MinLength(4)
 	@MaxLength(50)
+	@IsOptional()
 	email: string
 
 	@IsIn(Object.values(UserTypes))

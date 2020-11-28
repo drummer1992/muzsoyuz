@@ -30,7 +30,7 @@ export class JobService {
 		const findCondition: FindConditions<Job> = { jobType }
 
 		const options: JobFindManyOptions = {
-			relations: ['instrument', 'user'],
+			relations: (filters.relations || []) as any,
 			where    : [findCondition],
 			order    : { [attr]: direction },
 			take     : limit < 100 ? limit : 30,

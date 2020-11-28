@@ -63,17 +63,13 @@ export class DbChangesService {
 		})
 
 		if (records.length !== instrumentsPayload.length) {
-			const payload = instrumentsPayload.filter(item => records.some(rec => rec.name !== item.name))
+			const payload = instrumentsPayload.filter(item => !records.some(rec => rec.name === item.name))
 
-			await this.instrumentRepository.createQueryBuilder('instrument')
-				.insert()
-				.into('instrument')
-				.values(payload)
-				.execute()
+			for (const item of payload) {
+				await this.instrumentRepository.insert(item)
 
-			payload.forEach(instrument => {
-				dbChangesLogger.log(`${instrument.name} was inserted`)
-			})
+				dbChangesLogger.log(`${item.name} was inserted: ${item.imageURL}`)
+			}
 		} else {
 			dbChangesLogger.log('No need to insert instruments')
 		}

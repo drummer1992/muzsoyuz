@@ -39,19 +39,21 @@ export class AuthService {
 		return this.jwtService.sign({ username, sub })
 	}
 
-	async oauthHandler(user) {
+	async oauthHandler(user: any) {
 		const { provider, displayName, emails: [email] = [], photos: [image] = [] } = user
 
 		let profile = await this.userService.getUserByProviderIdOrEmail(user.id, email?.value, provider)
 
 		if (!profile) {
-			profile = await this.userService.createProfile(new User({
+			const payload = {
 				[`${provider}Id`]: user.id,
-				name             : displayName || undefined,
-				email            : email?.value || undefined,
-				imageURL         : image?.value || undefined,
-			})) as User
-		} else if (profile && !profile[`${provider}Id`]) {
+				name             : displayName,
+				email            : email?.value,
+				imageURL         : image?.value,
+			} as User
+
+			profile = await this.userService.createProfile(payload)
+		} else if (!profile[`${provider}Id`]) {
 			await this.userService.enrichWithProviderId(profile.id, provider, user.id)
 		}
 

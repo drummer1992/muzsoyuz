@@ -21,7 +21,7 @@ export class UserService {
 	async validateUser(email, password) {
 		const user = await this.userRepository.createQueryBuilder()
 			.addSelect(['hash', 'salt'])
-			.where({ whereFactory: { email } })
+			.where(`email='${email}'`)
 			.execute()
 
 		notFoundAssert(user, 'User not found')

@@ -14,6 +14,8 @@ export class GlobalErrorFilter implements ExceptionFilter {
 	catch(error: Error, host: ArgumentsHost) {
 		const response = host.switchToHttp().getResponse()
 
+		errorLogger.error(error)
+
 		const status = (error instanceof HttpException)
 			? error.getStatus()
 			: HttpStatus.INTERNAL_SERVER_ERROR
@@ -22,8 +24,6 @@ export class GlobalErrorFilter implements ExceptionFilter {
 			error = new InternalServerErrorException()
 		}
 
-		errorLogger.error(error)
-		
 		return response.status(status).send(error)
 	}
 }

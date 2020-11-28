@@ -3,7 +3,7 @@ import {
 	Controller,
 	Get,
 	Inject,
-	Patch, Post, Put, Query, Req, UseGuards,
+	Patch, Post, Put, Req, UseGuards,
 	UsePipes, ValidationPipe,
 } from '@nestjs/common'
 import { UserDto } from '../dto/user.dto'
@@ -20,10 +20,8 @@ export class UserController {
 	@UseGuards(JwtAuthGuard)
 	getProfile(
 		@Req() { user },
-		@Query('props') props,
-		@Query('relations') relations,
 	) {
-		return this.userService.getProfile(user.id, props, relations)
+		return this.userService.getProfile(user.id)
 	}
 
 	@Patch('profile')

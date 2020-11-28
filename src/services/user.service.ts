@@ -30,11 +30,10 @@ export class UserService {
 			&& this.userRepository.findOne({ where: { email } })
 	}
 
-	async getProfile(id: string, props: string[] = [], relations: string[] = []) {
+	async getProfile(id: string) {
 		const profile = await this.userRepository.findOne({
 			where: { id },
-			relations,
-			...(props.length ? { select: props as any }: {}),
+			relations: ['jobs'],
 		})
 
 		notFoundAssert(profile, 'User not found')

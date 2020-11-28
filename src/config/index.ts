@@ -1,9 +1,12 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm'
 import { User } from '../entities/entity.user'
 import { Job } from '../entities/entity.job'
-import { City } from '../entities/entity.city'
 import { WorkDay } from '../entities/entity.work.day'
 import { Instrument } from '../entities/entity.instrument'
+import { JobRepository } from '../repository/job.repository'
+import { UserRepository } from '../repository/user.repository'
+import { InstrumentRepository } from '../repository/instrument.repository'
+import { WorkdayRepository } from '../repository/workday.repository'
 
 require('dotenv').config()
 
@@ -54,6 +57,15 @@ class Index {
 		return mode !== 'DEV'
 	}
 
+	public getRepositories() {
+		return [
+			JobRepository,
+			UserRepository,
+			InstrumentRepository,
+			WorkdayRepository,
+		]
+	}
+
 	public getTypeOrmConfig(): TypeOrmModuleOptions {
 		return {
 			type    : 'postgres',
@@ -65,7 +77,6 @@ class Index {
 			entities: [
 				User,
 				Job,
-				City,
 				WorkDay,
 				Instrument,
 			],

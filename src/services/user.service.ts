@@ -7,7 +7,6 @@ import { User } from '../entities/entity.user'
 import { WorkdayDto, WorkdayFilterDto } from '../dto/workday.dto'
 import { WorkdayRepository } from '../repository/workday.repository'
 import { DateUtils } from '../utils/date'
-import { ArrayUtils } from '../utils/array'
 
 @Injectable()
 export class UserService {
@@ -19,27 +18,31 @@ export class UserService {
 	) {
 	}
 
-	async getProfile(id: string, props: string[] = []) {
-		const select: any = ['id'].concat(props.length
-			? ArrayUtils.intersection(this.userRepository.publicAttributes, props)
-			: this.userRepository.publicAttributes)
+	async validateUser(email, password) {
+		const user = await this.userRepository.createQueryBuilder()
+			.addSelect(['hash', 'salt'])
+			.where({ whereFactory: { email } })
+			.execute()
 
-		const profile = await this.userRepository.findOne({ where: { id }, select })
+		notFoundAssert(user, 'User not found')
+
+		return await new User(user).validatePassword(password)
+			&& this.userRepository.findOne({ where: { email } })
+	}
+
+	async getProfile(id: string, props: string[] = [], relations: string[] = []) {
+		const profile = await this.userRepository.findOne({
+			where: { id },
+			relations,
+			...(props.length ? { select: props as any }: {}),
+		})
 
 		notFoundAssert(profile, 'User not found')
 
 		return profile
 	}
 
-	async findByEmail(email: string): Promise<User> {
-		const user = await this.userRepository.findOne({ where: { email } })
-
-		notFoundAssert(user, `Unable to found user by email: ${email}`)
-
-		return user
-	}
-
-	getProfileByProviderOrEmail(id, email, provider) {
+	getUserByProviderIdOrEmail(id, email, provider) {
 		return this.userRepository.findOne({
 			where: [
 				{ [`${provider}Id`]: id },

@@ -37,7 +37,7 @@ export class LoggingInterceptor implements NestInterceptor {
 				}),
 
 				catchError(async err => {
-					const message = `[${requestId}], ${JSON.stringify(err.stack)}`
+					const message = `[${requestId}], ${JSON.stringify(err.message)}`
 
 					resLogger.error(message)
 

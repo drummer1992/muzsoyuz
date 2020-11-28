@@ -32,9 +32,7 @@ export class AuthService {
 	}
 
 	async validateUser(email, password) {
-		const user = await this.userService.findByEmail(email)
-
-		return await user.validatePassword(password) && user
+		return await this.userService.validateUser(email, password)
 	}
 
 	login({ username, sub }) {
@@ -44,7 +42,7 @@ export class AuthService {
 	async oauthHandler(user) {
 		const { provider, displayName, emails: [email] = [], photos: [image] = [] } = user
 
-		let profile = await this.userService.getProfileByProviderOrEmail(user.id, email?.value, provider)
+		let profile = await this.userService.getUserByProviderIdOrEmail(user.id, email?.value, provider)
 
 		if (!profile) {
 			profile = await this.userService.createProfile(new User({

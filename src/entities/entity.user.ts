@@ -40,13 +40,13 @@ export class User extends AppEntity implements IUser, IStats {
 	@Column({ type: 'varchar', length: 250, unique: true, nullable: true })
 	email: string
 
-	@Column({ type: 'varchar', nullable: true, unique: true })
+	@Column({ type: 'varchar', nullable: true, unique: true, select: false })
 	salt: string
 
 	@Column({ type: 'varchar', length: 10, enum: UserTypes, nullable: true })
 	type: UserTypes
 
-	@Column({ type: 'text', nullable: true, unique: true })
+	@Column({ type: 'text', nullable: true, unique: true, select: false })
 	hash: string
 
 	@Column({ type: 'varchar', nullable: true })

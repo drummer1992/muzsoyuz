@@ -1,5 +1,4 @@
 import { BasicDto } from './basic.dto'
-import {  UserTypes } from '../app.interfaces'
 import {
 	IsDateString,
 	IsEmail,
@@ -10,6 +9,7 @@ import {
 	MaxLength,
 	MinLength,
 } from 'class-validator'
+import { UserTypes } from '../app.interfaces'
 
 export class AuthDto {
 	@IsEmail()
@@ -28,10 +28,6 @@ export class UserDto extends BasicDto {
 	@IsDateString()
 	@IsOptional()
 	dob?: Date
-
-	@IsString()
-	@IsOptional()
-	city?: string
 
 	@IsString()
 	@IsOptional()

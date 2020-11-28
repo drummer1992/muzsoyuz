@@ -14,8 +14,6 @@ export interface IJob extends IApp {
 	title: string
 	jobType: JobTypes
 	isActive: boolean
-	city: string
-	cityGeoCoded: string
 	instrument: Instrument
 }
 
@@ -23,29 +21,6 @@ export interface IJob extends IApp {
 export class Job extends AppEntity implements IJob {
 	@Column({ type: 'varchar', length: 250, nullable: true })
 	address: string
-
-	@Column({ type: 'varchar', length: 500, nullable: true })
-	addressGeoCoded: string
-
-	@Column({ type: 'varchar', length: 30, nullable: true })
-	city: string
-
-	@Column({ type: 'varchar', length: 30, nullable: true })
-	cityGeoCoded: string
-
-	@Column({
-		type       : 'geometry',
-		nullable   : true,
-		transformer: {
-			to(location: any): any {
-				return location && { type: 'Point', coordinates: [location.lng, location.lat] }
-			},
-			from(geoJson: any): any {
-				return geoJson && { lng: geoJson.coordinates[0], lat: geoJson.coordinates[1] }
-			},
-		},
-	})
-	location: any
 
 	@Column({ type: 'numeric', nullable: false, precision: 7, scale: 2 })
 	salary: number

@@ -5,6 +5,7 @@ import { config } from './config'
 import { AuthModule } from './modules/auth.module'
 import { UserModule } from './modules/user.module'
 import { JobModule } from './modules/job.module'
+import { ScriptsModule } from './scripts/scripts.module'
 
 @Module({
 	imports: [
@@ -13,6 +14,7 @@ import { JobModule } from './modules/job.module'
 		UserModule,
 		JobModule,
 		AuthModule,
+		ScriptsModule,
 	],
 })
 

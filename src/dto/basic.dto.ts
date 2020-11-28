@@ -34,11 +34,7 @@ export abstract class BasicDto extends StatsDto {
 	role: Instruments
 }
 
-export abstract class PaginationDto {
-	@IsOptional()
-	@IsString({ each: true })
-	props: string
-
+export abstract class DbQueryDto {
 	@IsOptional()
 	@IsString()
 	orderBy: string
@@ -50,4 +46,12 @@ export abstract class PaginationDto {
 	@IsOptional()
 	@IsNumber()
 	offset: null
+
+	@IsOptional()
+	@IsString({ each: true })
+	props: string
+
+	@IsOptional()
+	@IsString({ each: true })
+	relations: string
 }

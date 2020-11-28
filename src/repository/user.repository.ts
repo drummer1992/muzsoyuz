@@ -4,7 +4,6 @@ import { WorkdayFilterDto } from '../dto/workday.dto'
 import { WorkDay } from '../entities/entity.work.day'
 import { DateUtils } from '../utils/date'
 import { Injectable } from '@nestjs/common'
-import { ObjectUtils } from '../utils/object'
 
 @Injectable()
 @EntityRepository(User)
@@ -26,10 +25,8 @@ export class UserRepository extends Repository<User> {
 		return !(await this.count({ where: { [attribute]: value } }))
 	}
 
-	async createProfile(user: User) {
-		const profile = await this.save(user)
-
-		return ObjectUtils.omit(profile, ['hash', 'salt']) as User
+	createProfile(user: User) {
+		return this.save(user)
 	}
 
 	findUsersByBusyness(filter: WorkdayFilterDto) {

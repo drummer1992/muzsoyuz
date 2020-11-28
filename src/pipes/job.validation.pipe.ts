@@ -20,7 +20,6 @@ abstract class JobValidator {
 	static address(value) {
 		argumentAssert(StringUtils.isString(value), 'address should be a string')
 		argumentAssert(value.length > 0, 'address can not be empty')
-		argumentAssert(value.length < 250, 'address should be shorter than 250 characters')
 	}
 
 	static salary(value) {

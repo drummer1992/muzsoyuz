@@ -18,8 +18,12 @@ export class UserController {
 
 	@Get('profile')
 	@UseGuards(JwtAuthGuard)
-	getProfile(@Req() { user }, @Query('props') props) {
-		return this.userService.getProfile(user.id, props)
+	getProfile(
+		@Req() { user },
+		@Query('props') props,
+		@Query('relations') relations,
+	) {
+		return this.userService.getProfile(user.id, props, relations)
 	}
 
 	@Patch('profile')

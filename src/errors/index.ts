@@ -22,7 +22,11 @@ export class BusinessError extends HttpException {
 
 export class NotFoundError extends HttpException {
 	constructor(message) {
-		super(message, HttpStatus.NOT_FOUND)
+		super({
+			statusCode: HttpStatus.NOT_FOUND,
+			message,
+			error     : 'Not Found'
+		}, HttpStatus.NOT_FOUND)
 	}
 }
 

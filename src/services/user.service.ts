@@ -19,20 +19,21 @@ export class UserService {
 	}
 
 	async validateUser(email, password) {
-		const user = await this.userRepository.createQueryBuilder()
-			.addSelect(['hash', 'salt'])
-			.where(`email='${email}'`)
-			.execute()
+		const user = await this.userRepository.createQueryBuilder('user')
+			.addSelect(['user.hash', 'user.salt'])
+			.where(`user.email=:email`, { email })
+			.getOne()
 
 		notFoundAssert(user, 'User not found')
 
-		return await new User(user).validatePassword(password)
-			&& this.userRepository.findOne({ where: { email } })
+		argumentAssert(await new User(user).validatePassword(password), 'password is not valid')
+
+		return this.userRepository.findOne({ where: { email } })
 	}
 
 	async getProfile(id: string) {
 		const profile = await this.userRepository.findOne({
-			where: { id },
+			where    : { id },
 			relations: ['jobs'],
 		})
 

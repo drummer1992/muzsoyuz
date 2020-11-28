@@ -43,12 +43,11 @@ export class UserService {
 	}
 
 	getUserByProviderIdOrEmail(id, email, provider) {
-		return this.userRepository.findOne({
-			where: [
-				{ [`${provider}Id`]: id },
-				{ email: email || undefined },
-			],
-		})
+		const where = [{ [`${provider}Id`]: id }]
+
+		email && where.push({ email })
+
+		return this.userRepository.findOne({ where })
 	}
 
 	ensureUniqueUser(email: string) {

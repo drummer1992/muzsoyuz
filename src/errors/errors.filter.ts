@@ -4,8 +4,10 @@ import {
 	HttpException,
 	ArgumentsHost,
 	HttpStatus,
-	InternalServerErrorException,
+	InternalServerErrorException, Logger,
 } from '@nestjs/common'
+
+const errorLogger = new Logger('ErrorLogger')
 
 @Catch()
 export class GlobalErrorFilter implements ExceptionFilter {
@@ -20,6 +22,8 @@ export class GlobalErrorFilter implements ExceptionFilter {
 			error = new InternalServerErrorException()
 		}
 
+		errorLogger.error(error)
+		
 		return response.status(status).send(error)
 	}
 }

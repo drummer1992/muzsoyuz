@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { CallHandler, ExecutionContext, Logger, NestInterceptor } from '@nestjs/common'
 import { Observable } from 'rxjs'
-import { tap, catchError } from 'rxjs/operators'
+import { tap } from 'rxjs/operators'
 
 const reqLogger = new Logger('ClientRequest')
 const resLogger = new Logger('ClientResponse')
@@ -34,14 +34,6 @@ export class LoggingInterceptor implements NestInterceptor {
 						+ `response: ${JSON.stringify(response)} ${after - before} ms`
 
 					resLogger.log(message)
-				}),
-
-				catchError(async err => {
-					const message = `[${requestId}], ${JSON.stringify(err.message)}`
-
-					resLogger.error(message)
-
-					throw err
 				}),
 			)
 	}

@@ -63,13 +63,17 @@ export class DbChangesService {
 		})
 
 		if (records.length !== instrumentsPayload.length) {
-			const result = await this.instrumentRepository.createQueryBuilder('instrument')
+			const payload = instrumentsPayload.filter(item => records.some(rec => rec.name !== item.name))
+
+			await this.instrumentRepository.createQueryBuilder('instrument')
 				.insert()
 				.into('instrument')
-				.values(instrumentsPayload.filter(item => records.some(rec => rec.name !== item.name)))
+				.values(payload)
 				.execute()
 
-			dbChangesLogger.log(result)
+			payload.forEach(instrument => {
+				dbChangesLogger.log(`${instrument.name} was inserted`)
+			})
 		} else {
 			dbChangesLogger.log('No need to insert instruments')
 		}

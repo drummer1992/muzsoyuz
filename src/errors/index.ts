@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, UnauthorizedException } from '@nestjs/common'
+import { HttpException, HttpStatus } from '@nestjs/common'
 
 export class InvalidArgumentsError extends HttpException {
 	constructor(message) {
@@ -25,7 +25,7 @@ export class NotFoundError extends HttpException {
 		super({
 			statusCode: HttpStatus.NOT_FOUND,
 			message,
-			error     : 'Not Found'
+			error     : 'Not Found',
 		}, HttpStatus.NOT_FOUND)
 	}
 }
@@ -53,11 +53,5 @@ export const businessAssert = (condition, message) => {
 export const notFoundAssert = (condition, message) => {
 	if (!condition) {
 		throw new NotFoundError(message || 'Unable to find entity')
-	}
-}
-
-export const authorizedAssert = user => {
-	if (!user) {
-		throw new UnauthorizedException()
 	}
 }

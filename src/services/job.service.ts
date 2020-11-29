@@ -1,14 +1,18 @@
 import { Injectable } from '@nestjs/common'
-import { JobFilterDto, JobDto } from '../dto/job.dto'
+import { JobFilterDto, UpdateJobDto, CreateJobDto } from '../controllers/dto/job.dto'
 import { InjectRepository } from '@nestjs/typeorm'
 import { argumentAssert, notFoundAssert } from '../errors'
-import { JobFindManyOptions, JobRepository } from '../repository/job.repository'
+import { JobRepository } from '../repository/job.repository'
 import { Job } from '../entities/entity.job'
 import { isUUID } from 'class-validator'
 import { User } from '../entities/entity.user'
 import { InstrumentRepository } from '../repository/instrument.repository'
-import { FindConditions, In } from 'typeorm'
-import { ArrayUtils } from '../utils/array'
+import { toArray } from '../utils/array'
+import { Between, In, MoreThanOrEqual } from 'typeorm'
+import { FindManyOptions } from 'typeorm/find-options/FindManyOptions'
+import { SelectQueryBuilder } from 'typeorm/query-builder/SelectQueryBuilder'
+import { trimTime, addDays } from '../utils/date'
+import { omitBy } from '../utils/object'
 
 @Injectable()
 export class JobService {
@@ -21,30 +25,49 @@ export class JobService {
 	}
 
 	findOffers(filters: JobFilterDto) {
-		const jobType = In(ArrayUtils.toArray(filters.jobType))
-
 		const { orderBy = 'created DESC', limit = 30, offset = 0 } = filters
 
 		const [attr, direction = 'DESC'] = orderBy.split(' ')
 
-		const findCondition: FindConditions<Job> = { jobType }
+		const buildCriteria = (qb: SelectQueryBuilder<Job>) => {
+			const whereClause: any = {
+				jobType : In(toArray(filters.jobType)),
+				sets    : filters.sets,
+				isActive: filters.isActive,
+				salary  : filters.salary
+					? MoreThanOrEqual(filters.salary)
+					: undefined,
+			}
 
-		const options: JobFindManyOptions = {
+			if (filters.date) {
+				const date = trimTime(new Date(filters.date))
+
+				whereClause.date = Between(date, addDays(date, 1))
+			}
+
+			qb.where(omitBy(whereClause))
+
+			if (filters.role) {
+				qb.andWhere(
+					'instrument.name IN (:...name)',
+					{ name: toArray(filters.role) },
+				)
+			}
+		}
+
+		const options: FindManyOptions<Job> = {
 			relations: (filters.relations || []) as any,
-			where    : [findCondition],
+			join     : { alias: 'job', innerJoinAndSelect: { instrument: 'job.instrument' } },
+			where    : buildCriteria,
 			order    : { [attr]: direction },
 			take     : limit < 100 ? limit : 30,
 			skip     : offset,
 		}
 
-		if (filters.role) {
-			findCondition.role = In(ArrayUtils.toArray(filters.role))
-		}
-
 		return this.jobRepository.find(options)
 	}
 
-	async createOffer(userId, data: JobDto) {
+	async createOffer(userId, data: CreateJobDto) {
 		const job = new Job(data)
 
 		job.instrument = await this.instrumentRepository.findOne({
@@ -56,7 +79,7 @@ export class JobService {
 		return this.jobRepository.save(job)
 	}
 
-	async updatedOffer(id: string, userId: string, data: JobDto) {
+	async updatedOffer(id: string, userId: string, data: UpdateJobDto) {
 		argumentAssert(isUUID(id), `Not valid id: [${id}]`)
 
 		const { affected } = await this.jobRepository.update({

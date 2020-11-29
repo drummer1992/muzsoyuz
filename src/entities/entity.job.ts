@@ -1,10 +1,10 @@
 import { Column, Entity, ManyToOne } from 'typeorm'
-import { AppEntity, IApp } from './entity.basic'
 import { User } from './entity.user'
 import { JobTypes } from '../app.interfaces'
 import { Instrument } from './entity.instrument'
+import { Basic, IBasic } from './entity.basic'
 
-export interface IJob extends IApp {
+export interface IJob extends IBasic {
 	address?: string
 	salary: number
 	date?: Date
@@ -18,7 +18,7 @@ export interface IJob extends IApp {
 }
 
 @Entity({ name: 'Job' })
-export class Job extends AppEntity implements IJob {
+export class Job extends Basic implements IJob {
 	@Column({ type: 'varchar', length: 250, nullable: true })
 	address: string
 

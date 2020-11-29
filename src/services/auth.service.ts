@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { UserService } from './user.service'
 import { businessAssert } from '../errors'
 import { User } from '../entities/entity.user'
-import { AuthDto } from '../dto/user.dto'
+import { AuthDto } from '../controllers/dto/user.dto'
 import { JwtService } from '@nestjs/jwt'
 
 @Injectable()
@@ -11,6 +11,10 @@ export class AuthService {
 		private readonly userService: UserService,
 		private readonly jwtService: JwtService,
 	) {
+	}
+
+	login({ username, sub }) {
+		return this.jwtService.sign({ username, sub })
 	}
 
 	async register(data: AuthDto) {
@@ -33,10 +37,6 @@ export class AuthService {
 
 	async validateUser(email, password) {
 		return await this.userService.validateUser(email, password)
-	}
-
-	login({ username, sub }) {
-		return this.jwtService.sign({ username, sub })
 	}
 
 	async oauthHandler(user: any) {

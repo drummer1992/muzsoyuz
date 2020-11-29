@@ -1,9 +1,9 @@
 import { EntityRepository, Repository } from 'typeorm'
 import { WorkDay } from '../entities/entity.work.day'
-import { WorkdayDto } from '../dto/workday.dto'
-import { DateUtils } from '../utils/date'
 import { Injectable } from '@nestjs/common'
 import { argumentAssert } from '../errors'
+import { WorkdayDto } from '../controllers/dto/workday.dto'
+import { addDays, trimTime } from '../utils/date'
 
 @Injectable()
 @EntityRepository(WorkDay)
@@ -15,8 +15,8 @@ export class WorkdayRepository extends Repository<WorkDay> {
 			.update({ dayOff: dto.dayOff })
 			.where('"userId"=:userId AND date BETWEEN :from AND :to', {
 				userId: userId,
-				from  : DateUtils.trimTime(now),
-				to    : DateUtils.trimTime(DateUtils.addDays(now, 1)),
+				from  : trimTime(now),
+				to    : trimTime(addDays(now, 1)),
 			})
 			.execute()
 

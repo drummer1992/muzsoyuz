@@ -1,30 +1,26 @@
-import { BasicDto } from './basic.dto'
 import {
 	IsDateString,
 	IsEmail,
 	IsIn, IsNumber,
 	IsOptional,
 	IsString, IsUrl,
-	Matches,
 	MaxLength,
 	MinLength,
 } from 'class-validator'
-import { UserTypes } from '../app.interfaces'
+import { UserTypes } from '../../app.interfaces'
+import { IsForbidden } from '../../validators/forbidden'
 
 export class AuthDto {
 	@IsEmail()
-	@MinLength(4)
-	@MaxLength(50)
 	email: string
 
 	@IsString()
 	@MinLength(8)
 	@MaxLength(50)
-	@Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[a-z]).*$/)
 	password: string
 }
 
-export class UserDto extends BasicDto {
+export class UpdateUserDto {
 	@IsDateString()
 	@IsOptional()
 	dob?: Date
@@ -33,10 +29,7 @@ export class UserDto extends BasicDto {
 	@IsOptional()
 	name: string
 
-	@IsEmail()
-	@MinLength(4)
-	@MaxLength(50)
-	@IsOptional()
+	@IsForbidden({ message: 'email is forbidden for update' })
 	email: string
 
 	@IsIn(Object.values(UserTypes))

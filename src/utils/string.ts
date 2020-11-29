@@ -1,5 +1,3 @@
-export class StringUtils {
-	static isString(str) {
-		return typeof str === 'string'
-	}
+export function isString(str) {
+	return typeof str === 'string'
 }

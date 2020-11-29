@@ -1,8 +1,8 @@
 import { EntityRepository, Repository } from 'typeorm'
 import { User } from '../entities/entity.user'
-import { WorkdayFilterDto } from '../dto/workday.dto'
+import { WorkdayFilterDto } from '../controllers/dto/workday.dto'
 import { WorkDay } from '../entities/entity.work.day'
-import { DateUtils } from '../utils/date'
+import { addDays } from '../utils/date'
 import { Injectable } from '@nestjs/common'
 
 @Injectable()
@@ -39,8 +39,8 @@ export class UserRepository extends Repository<User> {
 				role: filter.role,
 			})
 			.andWhere('workdays.date BETWEEN :from AND :to', {
-				from: filter.from || DateUtils.addDays(now, -1),
-				to  : filter.to || DateUtils.addDays(now, 1),
+				from: filter.from || addDays(now, -1),
+				to  : filter.to || addDays(now, 1),
 			})
 			.andWhere('type = :userType', { userType: filter.userType })
 			.andWhere('"workdays"."dayOff" = :dayOff', { dayOff: filter.dayOff })

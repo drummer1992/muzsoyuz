@@ -1,5 +1,5 @@
 import { registerDecorator, ValidationOptions, ValidationArguments } from 'class-validator'
-import { ArrayUtils } from '../utils/array'
+import { intersection } from '../utils/array'
 
 export function IsArrayOf(array: string[], validationOptions?: ValidationOptions) {
 	return function(object: Record<string, any>, propertyName: string) {
@@ -14,7 +14,7 @@ export function IsArrayOf(array: string[], validationOptions?: ValidationOptions
 					const [array] = args.constraints
 
 					return Array.isArray(value)
-						? ArrayUtils.intersection(array, value).length
+						? intersection(array, value).length
 						: array.includes(value)
 				},
 

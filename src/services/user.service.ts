@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common'
 import { UserRepository } from '../repository/user.repository'
-import { UserDto } from '../dto/user.dto'
+import { UpdateUserDto } from '../controllers/dto/user.dto'
 import { InjectRepository } from '@nestjs/typeorm'
 import { argumentAssert, notFoundAssert } from '../errors'
 import { User } from '../entities/entity.user'
-import { WorkdayDto, WorkdayFilterDto } from '../dto/workday.dto'
+import { WorkdayDto, WorkdayFilterDto } from '../controllers/dto/workday.dto'
 import { WorkdayRepository } from '../repository/workday.repository'
-import { DateUtils } from '../utils/date'
+import { trimTime } from '../utils/date'
 
 @Injectable()
 export class UserService {
@@ -21,7 +21,7 @@ export class UserService {
 	async validateUser(email, password) {
 		const user = await this.userRepository.createQueryBuilder('user')
 			.addSelect(['user.hash', 'user.salt'])
-			.where(`user.email=:email`, { email })
+			.where('user.email=:email', { email })
 			.getOne()
 
 		notFoundAssert(user, 'User not found')
@@ -58,12 +58,12 @@ export class UserService {
 		return this.userRepository.createProfile(user)
 	}
 
-	async createWorkingDay(userId, dto: WorkdayDto) {
+	createWorkingDay(userId, dto: WorkdayDto) {
 		const now = new Date()
 
-		await this.workdayRepository.insert({
+		return this.workdayRepository.save({
 			user  : userId,
-			date  : DateUtils.trimTime(dto.date || now),
+			date  : trimTime(dto.date || now),
 			dayOff: dto.dayOff,
 		})
 	}
@@ -76,7 +76,7 @@ export class UserService {
 		return this.userRepository.findUsersByBusyness(filter)
 	}
 
-	async updateProfile(id: string, data: UserDto) {
+	async updateProfile(id: string, data: UpdateUserDto) {
 		argumentAssert(Object.keys(data).length, 'empty profile data')
 
 		const { affected } = await this.userRepository.update({ id }, data)

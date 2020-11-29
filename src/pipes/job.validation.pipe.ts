@@ -1,8 +1,8 @@
 import { Injectable, PipeTransform } from '@nestjs/common'
 import { JobTypes, Instruments } from '../app.interfaces'
-import { StringUtils } from '../utils/string'
-import { NumberUtils } from '../utils/number'
-import { DateUtils } from '../utils/date'
+import { isString } from '../utils/string'
+import { isNumber } from '../utils/number'
+import { isDate, isFutureDate } from '../utils/date'
 import { argumentAssert, InvalidArgumentsError } from '../errors'
 
 abstract class JobValidator {
@@ -18,31 +18,31 @@ abstract class JobValidator {
 	}
 
 	static address(value) {
-		argumentAssert(StringUtils.isString(value), 'address should be a string')
+		argumentAssert(isString(value), 'address should be a string')
 		argumentAssert(value.length > 0, 'address can not be empty')
 	}
 
 	static salary(value) {
-		argumentAssert(NumberUtils.isNumber(value), 'salary should be type of number')
+		argumentAssert(isNumber(value), 'salary should be type of number')
 		argumentAssert(value > 0, 'salary should be greater than 0')
 	}
 
 	static date(value) {
-		argumentAssert(DateUtils.isDate(value), 'date should be typeOf Date')
-		argumentAssert(DateUtils.isFutureDate(value), 'date can not be in past')
+		argumentAssert(isDate(value), 'date should be typeOf Date')
+		argumentAssert(isFutureDate(value), 'date can not be in past')
 	}
 
 	static sets(value) {
-		argumentAssert(NumberUtils.isNumber(value), 'sets should be a number')
+		argumentAssert(isNumber(value), 'sets should be a number')
 		argumentAssert(value && value <= 5, 'sets should be a number between 1 and 5')
 	}
 
 	static extraInfo(value) {
-		argumentAssert(StringUtils.isString(value), 'extraInfo should be a string')
+		argumentAssert(isString(value), 'extraInfo should be a string')
 	}
 
 	static title(value) {
-		argumentAssert(StringUtils.isString(value), 'title should be a string')
+		argumentAssert(isString(value), 'title should be a string')
 		argumentAssert(
 			value.length > 10 && value.length < 250,
 			'title should be a string with length between 10 and 250',

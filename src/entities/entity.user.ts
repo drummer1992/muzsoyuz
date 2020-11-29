@@ -1,6 +1,6 @@
 import { Column, Entity, OneToMany } from 'typeorm'
-import { AppEntity, IStats } from './entity.basic'
-import { UserTypes } from '../app.interfaces'
+import { Basic } from './entity.basic'
+import { Instruments, UserTypes } from '../app.interfaces'
 import * as bCrypt from 'bcrypt'
 import { WorkDay } from './entity.work.day'
 import { Job } from './entity.job'
@@ -13,11 +13,42 @@ export interface IUser {
 	salt: string
 	facebookId: string
 	imageURL?: string
+	yearCommercialExp: number
+	countOfJobs: number
+	countOfLikes: number
+	countOfDisLikes: number
+	phone: string
+	altPhone: string
+	name: string
+	workdays: WorkDay[]
+	jobs: Job[]
+	googleId: string
 }
 
 @Entity({ name: 'User' })
-export class User extends AppEntity implements IUser, IStats {
+export class User extends Basic implements IUser {
 	static readonly SALT_ROUNDS: number = 10
+
+	@Column({ type: 'varchar', length: 30, enum: Instruments, nullable: true })
+	role: Instruments
+
+	@Column({ type: 'smallint', nullable: true })
+	yearCommercialExp: number
+
+	@Column({ type: 'int', nullable: true })
+	countOfJobs: number
+
+	@Column({ type: 'int', nullable: true })
+	countOfLikes: number
+
+	@Column({ type: 'int', nullable: true })
+	countOfDisLikes: number
+
+	@Column({ type: 'varchar', length: 30, nullable: true })
+	phone: string
+
+	@Column({ type: 'varchar', length: 30, nullable: true })
+	altPhone: string
 
 	@Column({ type: 'varchar', length: 80, nullable: true })
 	name: string

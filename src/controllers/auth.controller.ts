@@ -12,7 +12,7 @@ import {
 import { AuthService } from '../services/auth.service'
 import { UserService } from '../services/user.service'
 import { LocalAuthGuard } from '../services/auth/guards/local-auth.guard'
-import { AuthDto } from '../dto/user.dto'
+import { AuthDto } from './dto/user.dto'
 import { FacebookAuthGuard } from '../services/auth/guards/facebook-auth.guard'
 import { GoogleAuthGuard } from '../services/auth/guards/google-auth.guard'
 
@@ -35,8 +35,8 @@ export class AuthController {
 
 	@Post('register')
 	@UsePipes(ValidationPipe)
-	register(@Body() data: AuthDto): Promise<{ token: string }> {
-		return this.authService.register(data)
+	register(@Body() credential: AuthDto): Promise<{ token: string }> {
+		return this.authService.register(credential)
 	}
 
 	@Get('oauth/facebook')

@@ -20,4 +20,4 @@ jobs:
         run: sudo npm install pm2 -g
 
       - name: Deploy
-        run: pm2 deploy ecosystem.config.js
+        run: pm2 deploy ecosystem.config.js production

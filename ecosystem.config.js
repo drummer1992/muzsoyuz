@@ -13,7 +13,7 @@ module.exports = {
       // GIT remote/branch
       ref  : 'origin/master',
       // GIT remote
-      repo : 'github.com/drummer1992/muzsoyuz',
+      repo : 'https://github.com/drummer1992/muzsoyuz',
       // Fetch all branches or fast
       fetch: 'all',
       // Path in the server

@@ -19,7 +19,7 @@ module.exports = {
       // Path in the server
       path : '/home/nodejs/muzsoyuz',
       // Command run after pull source code
-      'post-deploy' : 'npm install && npm run build && pm2 reload ecosystem.config.js'
+      'post-deploy' : 'npm install && npm run build && pm2 reload ecosystem.config.js --env production && pm2 save'
     }
   }
 };

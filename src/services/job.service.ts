@@ -25,7 +25,9 @@ export class JobService {
 
 	findOffers(filters: JobFilterDto) {
 		const { orderBy = 'created DESC', limit = 30, offset = 0 } = filters
-		const { props = [], relations = [] } = filters
+
+		const props = filters.props || []
+		const relations = filters.relations || []
 
 		const [attr, direction = 'DESC'] = orderBy.split(' ')
 

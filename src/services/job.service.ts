@@ -30,12 +30,16 @@ export class JobService {
 		const [attr, direction = 'DESC'] = orderBy.split(' ')
 
 		const whereClause: any = {
-			jobType : In(toArray(filters.jobType)),
-			sets    : filters.sets,
-			isActive: filters.isActive,
-			salary  : filters.salary
+			jobType: In(toArray(filters.jobType)),
+		}
+
+		filters.sets && (whereClause.sets = filters.sets)
+		filters.isActive && (whereClause.isActive = filters.isActive)
+
+		if (filters.salary) {
+			whereClause.salary = filters.salary
 				? MoreThanOrEqual(filters.salary)
-				: undefined,
+				: undefined
 		}
 
 		if (filters.date) {

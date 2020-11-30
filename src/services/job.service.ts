@@ -30,16 +30,12 @@ export class JobService {
 		const [attr, direction = 'DESC'] = orderBy.split(' ')
 
 		const whereClause: any = {
-			jobType: In(toArray(filters.jobType)),
-		}
-
-		filters.sets && (whereClause.sets = filters.sets)
-		filters.isActive && (whereClause.isActive = filters.isActive)
-
-		if (filters.salary) {
-			whereClause.salary = filters.salary
+			jobType : In(toArray(filters.jobType)),
+			sets    : filters.sets,
+			isActive: filters.isActive,
+			salary  : filters.salary
 				? MoreThanOrEqual(filters.salary)
-				: undefined
+				: undefined,
 		}
 
 		if (filters.date) {
@@ -50,10 +46,13 @@ export class JobService {
 
 		const buildCriteria = (qb: SelectQueryBuilder<Job>) => {
 			qb.where(omitBy(whereClause))
-			qb.select(props.map(attr => `job.${attr}`))
 			qb.offset(offset)
 			qb.orderBy(`job.${attr}`, direction as any)
 			qb.limit(limit)
+
+			if (filters.props.length) {
+				qb.select(props.map(attr => `job.${attr}`))
+			}
 
 			if (filters.role) {
 				qb.andWhere(

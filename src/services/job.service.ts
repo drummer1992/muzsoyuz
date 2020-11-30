@@ -25,10 +25,8 @@ export class JobService {
 
 	findOffers(filters: JobFilterDto) {
 		const { orderBy = 'created DESC', limit = 30, offset = 0 } = filters
-
-		const props = filters.props || []
-		const relations = filters.relations || []
-
+		const { props = [], relations = [] } = filters
+		
 		const [attr, direction = 'DESC'] = orderBy.split(' ')
 
 		const whereClause: any = {
@@ -52,7 +50,7 @@ export class JobService {
 			qb.orderBy(`job.${attr}`, direction as any)
 			qb.limit(limit)
 
-			if (filters.props.length) {
+			if (props.length) {
 				qb.select(props.map(attr => `job.${attr}`))
 			}
 

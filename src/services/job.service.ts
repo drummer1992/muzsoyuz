@@ -9,7 +9,6 @@ import { User } from '../entities/entity.user'
 import { InstrumentRepository } from '../repository/instrument.repository'
 import { toArray } from '../utils/array'
 import { Between, In, MoreThanOrEqual } from 'typeorm'
-import { FindManyOptions } from 'typeorm/find-options/FindManyOptions'
 import { SelectQueryBuilder } from 'typeorm/query-builder/SelectQueryBuilder'
 import { trimTime, addDays } from '../utils/date'
 import { omitBy } from '../utils/object'
@@ -26,26 +25,31 @@ export class JobService {
 
 	findOffers(filters: JobFilterDto) {
 		const { orderBy = 'created DESC', limit = 30, offset = 0 } = filters
+		const { props = [], relations = [] } = filters
 
 		const [attr, direction = 'DESC'] = orderBy.split(' ')
 
+		const whereClause: any = {
+			jobType : In(toArray(filters.jobType)),
+			sets    : filters.sets,
+			isActive: filters.isActive,
+			salary  : filters.salary
+				? MoreThanOrEqual(filters.salary)
+				: undefined,
+		}
+
+		if (filters.date) {
+			const date = trimTime(new Date(filters.date))
+
+			whereClause.date = Between(date, addDays(date, 1))
+		}
+
 		const buildCriteria = (qb: SelectQueryBuilder<Job>) => {
-			const whereClause: any = {
-				jobType : In(toArray(filters.jobType)),
-				sets    : filters.sets,
-				isActive: filters.isActive,
-				salary  : filters.salary
-					? MoreThanOrEqual(filters.salary)
-					: undefined,
-			}
-
-			if (filters.date) {
-				const date = trimTime(new Date(filters.date))
-
-				whereClause.date = Between(date, addDays(date, 1))
-			}
-
 			qb.where(omitBy(whereClause))
+			qb.select(props.map(attr => `job.${attr}`))
+			qb.offset(offset)
+			qb.orderBy(`job.${attr}`, direction as any)
+			qb.limit(limit)
 
 			if (filters.role) {
 				qb.andWhere(
@@ -55,16 +59,11 @@ export class JobService {
 			}
 		}
 
-		const options: FindManyOptions<Job> = {
-			relations: (filters.relations || []) as any,
-			join     : { alias: 'job', innerJoinAndSelect: { instrument: 'job.instrument' } },
-			where    : buildCriteria,
-			order    : { [attr]: direction },
-			take     : limit < 100 ? limit : 30,
-			skip     : offset,
-		}
-
-		return this.jobRepository.find(options)
+		return this.jobRepository.find({
+			relations,
+			join : { alias: 'job', innerJoinAndSelect: { instrument: 'job.instrument' } },
+			where: buildCriteria,
+		})
 	}
 
 	async createOffer(userId, data: CreateJobDto) {

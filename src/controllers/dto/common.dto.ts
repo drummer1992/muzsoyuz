@@ -15,9 +15,9 @@ export class DbQueryDto {
 
 	@IsOptional()
 	@IsString({ each: true })
-	props: string
+	props: string[]
 
 	@IsOptional()
 	@IsString({ each: true })
-	relations: string
+	relations: string[]
 }

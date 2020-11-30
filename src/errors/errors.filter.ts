@@ -14,7 +14,7 @@ export class GlobalErrorFilter implements ExceptionFilter {
 	catch(error: any, host: ArgumentsHost) {
 		const response = host.switchToHttp().getResponse()
 
-		errorLogger.error(error)
+		errorLogger.error(error?.message || error)
 
 		let status
 

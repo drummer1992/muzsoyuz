@@ -6,7 +6,7 @@ import { argumentAssert, notFoundAssert } from '../errors'
 import { User } from '../entities/entity.user'
 import { WorkdayDto, WorkdayFilterDto } from '../controllers/dto/workday.dto'
 import { WorkdayRepository } from '../repository/workday.repository'
-import { trimTime } from '../utils/date'
+import { addDays, trimTime } from '../utils/date'
 
 @Injectable()
 export class UserService {
@@ -58,18 +58,33 @@ export class UserService {
 		return this.userRepository.createProfile(user)
 	}
 
-	createWorkingDay(userId, dto: WorkdayDto) {
-		const now = new Date()
-
-		return this.workdayRepository.save({
+	async createWorkingDay(userId, dto: WorkdayDto) {
+		const payload = dto.dates.map(date => ({
 			user  : userId,
-			date  : trimTime(dto.date || now),
+			date  : trimTime(date),
 			dayOff: dto.dayOff,
-		})
+		}))
+
+		await this.workdayRepository.insert(payload)
+
+		return dto
 	}
 
-	updateWorkingDay(userId, dto: WorkdayDto) {
-		return this.workdayRepository.updateWorkingDay(userId, dto)
+	async updateWorkingDay(userId, dto: WorkdayDto) {
+		for (const date of dto.dates) {
+			const { affected } = await this.workdayRepository.createQueryBuilder()
+				.update({ dayOff: dto.dayOff })
+				.where('"userId"=:userId AND date BETWEEN :from AND :to', {
+					userId: userId,
+					from  : trimTime(date),
+					to    : trimTime(addDays(date, 1)),
+				})
+				.execute()
+
+			argumentAssert(affected, `User: ${userId} has not had workingDay entity for date: ${date}`)
+		}
+
+		return dto
 	}
 
 	findUsersByBusyness(filter: WorkdayFilterDto) {

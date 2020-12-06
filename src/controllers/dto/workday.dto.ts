@@ -2,9 +2,8 @@ import { IsBoolean, IsDateString, IsIn, IsOptional } from 'class-validator'
 import { Instruments, UserTypes } from '../../app.interfaces'
 
 export class WorkdayDto {
-	@IsDateString()
-	@IsOptional()
-	date: Date
+	@IsDateString({ each: true })
+	dates: Date[]
 
 	@IsBoolean()
 	dayOff: boolean

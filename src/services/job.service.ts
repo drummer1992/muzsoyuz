@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { JobFilterDto, UpdateJobDto, CreateJobDto } from '../controllers/dto/job.dto'
+import { JobFilterDto, UpdateJobDto, CreateJobDto, JobQueryDto } from '../controllers/dto/job.dto'
 import { InjectRepository } from '@nestjs/typeorm'
 import { argumentAssert, notFoundAssert } from '../errors'
 import { JobRepository } from '../repository/job.repository'
@@ -7,11 +7,6 @@ import { Job } from '../entities/entity.job'
 import { isUUID } from 'class-validator'
 import { User } from '../entities/entity.user'
 import { InstrumentRepository } from '../repository/instrument.repository'
-import { toArray } from '../utils/array'
-import { Between, In, MoreThanOrEqual } from 'typeorm'
-import { SelectQueryBuilder } from 'typeorm/query-builder/SelectQueryBuilder'
-import { trimTime, addDays } from '../utils/date'
-import { omitBy } from '../utils/object'
 
 @Injectable()
 export class JobService {
@@ -24,48 +19,27 @@ export class JobService {
 	}
 
 	findOffers(filters: JobFilterDto) {
-		const { orderBy = 'created DESC', limit = 30, offset = 0 } = filters
-		const { props = [], relations = [] } = filters
-		
-		const [attr, direction = 'DESC'] = orderBy.split(' ')
-
-		const whereClause: any = {
-			jobType : In(toArray(filters.jobType)),
-			sets    : filters.sets,
-			isActive: filters.isActive,
-			salary  : filters.salary
-				? MoreThanOrEqual(filters.salary)
-				: undefined,
-		}
-
-		if (filters.date) {
-			const date = trimTime(new Date(filters.date))
-
-			whereClause.date = Between(date, addDays(date, 1))
-		}
-
-		const buildCriteria = (qb: SelectQueryBuilder<Job>) => {
-			qb.where(omitBy(whereClause))
-			qb.offset(offset)
-			qb.orderBy(`job.${attr}`, direction as any)
-			qb.limit(limit)
-
-			if (props.length) {
-				qb.select(props.map(attr => `job.${attr}`))
-			}
-
-			if (filters.role) {
-				qb.andWhere(
-					'instrument.name IN (:...name)',
-					{ name: toArray(filters.role) },
-				)
-			}
+		const query: JobQueryDto = {
+			where : {
+				isActive: filters.isActive,
+				role    : filters.role,
+				jobType : filters.jobType,
+				salary  : filters.salary,
+				date    : filters.date,
+				sets    : filters.sets,
+			},
+			limit : filters.limit,
+			offset: filters.offset,
+			props : filters.props,
 		}
 
 		return this.jobRepository.find({
-			relations,
-			join : { alias: 'job', innerJoinAndSelect: { instrument: 'job.instrument' } },
-			where: buildCriteria,
+			relations: filters.relations || ['instrument'],
+			join     : {
+				alias             : 'job',
+				innerJoinAndSelect: { instrument: 'job.instrument' },
+			},
+			where    : this.jobRepository.buildJobCriteria(query),
 		})
 	}
 

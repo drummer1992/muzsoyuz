@@ -35,7 +35,7 @@ export class AuthController {
 
 	@Post('register')
 	@UsePipes(ValidationPipe)
-	register(@Body() credential: AuthDto): Promise<{ token: string }> {
+	register(@Body() credential: AuthDto) {
 		return this.authService.register(credential)
 	}
 

@@ -3,21 +3,29 @@ import { IsNumber, IsOptional, IsString } from 'class-validator'
 export class DbQueryDto {
 	@IsOptional()
 	@IsString()
-	orderBy: string
+	orderBy?: string
 
 	@IsOptional()
 	@IsNumber()
-	limit: null
+	limit?: number
 
 	@IsOptional()
 	@IsNumber()
-	offset: null
+	offset?: number
 
 	@IsOptional()
 	@IsString({ each: true })
-	props: string[]
+	props?: string[]
 
 	@IsOptional()
 	@IsString({ each: true })
-	relations: string[]
+	relations?: string[]
+}
+
+export class RangeDto {
+	@IsOptional()
+	from?: Date
+
+	@IsOptional()
+	to?: Date
 }

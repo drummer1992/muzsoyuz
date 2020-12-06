@@ -1,8 +1,8 @@
-import { IsBoolean, IsDate, IsDateString, IsIn, IsOptional } from 'class-validator'
+import { IsBoolean, IsDateString, IsIn, IsOptional } from 'class-validator'
 import { Instruments, UserTypes } from '../../app.interfaces'
 
 export class WorkdayDto {
-	@IsDate()
+	@IsDateString()
 	@IsOptional()
 	date: Date
 

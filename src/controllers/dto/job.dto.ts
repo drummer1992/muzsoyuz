@@ -1,30 +1,43 @@
-import { IsBoolean, IsDateString, IsIn, IsOptional } from 'class-validator'
-import { DbQueryDto } from './common.dto'
+import { IsBoolean, IsOptional } from 'class-validator'
+import { DbQueryDto, RangeDto } from './common.dto'
 import { JobTypes, Instruments } from '../../app.interfaces'
 import { IsArrayOf } from '../../validators/array-of-string'
+import { IsRange } from '../../validators/range'
 
 export class JobFilterDto extends DbQueryDto {
 	@IsOptional()
 	@IsArrayOf(Object.values(Instruments))
-	role: string
+	role: string | string[]
 
 	@IsArrayOf(Object.values(JobTypes))
-	jobType: string
+	jobType: string | string[]
 
 	@IsOptional()
-	salary: number
+	@IsRange()
+	salary: RangeDto
 
 	@IsOptional()
-	@IsDateString()
-	date: Date
+	@IsRange()
+	date: RangeDto
 
 	@IsOptional()
-	@IsIn([1, 2, 3, 4, 5])
-	sets: number
+	@IsRange()
+	sets: RangeDto
 
 	@IsOptional()
 	@IsBoolean()
 	isActive: boolean
+}
+
+export class JobQueryDto extends DbQueryDto {
+	where: {
+		role?: string | string[]
+		jobType?: string | string[]
+		salary?: RangeDto | number
+		date?: RangeDto | number | string
+		sets?: RangeDto | number
+		isActive?: boolean
+	}
 }
 
 export class UpdateJobDto {

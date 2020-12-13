@@ -98,9 +98,11 @@ const nodeRequest = ({ path, method, body, headers }: RequestOptions): Promise<R
 			request.setHeader('content-length', Buffer.byteLength(stringifierBody))
 
 			request.write(stringifierBody)
-		}
 
-		request.end()
+			request.on('finish', request.end)
+		} else {
+			request.end()
+		}
 
 		request.on('error', reject)
 	})

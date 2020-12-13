@@ -1,4 +1,4 @@
-import { IsBoolean, IsOptional } from 'class-validator'
+import { IsBoolean, IsIn, IsOptional } from 'class-validator'
 import { DbQueryDto, RangeDto } from './common.dto'
 import { JobTypes, Instruments } from '../../app.interfaces'
 import { IsArrayOf } from '../../validators/array-of-string'
@@ -21,8 +21,8 @@ export class JobFilterDto extends DbQueryDto {
 	date: RangeDto
 
 	@IsOptional()
-	@IsRange()
-	sets: RangeDto
+	@IsIn([1, 2, 3, 4, 5])
+	sets: number
 
 	@IsOptional()
 	@IsBoolean()

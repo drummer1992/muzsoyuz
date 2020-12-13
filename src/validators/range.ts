@@ -13,7 +13,7 @@ export function IsRange(validationOptions?: ValidationOptions) {
 				},
 
 				defaultMessage(validationArguments?: ValidationArguments): string {
-					return `${validationArguments.property} should be object with 'from', 'to' fields`
+					return `${validationArguments.property} should be an object with 'from', 'to' non empty fields`
 				},
 			},
 		})

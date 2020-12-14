@@ -25,13 +25,12 @@ export class LoggingInterceptor implements NestInterceptor {
 		return next
 			.handle()
 			.pipe(
-				tap(async response => {
+				tap(async () => {
 					const [, { statusCode }] = context.getArgs()
 
 					const after = Date.now()
 
-					const message = `[${requestId}], status: ${statusCode}, `
-						+ `response: ${JSON.stringify(response)} ${after - before} ms`
+					const message = `[${requestId}], status: ${statusCode}, ${after - before} ms`
 
 					resLogger.log(message)
 				}),

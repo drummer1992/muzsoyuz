@@ -9,7 +9,11 @@ export function IsRange(validationOptions?: ValidationOptions) {
 			options  : validationOptions,
 			validator: {
 				validate(value: any) {
-					return isNotEmptyObject(value) && (value.from || value.to)
+
+					value = Object(value)
+
+					return isNotEmptyObject(value)
+						&& (value.hasOwnProperty('from') || value.hasOwnProperty('to'))
 				},
 
 				defaultMessage(validationArguments?: ValidationArguments): string {

@@ -6,6 +6,7 @@ export enum Instruments {
 	KEYS     = 'keys',
 	SAX      = 'sax',
 	PANDORA  = 'pandora',
+	PIANO    = 'piano',
 	VIOLIN   = 'violin',
 	TRUMPET  = 'trumpet',
 	TROMBONE = 'trombone',

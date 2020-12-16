@@ -24,35 +24,38 @@ export class DbChangesService {
 		const instrumentsPayload = [
 			{
 				name    : Instruments.DRUMS,
-				imageURL: 'https://i.ibb.co/7ST9nXH/Drum.png',
+				imageURL: 'https://muzsoyuz.com/assets/icon/drums.svg',
 			},
 			{
 				name    : Instruments.PANDORA,
-				imageURL: 'https://i.ibb.co/dJDSzZg/bandura.png',
+				imageURL: 'https://muzsoyuz.com/assets/icon/pandora.svg',
 			},
 			{
 				name    : Instruments.GUITAR,
-				imageURL: 'https://i.ibb.co/59vWJd7/guitar.png',
+				imageURL: 'https://muzsoyuz.com/assets/icon/guitar.svg',
 			},
 			{
 				name    : Instruments.BAS,
-				imageURL: 'https://i.ibb.co/59vWJd7/guitar.png',
+				imageURL: 'https://muzsoyuz.com/assets/icon/bas.svg',
 			},
 			{
 				name    : Instruments.VOICE,
-				imageURL: 'https://i.ibb.co/Vvcm1s5/mic.png',
+				imageURL: 'https://muzsoyuz.com/assets/icon/voice.svg',
 			},
 			{
 				name    : Instruments.SAX,
-				imageURL: 'https://i.ibb.co/Xzt1y7C/sax.png',
+				imageURL: 'https://muzsoyuz.com/assets/icon/sax.svg',
 			},
 			{
 				name    : Instruments.TRUMPET,
-				imageURL: 'https://i.ibb.co/D7jtHdj/trumpet.png',
+				imageURL: 'https://muzsoyuz.com/assets/icon/trumpet.svg',
 			},
 			{
 				name    : Instruments.VIOLIN,
-				imageURL: 'https://i.ibb.co/gvV4f6d/violin.png',
+				imageURL: 'https://muzsoyuz.com/assets/icon/violin.svg',
+			},			{
+				name    : Instruments.PIANO,
+				imageURL: 'https://muzsoyuz.com/assets/icon/piano.svg',
 			},
 		]
 

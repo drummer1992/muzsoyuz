@@ -52,7 +52,7 @@ export class JobRepository extends Repository<Job> {
 
 				whereClause.date = Between(
 					trimTime(from),
-					addDays(to, 1.2),
+					trimTime(addDays(to, 1.2)),
 				)
 			}
 

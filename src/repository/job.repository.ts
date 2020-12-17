@@ -58,7 +58,7 @@ export class JobRepository extends Repository<Job> {
 
 			qb.where(omitBy(whereClause))
 			qb.offset(offset)
-			qb.orderBy(this.getTablePrefix(attr), direction.toLowerCase() as any)
+			qb.orderBy(this.getTablePrefix(attr), direction.toUpperCase() as any)
 			qb.limit(limit)
 
 			if (props.length) {

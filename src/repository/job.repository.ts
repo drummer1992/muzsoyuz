@@ -58,17 +58,17 @@ export class JobRepository extends Repository<Job> {
 
 			qb.where(omitBy(whereClause))
 			qb.offset(offset)
-			qb.orderBy(this.getTablePrefix(attr), direction as any)
+			qb.orderBy(this.getTablePrefix(attr), direction.toLowerCase() as any)
 			qb.limit(limit)
 
 			if (props.length) {
 				qb.select(props.map(this.getTablePrefix))
 			}
 
-			if (where.role) {
+			if (where['instrument.name']) {
 				qb.andWhere(
 					'instrument.name IN (:...name)',
-					{ name: toArray(where.role) },
+					{ name: toArray(where['instrument.name']) },
 				)
 			}
 		}

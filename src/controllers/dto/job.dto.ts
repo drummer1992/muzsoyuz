@@ -31,7 +31,7 @@ export class JobFilterDto extends DbQueryDto {
 
 export class JobQueryDto extends DbQueryDto {
 	where: {
-		role?: string | string[]
+		['instrument.name']?: string | string[]
 		jobType?: string | string[]
 		salary?: RangeDto | number
 		date?: RangeDto | number | string

@@ -21,12 +21,12 @@ export class JobService {
 	findOffers(filters: JobFilterDto) {
 		const query: JobQueryDto = {
 			where  : {
-				isActive: filters.isActive,
-				role    : filters.role,
-				jobType : filters.jobType,
-				salary  : filters.salary,
-				date    : filters.date,
-				sets    : filters.sets,
+				isActive         : filters.isActive,
+				'instrument.name': filters['instrument.name'],
+				jobType          : filters.jobType,
+				salary           : filters.salary,
+				date             : filters.date,
+				sets             : filters.sets,
 			},
 			limit  : filters.limit,
 			offset : filters.offset,

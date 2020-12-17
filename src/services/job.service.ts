@@ -20,7 +20,7 @@ export class JobService {
 
 	findOffers(filters: JobFilterDto) {
 		const query: JobQueryDto = {
-			where : {
+			where  : {
 				isActive: filters.isActive,
 				role    : filters.role,
 				jobType : filters.jobType,
@@ -28,9 +28,10 @@ export class JobService {
 				date    : filters.date,
 				sets    : filters.sets,
 			},
-			limit : filters.limit,
-			offset: filters.offset,
-			props : filters.props,
+			limit  : filters.limit,
+			offset : filters.offset,
+			props  : filters.props,
+			orderBy: filters.orderBy,
 		}
 
 		return this.jobRepository.find({

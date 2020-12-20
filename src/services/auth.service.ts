@@ -54,7 +54,7 @@ export class AuthService {
 
 			profile = await this.userService.createProfile(payload)
 		} else if (!profile[`${provider}Id`]) {
-			await this.userService.enrichWithProviderId(profile.id, provider, user.id)
+			await this.userService.updateProfile(profile.id, { [`${provider}Id`]: user.id } as User)
 		}
 
 		return {

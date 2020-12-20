@@ -91,7 +91,7 @@ export class UserService {
 		return this.userRepository.findUsersByBusyness(filter)
 	}
 
-	async updateProfile(id: string, data: UpdateUserDto) {
+	async updateProfile(id: string, data: UpdateUserDto | User) {
 		argumentAssert(Object.keys(data).length, 'empty profile data')
 
 		const { affected } = await this.userRepository.update({ id }, data)
@@ -99,9 +99,5 @@ export class UserService {
 		argumentAssert(affected, 'User not found')
 
 		return data
-	}
-
-	enrichWithProviderId(id, provider, providerId) {
-		return this.userRepository.update({ id }, { [`${provider}Id`]: providerId })
 	}
 }

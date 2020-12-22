@@ -19,7 +19,7 @@ export class UserController {
 	@Get('profile')
 	@UseGuards(JwtAuthGuard)
 	getProfile(@Req() { user }) {
-		return this.userService.getProfile(user.id)
+		return this.userService.getProfileById(user.id)
 	}
 
 	@Patch('profile')
@@ -29,18 +29,24 @@ export class UserController {
 		return this.userService.updateProfile(user.id, data)
 	}
 
-	@Post('workday')
-	@UsePipes(ValidationPipe)
+	@Get('workdays')
 	@UseGuards(JwtAuthGuard)
-	createWorkingDay(@Req() { user }, @Body() data: WorkdayDto) {
-		return this.userService.createWorkingDay(user.id, data)
+	getWorkingDays(@Req() { user }) {
+		return this.userService.getUserWorkingDays(user.id)
 	}
 
-	@Put('workday')
+	@Post('workdays')
 	@UsePipes(ValidationPipe)
 	@UseGuards(JwtAuthGuard)
-	updateWorkingDay(@Req() { user }, @Body() data: WorkdayDto) {
-		return this.userService.updateWorkingDay(user.id, data)
+	createWorkingDays(@Req() { user }, @Body() data: WorkdayDto) {
+		return this.userService.createWorkingDays(user.id, data)
+	}
+
+	@Put('workdays')
+	@UsePipes(ValidationPipe)
+	@UseGuards(JwtAuthGuard)
+	updateWorkingDays(@Req() { user }, @Body() data: WorkdayDto) {
+		return this.userService.updateWorkingDays(user.id, data)
 	}
 
 	@Post('findByBusyness')

@@ -9,7 +9,6 @@ export function IsRange(validationOptions?: ValidationOptions) {
 			options  : validationOptions,
 			validator: {
 				validate(value: any) {
-
 					value = Object(value)
 
 					return isNotEmptyObject(value)

@@ -57,4 +57,5 @@ export class CreateJobDto {
 	salary: number
 	date: Date
 	sets: number
+	phone: string
 }

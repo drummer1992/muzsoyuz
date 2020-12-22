@@ -19,7 +19,7 @@ export class AuthService {
 
 	async register(data: AuthDto) {
 		businessAssert(
-			await this.userService.ensureUniqueUser(data.email),
+			await this.userService.ensureUniqueEmail(data.email),
 			`User with email: ${data.email} already exists`,
 		)
 
@@ -39,10 +39,18 @@ export class AuthService {
 		return await this.userService.validateUser(email, password)
 	}
 
+	getUserByEmailOrId(provider, id, email) {
+		const where = [{ [`${provider}Id`]: id }]
+
+		email && where.push({ email })
+
+		return this.userService.getUserProfile(where)
+	}
+
 	async oauthHandler(user: any) {
 		const { provider, displayName, emails: [email] = [], photos: [image] = [] } = user
 
-		let profile = await this.userService.getUserByProviderIdOrEmail(user.id, email?.value, provider)
+		let profile = await this.getUserByEmailOrId(provider, user.id, email?.value)
 
 		if (!profile) {
 			const payload = {

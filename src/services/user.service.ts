@@ -7,6 +7,7 @@ import { User } from '../entities/entity.user'
 import { WorkdayDto, WorkdayFilterDto } from '../controllers/dto/workday.dto'
 import { WorkdayRepository } from '../repository/workday.repository'
 import { addDays, trimTime } from '../utils/date'
+import { MoreThan } from 'typeorm'
 
 @Injectable()
 export class UserService {
@@ -22,6 +23,7 @@ export class UserService {
 		const user = await this.userRepository.createQueryBuilder('user')
 			.addSelect(['user.hash', 'user.salt'])
 			.where('user.email=:email', { email })
+			.andWhere('user.hash IS NOT NULL AND user.salt IS NOT NULL')
 			.getOne()
 
 		notFoundAssert(user, 'User not found')
@@ -31,7 +33,7 @@ export class UserService {
 		return this.userRepository.findOne({ where: { email } })
 	}
 
-	async getProfile(id: string) {
+	async getProfileById(id: string) {
 		const profile = await this.userRepository.findOne({
 			where    : { id },
 			relations: ['jobs'],
@@ -42,15 +44,21 @@ export class UserService {
 		return profile
 	}
 
-	getUserByProviderIdOrEmail(id, email, provider) {
-		const where = [{ [`${provider}Id`]: id }]
-
-		email && where.push({ email })
-
+	getUserProfile(where: any) {
 		return this.userRepository.findOne({ where })
 	}
 
-	ensureUniqueUser(email: string) {
+	getUserWorkingDays(userId: string) {
+		return this.workdayRepository.find({
+			where: {
+				dayOff: true,
+				date  : MoreThan(new Date()),
+				user  : new User({ id: userId }),
+			},
+		})
+	}
+
+	ensureUniqueEmail(email: string) {
 		return this.userRepository.ensureUniqueUser('email', email)
 	}
 
@@ -58,7 +66,7 @@ export class UserService {
 		return this.userRepository.createProfile(user)
 	}
 
-	async createWorkingDay(userId, dto: WorkdayDto) {
+	async createWorkingDays(userId, dto: WorkdayDto) {
 		const payload = dto.dates.map(date => ({
 			user  : userId,
 			date  : trimTime(date),
@@ -70,7 +78,7 @@ export class UserService {
 		return dto
 	}
 
-	async updateWorkingDay(userId, dto: WorkdayDto) {
+	async updateWorkingDays(userId, dto: WorkdayDto) {
 		for (const date of dto.dates) {
 			const { affected } = await this.workdayRepository.createQueryBuilder()
 				.update({ dayOff: dto.dayOff })

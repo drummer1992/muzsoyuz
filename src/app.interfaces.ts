@@ -14,6 +14,11 @@ export enum Instruments {
 	OTHER    = 'other',
 }
 
+export enum Gender {
+	MALE   = 'm',
+	FEMALE = 'f',
+}
+
 export enum UserTypes {
 	MUSICIAN    = 'musician',
 	MANAGER     = 'manager',

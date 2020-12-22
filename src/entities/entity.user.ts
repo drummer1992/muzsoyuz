@@ -1,6 +1,6 @@
 import { Column, Entity, OneToMany } from 'typeorm'
 import { Basic } from './entity.basic'
-import { Instruments, UserTypes } from '../app.interfaces'
+import { Gender, Instruments, UserTypes } from '../app.interfaces'
 import * as bCrypt from 'bcrypt'
 import { WorkDay } from './entity.work.day'
 import { Job } from './entity.job'
@@ -22,6 +22,7 @@ export interface IUser {
 	name: string
 	workdays: WorkDay[]
 	jobs: Job[]
+	gender: Gender
 	googleId: string
 }
 
@@ -61,6 +62,15 @@ export class User extends Basic implements IUser {
 
 	@Column({ type: 'varchar', length: 30, nullable: true })
 	facebookId: string
+
+	@Column({
+		type    : 'varchar',
+		length  : 1,
+		nullable: false,
+		enum    : Gender,
+		default : Gender.MALE,
+	})
+	gender: Gender
 
 	@Column({ type: 'varchar', length: 30, nullable: true })
 	googleId: string

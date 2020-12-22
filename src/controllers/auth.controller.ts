@@ -29,7 +29,7 @@ export class AuthController {
 	async login(@Req() { user }) {
 		return {
 			token  : this.authService.login({ username: user.email, sub: user.id }),
-			profile: await this.userService.getProfile(user.id),
+			profile: await this.userService.getProfileById(user.id),
 		}
 	}
 

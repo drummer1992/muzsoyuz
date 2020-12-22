@@ -54,10 +54,15 @@ abstract class JobValidator {
 			`role should be one of [${JobValidator.musicalInstruments.join(', ')}]`)
 	}
 
+	static phone(value) {
+		argumentAssert(value, 'phone is required')
+	}
+
 	private static BASIC_JOB_VALIDATORS = {
 		title    : JobValidator.title,
 		extraInfo: JobValidator.extraInfo,
 		role     : JobValidator.role,
+		phone    : JobValidator.phone,
 	}
 
 	private static MUSICAL_REPLACEMENT_VALIDATION_MAP = {

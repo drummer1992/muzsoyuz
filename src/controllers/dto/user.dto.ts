@@ -7,7 +7,7 @@ import {
 	MaxLength,
 	MinLength,
 } from 'class-validator'
-import { UserTypes } from '../../app.interfaces'
+import { Gender, UserTypes } from '../../app.interfaces'
 import { IsForbidden } from '../../validators/forbidden'
 
 export class AuthDto {
@@ -43,4 +43,8 @@ export class UpdateUserDto {
 	@IsUrl()
 	@IsOptional()
 	imageURL: string
+
+	@IsIn(Object.values(Gender))
+	@IsOptional()
+	gender: Gender
 }

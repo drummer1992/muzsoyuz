@@ -11,6 +11,7 @@ export interface IJob extends IBasic {
 	sets: number
 	extraInfo?: string
 	user: User
+	phone: string
 	title: string
 	jobType: JobTypes
 	isActive: boolean
@@ -33,6 +34,9 @@ export class Job extends Basic implements IJob {
 
 	@ManyToOne(() => User, user => user.jobs)
 	user: User
+
+	@Column({ nullable: false, type: 'varchar', length: 50 })
+	phone: string
 
 	@Column({ type: 'varchar', length: 100 })
 	title: string

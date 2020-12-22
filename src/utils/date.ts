@@ -3,18 +3,12 @@ export const MINUTE = SECOND * 60
 export const HOUR = MINUTE * 60
 export const DAY = HOUR * 24
 
-const WEEK_DAYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
-
 export function isDate(dateAsString) {
 	return !Number.isNaN(new Date(dateAsString))
 }
 
 export function isFutureDate(date) {
 	return new Date(date).getTime() > this.trimTime(Date.now()).getTime()
-}
-
-export function getWeekDay(date) {
-	return this.WEEK_DAYS[new Date(date).getDay()]
 }
 
 export function getMinutes(date) {

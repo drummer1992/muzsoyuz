@@ -35,7 +35,7 @@ export class Job extends Basic implements IJob {
 	@ManyToOne(() => User, user => user.jobs)
 	user: User
 
-	@Column({ nullable: false, type: 'varchar', length: 50 })
+	@Column({ nullable: false, type: 'varchar', length: 30 })
 	phone: string
 
 	@Column({ type: 'varchar', length: 100 })

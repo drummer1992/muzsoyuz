@@ -66,19 +66,7 @@ export class UserService {
 		return this.userRepository.createProfile(user)
 	}
 
-	async createWorkingDays(userId, dto: WorkdayDto) {
-		const payload = dto.dates.map(date => ({
-			user  : userId,
-			date  : trimTime(date),
-			dayOff: dto.dayOff,
-		}))
-
-		await this.workdayRepository.insert(payload)
-
-		return dto
-	}
-
-	async updateWorkingDays(userId, dto: WorkdayDto) {
+	async markWorkingDays(userId, dto: WorkdayDto) {
 		for (const date of dto.dates) {
 			const { affected } = await this.workdayRepository.createQueryBuilder()
 				.update({ dayOff: dto.dayOff })
@@ -89,7 +77,15 @@ export class UserService {
 				})
 				.execute()
 
-			argumentAssert(affected, `User: ${userId} has not had workingDay entity for date: ${date}`)
+			if (!affected) {
+				const payload = {
+					user  : userId,
+					date  : trimTime(date),
+					dayOff: dto.dayOff,
+				}
+
+				await this.workdayRepository.insert(payload)
+			}
 		}
 
 		return dto

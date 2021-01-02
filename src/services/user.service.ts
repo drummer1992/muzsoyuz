@@ -6,7 +6,7 @@ import { argumentAssert, notFoundAssert } from '../errors'
 import { User } from '../entities/entity.user'
 import { WorkdayDto, WorkdayFilterDto } from '../controllers/dto/workday.dto'
 import { WorkdayRepository } from '../repository/workday.repository'
-import { addDays, isFutureDate, trimTime } from '../utils/date'
+import { isFutureDate, trimTime } from '../utils/date'
 import { MoreThanOrEqual } from 'typeorm'
 
 @Injectable()
@@ -72,10 +72,9 @@ export class UserService {
 
 			const { affected } = await this.workdayRepository.createQueryBuilder()
 				.update({ dayOff: dto.dayOff })
-				.where('"userId"=:userId AND date BETWEEN :from AND :to', {
+				.where('"userId"=:userId AND date=:date', {
 					userId: userId,
-					from  : trimmedDate,
-					to    : addDays(date, 1),
+					date  : trimmedDate,
 				})
 				.execute()
 

@@ -48,7 +48,7 @@ export class JobRepository extends Repository<Job> {
 				const date = resolveRange(where.date)
 
 				const from = date.from || now
-				const to = date.to || now
+				const to = date.to || from
 
 				whereClause.date = Between(
 					trimTime(from),

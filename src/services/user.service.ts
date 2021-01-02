@@ -79,7 +79,7 @@ export class UserService {
 				.execute()
 
 			if (!affected) {
-				argumentAssert(isFutureDate(trimmedDate), 'date can not be in past')
+				argumentAssert(isFutureDate(date), 'date can not be in past')
 
 				const payload = {
 					user  : userId,

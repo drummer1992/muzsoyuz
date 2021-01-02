@@ -67,6 +67,10 @@ export class UserService {
 	}
 
 	async markWorkingDays(userId, dto: WorkdayDto) {
+		if (dto.dayOff) {
+			argumentAssert(dto.dates.every(isFutureDate), 'date can not be in past')
+		}
+
 		for (const date of dto.dates) {
 			const trimmedDate = trimTime(date)
 
@@ -79,8 +83,6 @@ export class UserService {
 				.execute()
 
 			if (!affected) {
-				argumentAssert(isFutureDate(date), 'date can not be in past')
-
 				const payload = {
 					user  : userId,
 					date  : trimmedDate,

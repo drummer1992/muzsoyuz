@@ -11,7 +11,7 @@ export class FacebookStrategy extends PassportStrategy(Strategy) {
 			clientID     : process.env.FACEBOOK_CLIENT_ID,
 			clientSecret : process.env.FACEBOOK_CLIENT_SECRET,
 			callbackURL  : config.getProviderCallback('facebook'),
-			profileFields: ['displayName', 'email', 'photos'],
+			profileFields: ['displayName', 'email', 'picture.type(large)'],
 		})
 	}
 

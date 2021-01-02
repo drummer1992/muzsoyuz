@@ -68,19 +68,19 @@ export class UserService {
 
 	async markWorkingDays(userId, dto: WorkdayDto) {
 		for (const date of dto.dates) {
-			const trimmedDate = trimTime(date)
-
 			const { affected } = await this.workdayRepository.createQueryBuilder()
 				.update({ dayOff: dto.dayOff })
 				.where('"userId"=:userId AND date BETWEEN :from AND :to', {
 					userId: userId,
-					from  : trimmedDate,
-					to    : addDays(trimmedDate, 1),
+					from  : trimTime(date),
+					to    : trimTime(addDays(date, 1)),
 				})
 				.execute()
 
 			if (!affected) {
-				argumentAssert(isFutureDate(date), 'date can not be in past')
+				const trimmedDate = trimTime(date)
+
+				argumentAssert(isFutureDate(trimmedDate), 'date can not be in past')
 
 				const payload = {
 					user  : userId,

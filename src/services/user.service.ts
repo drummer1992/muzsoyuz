@@ -7,7 +7,7 @@ import { User } from '../entities/entity.user'
 import { WorkdayDto, WorkdayFilterDto } from '../controllers/dto/workday.dto'
 import { WorkdayRepository } from '../repository/workday.repository'
 import { addDays, trimTime } from '../utils/date'
-import { MoreThan } from 'typeorm'
+import { MoreThanOrEqual } from 'typeorm'
 
 @Injectable()
 export class UserService {
@@ -52,7 +52,7 @@ export class UserService {
 		return this.workdayRepository.find({
 			where: {
 				dayOff: true,
-				date  : MoreThan(trimTime(Date.now())),
+				date  : MoreThanOrEqual(trimTime(Date.now())),
 				user  : new User({ id: userId }),
 			},
 		})

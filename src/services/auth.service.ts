@@ -4,6 +4,7 @@ import { businessAssert } from '../errors'
 import { User } from '../entities/entity.user'
 import { AuthDto } from '../controllers/dto/user.dto'
 import { JwtService } from '@nestjs/jwt'
+import { pick } from '../utils/object'
 
 @Injectable()
 export class AuthService {
@@ -52,17 +53,23 @@ export class AuthService {
 
 		let profile = await this.getUserByEmailOrId(provider, user.id, email?.value)
 
-		if (!profile) {
-			const payload = {
-				[`${provider}Id`]: user.id,
-				name             : displayName,
-				email            : email?.value,
-				imageURL         : image?.value,
-			} as User
+		const payload = {
+			[`${provider}Id`]: user.id,
+			name             : displayName,
+			email            : email?.value,
+			imageURL         : image?.value,
+		} as User
 
+		if (!profile) {
 			profile = await this.userService.createProfile(payload)
-		} else if (!profile[`${provider}Id`]) {
-			await this.userService.updateProfile(profile.id, { [`${provider}Id`]: user.id } as User)
+		}
+
+		const difference = Object.keys(payload).filter(key => {
+			return payload[key] && profile[key] !== payload[key]
+		})
+
+		if (difference.length) {
+			await this.userService.updateProfile(profile.id, pick(payload, difference) as User)
 		}
 
 		return {

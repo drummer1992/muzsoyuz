@@ -52,7 +52,7 @@ export class UserService {
 		return this.workdayRepository.find({
 			where: {
 				dayOff: true,
-				date  : MoreThan(new Date()),
+				date  : MoreThan(trimTime(Date.now())),
 				user  : new User({ id: userId }),
 			},
 		})

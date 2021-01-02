@@ -75,7 +75,7 @@ export class UserService {
 				.where('"userId"=:userId AND date BETWEEN :from AND :to', {
 					userId: userId,
 					from  : trimmedDate,
-					to    : addDays(trimmedDate, 1),
+					to    : addDays(date, 1),
 				})
 				.execute()
 

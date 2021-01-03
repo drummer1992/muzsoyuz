@@ -6,8 +6,8 @@ import { argumentAssert, notFoundAssert } from '../errors'
 import { User } from '../entities/entity.user'
 import { WorkdayDto, WorkdayFilterDto } from '../controllers/dto/workday.dto'
 import { WorkdayRepository } from '../repository/workday.repository'
-import { addDays, trimTime } from '../utils/date'
-import { MoreThan } from 'typeorm'
+import { isFutureDate, trimTime } from '../utils/date'
+import { MoreThanOrEqual } from 'typeorm'
 
 @Injectable()
 export class UserService {
@@ -52,7 +52,7 @@ export class UserService {
 		return this.workdayRepository.find({
 			where: {
 				dayOff: true,
-				date  : MoreThan(new Date()),
+				date  : MoreThanOrEqual(trimTime(Date.now())),
 				user  : new User({ id: userId }),
 			},
 		})
@@ -67,20 +67,25 @@ export class UserService {
 	}
 
 	async markWorkingDays(userId, dto: WorkdayDto) {
+		if (dto.dayOff) {
+			argumentAssert(dto.dates.every(isFutureDate), 'date can not be in past')
+		}
+
 		for (const date of dto.dates) {
+			const trimmedDate = trimTime(date)
+
 			const { affected } = await this.workdayRepository.createQueryBuilder()
 				.update({ dayOff: dto.dayOff })
-				.where('"userId"=:userId AND date BETWEEN :from AND :to', {
+				.where('"userId"=:userId AND date=:date', {
 					userId: userId,
-					from  : trimTime(date),
-					to    : trimTime(addDays(date, 1)),
+					date  : trimmedDate,
 				})
 				.execute()
 
 			if (!affected) {
 				const payload = {
 					user  : userId,
-					date  : trimTime(date),
+					date  : trimmedDate,
 					dayOff: dto.dayOff,
 				}
 

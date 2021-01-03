@@ -8,7 +8,7 @@ export function isDate(dateAsString) {
 }
 
 export function isFutureDate(date) {
-	return new Date(date).getTime() > this.trimTime(Date.now()).getTime()
+	return new Date(date).getTime() > trimTime(Date.now()).getTime()
 }
 
 export function getMinutes(date) {

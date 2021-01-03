@@ -7,8 +7,17 @@ import { JobRepository } from '../repository/job.repository'
 import { UserRepository } from '../repository/user.repository'
 import { InstrumentRepository } from '../repository/instrument.repository'
 import { WorkdayRepository } from '../repository/workday.repository'
+import * as dotEnv from 'dotenv'
+import * as path from 'path'
 
-require('dotenv').config()
+const env = process.env.NODE_ENV || ''
+const envPath = path.resolve(__dirname, `../../.env${env && '.' + env}`)
+
+const { error } = dotEnv.config({ path: envPath })
+
+if (error) {
+	console.warn('.env file is not loaded', error)
+}
 
 class Index {
 	constructor(private env: { [key: string]: string | undefined }) {
@@ -34,10 +43,6 @@ class Index {
 		return parseInt(this.getValue(isServer ? 'PORT' : 'CLIENT_PORT'))
 	}
 
-	public getServerHost() {
-		return this.getValue('SERVER_HOST')
-	}
-
 	public getServerAPIPrefix() {
 		return this.getValue('API_PREFIX')
 	}
@@ -48,13 +53,7 @@ class Index {
 			facebook: 'FACEBOOK_CALLBACK_URL',
 		}
 
-		return `${this.getServerHost()}/${this.getValue(PROVIDERS_MAP[provider])}`
-	}
-
-	public isProduction() {
-		const mode = this.getValue('MODE', false)
-
-		return mode !== 'DEV'
+		return `${this.getValue('CALLBACK_HOST')}/${this.getValue(PROVIDERS_MAP[provider])}`
 	}
 
 	public getRepositories() {

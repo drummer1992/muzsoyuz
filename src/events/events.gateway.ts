@@ -1,49 +1,69 @@
-import {
-	OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit, SubscribeMessage,
-	WebSocketGateway,
-	WebSocketServer,
-} from '@nestjs/websockets'
-import { Server, Socket } from 'socket.io'
-import { Logger } from '@nestjs/common'
+import { SubscribeMessage, WebSocketGateway, WebSocketServer, OnGatewayConnection } from '@nestjs/websockets'
+import { Socket, Server } from 'socket.io'
+import { Inject, Logger, UseGuards } from '@nestjs/common'
+import { CREATE_ROOM, GET_MESSAGES, JOIN_ROOM, JOINED_ROOM, LEAVE_ROOM, LEFT_ROOM, MESSAGE } from './constants'
+import { WsAuthGuard } from '../services/auth/guards/ws-auth-guard'
+import { ChatRepository } from '../repository/chat.repository'
+import { ChatMessageRepository } from '../repository/chat-message.repository'
+import { Chat } from '../entities/entity.chat'
 
-@WebSocketGateway()
-export class EventsGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
+@UseGuards(WsAuthGuard)
+@WebSocketGateway({ namespace: /\/chat/gi })
+export class EventsGateway implements OnGatewayConnection {
+	@Inject()
+	private chatRepository: ChatRepository
+	@Inject()
+	private chatMessageRepository: ChatMessageRepository
+
 	@WebSocketServer()
-	server: Server;
+	private wss: Server
 
-	private logger: Logger = new Logger('EventsGateway');
+	private logger: Logger = new Logger('ChatGateway')
 
-	afterInit(server: Server) {
-		this.logger.log('Init');
+	@SubscribeMessage(MESSAGE)
+	handleMessage(
+		client: Socket,
+		message: { senderId: string, roomId: string, body: string },
+	) {
+		this.wss.to(message.roomId).emit(MESSAGE, message)
 	}
 
-	handleDisconnect(client: Socket) {
-		this.logger.log(`Client disconnected: ${client.id}`);
+	@SubscribeMessage(GET_MESSAGES)
+	handleMessagesGet(client: any) {
+		return this.chatMessageRepository.find({
+			where: [
+				{ senderId: client.user.id },
+				{ receiverId: client.user.id },
+			]
+		})
 	}
 
-	handleConnection(socket: Socket, ...args: any[]) {
-		this.logger.log(`Client connected: ${socket.id}`);
+	@SubscribeMessage(CREATE_ROOM)
+	async handleRoomCreate(client: Socket, room: string) {
+		await this.chatRepository.insert(new Chat({ roomId: room }))
 
-		const { roomId } = socket.handshake.query
+		client.join(room)
+		client.emit(JOINED_ROOM, room)
 
-		this.logger.log(`Room Id: ${roomId}`);
-
-		socket.join(roomId)
-
-		socket.on('newChatMessage', (data) => {
-			this.server.in(roomId).emit('newChatMessage', data);
-		});
-
-		// Leave the room if the user closes the socket
-		socket.on("disconnect", () => {
-			socket.leave(roomId);
-		});
+		this.logger.log(`Client: ${client.id} created room: ${room}`)
 	}
 
-	@SubscribeMessage('newChatMessage')
-	async onChat(client, message){
-		this.logger.log(`Client newChatMessage : ${client.id}`);
+	@SubscribeMessage(JOIN_ROOM)
+	handleRoomJoin(client: Socket, room: string) {
+		client.join(room)
+		client.emit(JOINED_ROOM, room)
 
-		client.broadcast.emit('newChatMessage', message);
+		this.logger.log(`Client: ${client.id} joined to room: ${room}`)
+	}
+
+	@SubscribeMessage(LEAVE_ROOM)
+	handleRoomLeave(client: Socket, room: string) {
+		client.leave(room)
+		client.emit(LEFT_ROOM, room)
+	}
+
+	handleConnection(client, ...args): any {
+		this.logger.log(client.auth || 'auth -')
+		this.logger.log(`Client connected: ${client.id}`)
 	}
 }

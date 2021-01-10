@@ -33,6 +33,10 @@ export class UserService {
 		return this.userRepository.findOne({ where: { email } })
 	}
 
+	async ensureUserExists(id: string) {
+		return !!(await this.userRepository.count({ where: { id } }))
+	}
+
 	async getProfileById(id: string) {
 		const profile = await this.userRepository.findOne({
 			where    : { id },

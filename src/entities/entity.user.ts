@@ -1,9 +1,11 @@
-import { Column, Entity, OneToMany } from 'typeorm'
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm'
 import { Basic } from './entity.basic'
 import { Gender, Instruments, UserTypes } from '../app.interfaces'
 import * as bCrypt from 'bcrypt'
 import { WorkDay } from './entity.work.day'
 import { Job } from './entity.job'
+import { Instrument } from './entity.instrument'
+import { Chat } from './entity.chat'
 
 export interface IUser {
 	dob?: Date

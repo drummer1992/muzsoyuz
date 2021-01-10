@@ -9,6 +9,8 @@ import { InstrumentRepository } from '../repository/instrument.repository'
 import { WorkdayRepository } from '../repository/workday.repository'
 import * as dotEnv from 'dotenv'
 import * as path from 'path'
+import { Chat } from '../entities/entity.chat'
+import { ChatMessage } from '../entities/entity.chat-message'
 
 const env = process.env.NODE_ENV || ''
 const envPath = path.resolve(__dirname, `../../.env${env && '.' + env}`)
@@ -78,6 +80,8 @@ class Index {
 				Job,
 				WorkDay,
 				Instrument,
+				Chat,
+				ChatMessage,
 			],
 
 			synchronize: true,

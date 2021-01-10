@@ -1,0 +1,8 @@
+export const MESSAGE = 'chatMessage'
+export const GET_MESSAGES = 'getMessages'
+export const CREATE_ROOM = 'createRoom'
+export const JOIN_ROOM = 'joinRoom'
+export const JOINED_ROOM = 'joinedRoom'
+export const LEAVE_ROOM = 'leaveRoom'
+export const LEFT_ROOM = 'leftRoom'
+export const TYPING = 'typing'
